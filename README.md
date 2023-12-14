@@ -1,4 +1,4 @@
-# Discord Ollama Integration [![Release Badge](https://img.shields.io/github/v/release/kevinthedang/Space-Guardians?logo=github)](https://github.com/kevinthedang/discord-ollama/releases/latest) [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-blue.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
+# Discord Ollama Integration [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-blue.svg)](https://creativecommons.org/licenses/by-nc/4.0/) [![Release Badge](https://img.shields.io/github/v/release/kevinthedang/Space-Guardians?logo=github)](https://github.com/kevinthedang/discord-ollama/releases/latest)
 Ollama is an AI model management tool that allows users to install and use custom large language models locally. The goal is to create a discord bot that will utilize Ollama and chat with it on a Discord!
 
 ## Resources
