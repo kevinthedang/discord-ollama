@@ -17,6 +17,6 @@
     "outDir": "dist"
   },
   // environment for env vars
-  "include": ["src/**/*", "environment.d.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
