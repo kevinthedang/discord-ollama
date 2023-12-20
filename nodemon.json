@@ -1,0 +1,12 @@
+{
+    "restartable": "rs",
+    "ignore": ["node_modules/"],
+    "watch": ["src/"],
+    "execMap": {
+        "ts": "ts-node --esm"
+    },
+    "env": {
+        "NODE_ENV": "development"
+    },
+    "ext": "js,json,ts"
+}

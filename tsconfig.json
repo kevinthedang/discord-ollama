@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     // Dependent on node version
-    "target": "ES2022",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
+    "target": "ES2016",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "strict": true,
     // We must set the type
     "noImplicitAny": true,
@@ -17,6 +17,6 @@
     "outDir": "dist"
   },
   // environment for env vars
-  "include": ["src", "environment.d.ts"],
+  "include": ["src/**/*", "environment.d.ts"],
   "exclude": ["node_modules"]
 }
