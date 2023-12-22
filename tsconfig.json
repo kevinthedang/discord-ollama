@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    // Dependent on node version
+    "target": "ES2020",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strict": true,
+    // We must set the type
+    "noImplicitAny": true,
+    "declaration": false,
+    // Will not go through node_modules
+    "skipDefaultLibCheck": true,
+    "strictNullChecks": true,
+    // We can import json files like JavaScript
+    "resolveJsonModule": true,
+    // Decompile .ts to .js into a folder named dist
+    "outDir": "dist"
+  },
+  // environment for env vars
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}

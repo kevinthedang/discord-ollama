@@ -2,6 +2,11 @@
 Ollama is an AI model management tool that allows users to install and use custom large language models locally. The goal is to create a discord bot that will utilize Ollama and chat with it on a Discord!
 
 ## Resources
+* [NodeJS](https://nodejs.org/en)
+    * This project uses `v20.10.0` (npm `10.2.5`). Consider using [nvm](https://github.com/nvm-sh/nvm) for multiple NodeJS versions.
+        * To run dev in `ts-node`, using `v18.x.x` is recommended.
+        * To run dev with `tsx`, you can use `v20.10.0`.
+    * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
 * [Ollama](https://ollama.ai/)
 * [Docker Documentation](https://docs.docker.com/?_gl=1*nof6f8*_ga*MTQxNTc1MTYxOS4xNzAxNzI1ODAx*_ga_XJWPQMJYHQ*MTcwMjQxODUzOS4yLjEuMTcwMjQxOTgyMC41OS4wLjA.)
 * [Discord Developer Portal](https://discord.com/developers/docs/intro)

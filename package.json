@@ -1,0 +1,31 @@
+{
+  "name": "discord-ollama",
+  "version": "0.0.1",
+  "description": "Ollama Integration into discord",
+  "main": "dist/index.js",
+  "exports": "./dist/index.js",
+  "scripts": {
+    "dev-tsx": "tsx watch src/index.ts",
+    "dev-mon": "nodemon --config nodemon.json src/index.ts",
+    "build": "tsc",
+    "prod": "node .",
+    "start": "npm run build && npm run prod"
+  },
+  "author": "Kevin Dang",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.3"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
