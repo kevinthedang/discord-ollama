@@ -9,11 +9,15 @@
     "dev-mon": "nodemon --config nodemon.json src/index.ts",
     "build": "tsc",
     "prod": "node .",
-    "start": "npm run build && npm run prod"
+    "client": "npm run build && npm run prod",
+    "API": "ollama serve",
+    "start": "concurrently \"npm:API\" \"npm:client\""
   },
   "author": "Kevin Dang",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.6.2",
+    "concurrently": "^8.2.2",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1"
   },
