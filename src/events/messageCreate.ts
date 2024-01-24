@@ -4,7 +4,7 @@ import Axios from 'axios'
 /*
  * Max Message length for free users is 2000 characters (bot or not).
  */
-export default event(Events.MessageCreate, ({ log }, message) => {
+export default event(Events.MessageCreate, ({ log, msgHist }, message) => {
     log(`Message created \"${message.content}\" from ${message.author.tag}.`)
 
     // Hard-coded channel to test output there only, in our case "ollama-endpoint"
@@ -13,20 +13,32 @@ export default event(Events.MessageCreate, ({ log }, message) => {
     // Do not respond if bot talks in the chat
     if (message.author.tag === message.client.user.tag) return
 
+    // push user response
+    msgHist.push({
+        role: 'user',
+        content: message.content
+    })
+
     // Reply with something to prompt that ollama is working
-    message.reply("Generating Response...").then(sentMessage => {
+    message.reply("Generating Response . . .").then(sentMessage => {
         // Request made to API
         const request = async () => {
             try {
                 // change this when using an actual hosted server or use ollama.js
-                const response = await Axios.post('http://127.0.0.1:11434/api/generate', {
+                const response = await Axios.post('http://127.0.0.1:11434/api/chat', {
                     model: 'llama2',
-                    prompt: message.content,
+                    messages: msgHist,
                     stream: false
                 })
                 log(response.data)
     
-                sentMessage.edit(response.data.response)
+                sentMessage.edit(response.data.message.content)
+
+                // push bot response
+                msgHist.push({
+                    role: 'assistant',
+                    content: response.data.message.content
+                })
             } catch (error) {
                 log(error)
             }
