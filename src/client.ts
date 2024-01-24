@@ -14,7 +14,14 @@ const client = new Client({
     ]
 });
 
-registerEvents(client, Events)
+const messageHistory = [
+    {
+        role: 'assistant',
+        content: 'My name is Ollama GU.'
+    }
+]
+
+registerEvents(client, Events, messageHistory)
 
 // Try to log in the client
 client.login(Keys.clientToken)
