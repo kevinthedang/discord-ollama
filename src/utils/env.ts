@@ -2,7 +2,7 @@ import { resolve } from "path"
 import { config } from "dotenv"
 
 // Find config - ONLY WORKS WITH NODEMON
-const envFile = process.env.NODE_ENV === "development" ? ".dev.env" : ".env"
+const envFile = process.env.NODE_ENV === "development" ? ".env.dev.local" : ".env"
 
 // resolve config file
 const envFilePath = resolve(process.cwd(), envFile)
