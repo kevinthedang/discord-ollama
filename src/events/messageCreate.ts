@@ -1,10 +1,13 @@
 import { event, Events } from '../utils/index.js'
+import { EmbedBuilder } from 'discord.js'
+import ollama from 'ollama'
 import Axios from 'axios'
 
-/*
+/** 
  * Max Message length for free users is 2000 characters (bot or not).
+ * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, ({ log, msgHist }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist }, message) => {
     log(`Message created \"${message.content}\" from ${message.author.tag}.`)
 
     // Hard-coded channel to test output there only, in our case "ollama-endpoint"
@@ -19,7 +22,44 @@ export default event(Events.MessageCreate, ({ log, msgHist }, message) => {
         content: message.content
     })
 
-    // Reply with something to prompt that ollama is working
+    const botMessage = new EmbedBuilder()
+    .setTitle(`Response to ${message.author.tag}`)
+    .setDescription('Generating Response . . .')
+    .setColor('#00FF00')
+
+    const sentMessage = await message.channel.send({ embeds: [botMessage] })
+
+    const request = async () => {
+        try {
+            // change this when using an actual hosted server or use ollama.js
+            const response = await ollama.chat({
+                model: 'llama2',
+                messages: msgHist,
+                stream: false
+            })
+
+            const embed = new EmbedBuilder()
+                .setTitle(`Response to ${message.author.tag}`)
+                .setDescription(response.message.content)
+                .setColor('#00FF00')
+
+            sentMessage.edit({ embeds: [embed] })
+
+            // push bot response
+            msgHist.push({
+                role: 'assistant',
+                content: response.message.content
+            })
+        } catch (error) {
+            message.edit(error as string)
+            log(error)
+        }
+    }        
+
+    // Attempt to call ollama's endpoint
+    request()
+
+    // Reply with something to prompt that ollama is working, version without embed
     message.reply("Generating Response . . .").then(sentMessage => {
         // Request made to API
         const request = async () => {
@@ -30,19 +70,19 @@ export default event(Events.MessageCreate, ({ log, msgHist }, message) => {
                     messages: msgHist,
                     stream: false
                 })
-                log(response.data)
     
                 sentMessage.edit(response.data.message.content)
 
                 // push bot response
-                msgHist.push({
-                    role: 'assistant',
-                    content: response.data.message.content
-                })
+                // msgHist.push({
+                //     role: 'assistant',
+                //     content: response.data.message.content
+                // })
             } catch (error) {
+                message.edit(error as string)
                 log(error)
             }
-        }
+        }        
 
         // Attempt to call ollama's endpoint
         request()
