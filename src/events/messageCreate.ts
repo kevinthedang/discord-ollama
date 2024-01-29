@@ -13,6 +13,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens }, mess
     // Do not respond if bot talks in the chat
     if (message.author.tag === message.client.user.tag) return
 
+    // Only respond if message mentions the bot
+    if (!message.mentions.has(tokens.botID)) return
+
     // push user response
     msgHist.push({
         role: 'user',
