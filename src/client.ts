@@ -5,6 +5,7 @@ import Events from "./events/index.js";
 // Import keys/tokens
 import Keys from "./keys.js";
 
+// initialize the client with the following permissions when logging in
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -16,12 +17,19 @@ const client = new Client({
 
 const messageHistory = [
     {
-        role: 'assistant',
-        content: 'My name is Ollama GU.'
+        role: 'system',
+        content: 'Your name is Ollama GU'
     }
 ]
 
-registerEvents(client, Events, messageHistory)
+/**
+ * register events for bot to listen to in discord
+ * @param messageHistory message history for the llm
+ * @param Events events to register
+ * @param client the bot reference
+ * @param Keys tokens from .env files
+ */
+registerEvents(client, Events, messageHistory, Keys)
 
 // Try to log in the client
 client.login(Keys.clientToken)

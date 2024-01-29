@@ -11,6 +11,11 @@ export interface EventProps {
     client: Client
     log: LogMethod
     msgHist: { role: string, content: string }[]
+    tokens: {
+        channel: string,
+        model: string,
+        botUid: string
+    }
 }
 export type EventCallback<T extends EventKeys> = (
     props: EventProps,
@@ -27,7 +32,16 @@ export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): 
     return { key, callback }
 }
 
-export function registerEvents(client: Client, events: Event[], msgHist: { role: string, content: string }[]): void {
+export function registerEvents(
+    client: Client, 
+    events: Event[], 
+    msgHist: { role: string, content: string }[],
+    tokens: {
+        channel: string,
+        model: string,
+        botUid: string
+    }
+): void {
     for (const { key, callback } of events) {
         client.on(key, (...args) => {
             // Create a new log method for this event
@@ -35,7 +49,7 @@ export function registerEvents(client: Client, events: Event[], msgHist: { role:
 
             // Handle Errors, call callback, log errors as needed
             try {
-                callback({ client, log, msgHist }, ...args)
+                callback({ client, log, msgHist, tokens }, ...args)
             } catch (error) {
                 log('[Uncaught Error]', error)
             }
