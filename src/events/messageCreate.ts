@@ -35,6 +35,12 @@ export default event(Events.MessageCreate, async ({ log, msgHist }, message) => 
             const response = await ollama.chat({
                 model: 'llama2',
                 messages: msgHist,
+                options: {
+                    num_thread: 8, // remove if optimization needed further
+                    mirostat: 1,
+                    mirostat_tau: 2.0,
+                    top_k: 70
+                },
                 stream: false
             })
 
@@ -50,6 +56,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist }, message) => 
                 role: 'assistant',
                 content: response.message.content
             })
+            console.log(msgHist)    
         } catch (error) {
             message.edit(error as string)
             log(error)
@@ -60,31 +67,31 @@ export default event(Events.MessageCreate, async ({ log, msgHist }, message) => 
     request()
 
     // Reply with something to prompt that ollama is working, version without embed
-    message.reply("Generating Response . . .").then(sentMessage => {
-        // Request made to API
-        const request = async () => {
-            try {
-                // change this when using an actual hosted server or use ollama.js
-                const response = await Axios.post('http://127.0.0.1:11434/api/chat', {
-                    model: 'llama2',
-                    messages: msgHist,
-                    stream: false
-                })
+    // message.reply("Generating Response . . .").then(sentMessage => {
+    //     // Request made to API
+    //     const request = async () => {
+    //         try {
+    //             // change this when using an actual hosted server or use ollama.js
+    //             const response = await Axios.post('http://127.0.0.1:11434/api/chat', {
+    //                 model: 'llama2',
+    //                 messages: msgHist,
+    //                 stream: false
+    //             })
     
-                sentMessage.edit(response.data.message.content)
+    //             sentMessage.edit(response.data.message.content)
 
-                // push bot response
-                // msgHist.push({
-                //     role: 'assistant',
-                //     content: response.data.message.content
-                // })
-            } catch (error) {
-                message.edit(error as string)
-                log(error)
-            }
-        }        
+    //             // push bot response
+    //             // msgHist.push({
+    //             //     role: 'assistant',
+    //             //     content: response.data.message.content
+    //             // })
+    //         } catch (error) {
+    //             message.edit(error as string)
+    //             log(error)
+    //         }
+    //     }        
 
-        // Attempt to call ollama's endpoint
-        request()
-    })
+    //     // Attempt to call ollama's endpoint
+    //     request()
+    // })
 })

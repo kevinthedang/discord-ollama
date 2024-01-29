@@ -5,6 +5,7 @@ import Events from "./events/index.js";
 // Import keys/tokens
 import Keys from "./keys.js";
 
+// initialize the client with the following permissions when logging in
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
@@ -16,8 +17,8 @@ const client = new Client({
 
 const messageHistory = [
     {
-        role: 'assistant',
-        content: 'My name is Ollama GU.'
+        role: 'system',
+        content: 'Your name is Ollama GU'
     }
 ]
 
