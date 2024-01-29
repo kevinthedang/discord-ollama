@@ -32,5 +32,6 @@ Ollama is an AI model management tool that allows users to install and use custo
 
 ## Acknowledgement
 * [Kevin Dang](https://github.com/kevinthedang)
+* [Jonathan Smoley](https://github.com/JT2M0L3Y)
 
 [discord-ollama](https://github.com/kevinthedang/discord-ollama) © 2023 by [Kevin Dang](https://github.com/kevinthedang) is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
