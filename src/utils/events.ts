@@ -13,7 +13,8 @@ export interface EventProps {
     msgHist: { role: string, content: string }[]
     tokens: {
         channel: string,
-        model: string
+        model: string,
+        botID: string
     }
 }
 export type EventCallback<T extends EventKeys> = (
@@ -37,7 +38,8 @@ export function registerEvents(
     msgHist: { role: string, content: string }[],
     tokens: {
         channel: string,
-        model: string
+        model: string,
+        botID: string
     }
 ): void {
     for (const { key, callback } of events) {
