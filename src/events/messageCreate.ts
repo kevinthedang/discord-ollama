@@ -1,9 +1,4 @@
-import { event, Events } from '../utils/index.js'
-import { EmbedBuilder } from 'discord.js'
-import ollama from 'ollama'
-import { normalMessage } from '../utils/messageNormal.js'
-import { embedMessage } from '../utils/messageEmbed.js'
-// import Axios from 'axios'
+import { embedMessage, event, Events } from '../utils/index.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
