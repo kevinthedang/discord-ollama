@@ -1,5 +1,5 @@
-import { EmbedBuilder, Message } from "discord.js";
-import ollama, { ChatResponse } from "ollama";
+import { EmbedBuilder, Message } from 'discord.js'
+import ollama, { ChatResponse } from 'ollama'
 
 /**
  * Method to send replies as normal text on discord like any other user

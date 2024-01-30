@@ -1,4 +1,4 @@
-import { getEnvVar } from "./utils/env.js"
+import { getEnvVar } from './utils/env.js'
 
 export const Keys = {
     clientToken: getEnvVar('CLIENT_TOKEN'),
