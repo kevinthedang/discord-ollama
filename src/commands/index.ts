@@ -1,6 +1,6 @@
 import { SlashCommand } from '../utils/commands.js'
-import { ServerInfo } from './serverInfo.js'
+import { ThreadCreate } from './threadCreate.js'
 
 export default [
-    ServerInfo
+    ThreadCreate
 ] as SlashCommand[]

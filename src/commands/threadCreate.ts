@@ -1,8 +1,8 @@
 import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
 
-export const ServerInfo: SlashCommand = {
-    name: 'talk',
+export const ThreadCreate: SlashCommand = {
+    name: 'thread',
     description: 'creates a thread and mentions user',
 
     // Query for server information
