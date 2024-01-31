@@ -10,10 +10,10 @@ export default event(Events.InteractionCreate, async ({ log, client }, interacti
     
     log(`Interaction called \'${interaction.commandName}\' from ${interaction.client.user.tag}.`)
 
-    // ensure command exists
+    // ensure command exists, otherwise kill event
     const command = commands.find(command => command.name === interaction.commandName)
     if (!command) return
 
-    // take all commands and run the command
+    // the command exists, execute it
     command.run(client, interaction)
 })
