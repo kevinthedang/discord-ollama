@@ -1,9 +1,9 @@
-import { Client, GatewayIntentBits } from "discord.js";
-import { registerEvents } from "./utils/events.js";
-import Events from "./events/index.js";
+import { Client, GatewayIntentBits } from 'discord.js'
+import { registerEvents } from './utils/events.js'
+import Events from './events/index.js'
 
 // Import keys/tokens
-import Keys from "./keys.js";
+import Keys from './keys.js'
 
 // initialize the client with the following permissions when logging in
 const client = new Client({

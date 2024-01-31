@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse } from 'axios'
 
 /**
  * When running a /api/chat stream, the output needs to be parsed into an array of objects
