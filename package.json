@@ -1,9 +1,9 @@
 {
   "name": "discord-ollama",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "Ollama Integration into discord",
-  "main": "dist/index.js",
-  "exports": "./dist/index.js",
+  "main": "build/index.js",
+  "exports": "./build/index.js",
   "scripts": {
     "dev-tsx": "tsx watch src/index.ts",
     "dev-mon": "nodemon --config nodemon.json src/index.ts",

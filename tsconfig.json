@@ -14,7 +14,8 @@
     // We can import json files like JavaScript
     "resolveJsonModule": true,
     // Decompile .ts to .js into a folder named dist
-    "outDir": "dist"
+    "outDir": "build",
+    "rootDir": "src"
   },
   // environment for env vars
   "include": ["src/**/*"],

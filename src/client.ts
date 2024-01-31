@@ -5,6 +5,7 @@ import Events from './events/index.js'
 // Import keys/tokens
 import Keys from './keys.js'
 
+
 // initialize the client with the following permissions when logging in
 const client = new Client({
     intents: [
@@ -32,8 +33,8 @@ const messageHistory = [
 registerEvents(client, Events, messageHistory, Keys)
 
 // Try to log in the client
-client.login(Keys.clientToken)
-    .catch((error) => {
-        console.error('[Login Error]', error);
-        process.exit(1);
-    });
+await client.login(Keys.clientToken)
+.catch((error) => {
+    console.error('[Login Error]', error)
+    process.exit(1)
+})
