@@ -1,6 +1,6 @@
 {
   "name": "discord-ollama",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Ollama Integration into discord",
   "main": "dist/index.js",
   "exports": "./dist/index.js",
