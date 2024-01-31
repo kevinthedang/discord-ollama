@@ -1,6 +1,17 @@
-import { event, Events } from '../utils/index.js'
+import { event, Events, registerCommands } from '../utils/index.js'
+import { ActivityType } from 'discord.js'
+import commands from '../commands/index.js'
 
 // Log when the bot successfully logs in and export it
 export default event(Events.ClientReady, ({ log }, client) => {
-    return log(`Logged in as ${client.user.username}.`)
+    log(`Logged in as ${client.user.username}.`)
+
+    // Register the commands associated with the bot upon loggin in
+    registerCommands(client, commands)
+
+    // set status of the bot
+    client.user.setActivity({
+        name: 'Powered by Ollama',
+        type: ActivityType.Custom
+    })
 })

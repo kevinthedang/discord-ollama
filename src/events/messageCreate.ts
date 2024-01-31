@@ -14,7 +14,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens }, mess
     if (message.author.tag === message.client.user.tag) return
 
     // Only respond if message mentions the bot
-    if (!message.mentions.has(tokens.botUid)) return
+    if (!message.mentions.has(tokens.clientUid)) return
 
     // push user response
     msgHist.push({

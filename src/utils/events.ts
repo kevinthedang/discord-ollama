@@ -14,7 +14,7 @@ export interface EventProps {
     tokens: {
         channel: string,
         model: string,
-        botUid: string
+        clientUid: string
     }
 }
 export type EventCallback<T extends EventKeys> = (
@@ -39,7 +39,7 @@ export function registerEvents(
     tokens: {
         channel: string,
         model: string,
-        botUid: string
+        clientUid: string
     }
 ): void {
     for (const { key, callback } of events) {
