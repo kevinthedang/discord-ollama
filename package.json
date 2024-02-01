@@ -9,7 +9,7 @@
     "dev-mon": "nodemon --config nodemon.json src/index.ts",
     "build": "tsc",
     "prod": "node .",
-    "client": "npm run build && npm run prod",
+    "client": "npm i && npm run build && npm run prod",
     "API": "ollama serve",
     "start": "concurrently \"npm:API\" \"npm:client\""
   },
@@ -20,7 +20,7 @@
     "concurrently": "^8.2.2",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
-    "ollama": "^0.4.3"
+    "ollama": "^0.4.4"
   },
   "devDependencies": {
     "@types/node": "^20.10.5",
