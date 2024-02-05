@@ -9,23 +9,12 @@
     "dev-mon": "nodemon --config nodemon.json src/index.ts",
     "build": "tsc",
     "prod": "node .",
-    "client": "npm i && npm run build && npm run prod",
-    "API": "ollama serve",
-    "docker:setup": "sudo systemctl start docker",
-    "docker:cpu": "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama-cpu ollama/ollama && docker start ollama-cpu && ollama pull codellama",
-    "docker:gpu": "docker run -d --gpus 'device=0' -v ollama:/root/.ollama -p 11434:11434 --name ollama-gpu ollama/ollama && docker start ollama-gpu && ollama pull codellama",
-    "docker:clean-cpu": "docker stop ollama-cpu && docker rm ollama-cpu && echo \"Removed ollama-cpu\"",
-    "docker:clean-gpu": "docker stop ollama-gpu && docker rm ollama-gpu && echo \"Removed ollama-gpu\"",
-    "docker:stop": "sudo systemctl stop docker",
-    "docker:clean": "concurrently \"npm:docker:clean-cpu\" \"npm:docker:clean-gpu\" \"npm:docker:stop\"",
-    "docker": "npm run docker:setup && npm run docker:gpu",
-    "start": "concurrently \"npm:client\""
+    "client": "npm i && npm run build && npm run prod"
   },
   "author": "Kevin Dang",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.2",
-    "concurrently": "^8.2.2",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "ollama": "^0.4.4"

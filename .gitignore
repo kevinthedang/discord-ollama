@@ -4,6 +4,8 @@
 # builds
 build/
 dist/
+app/
+tmp/
 
 # dotenv environment variable files
 .env

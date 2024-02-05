@@ -27,6 +27,8 @@ Ollama is an AI model management tool that allows users to install and use custo
         * To run dev with `tsx`, you can use `v20.10.0` or earlier.
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
 * [Ollama](https://ollama.ai/)
+    * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
+    * **IMPORTANT**: For Nvidia GPU setup, **install** `nvidia container toolkit` then **configure** it with Docker to utilize Nvidia driver.
 * [Discord Developer Portal](https://discord.com/developers/docs/intro)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 
