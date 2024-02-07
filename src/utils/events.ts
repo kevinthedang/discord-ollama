@@ -1,21 +1,24 @@
 import type { ClientEvents, Awaitable, Client } from 'discord.js'
+import { Ollama } from 'ollama'
 
 // Export events through here to reduce amount of imports
 export { Events } from 'discord.js'
 
 export type LogMethod = (...args: unknown[]) => void
 export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents object
+export type Tokens = {
+    channel: string,
+    model: string,
+    clientUid: string
+}
 
 // Event properties
 export interface EventProps {
     client: Client
     log: LogMethod
     msgHist: { role: string, content: string }[]
-    tokens: {
-        channel: string,
-        model: string,
-        clientUid: string
-    }
+    tokens: Tokens,
+    ollama: Ollama
 }
 export type EventCallback<T extends EventKeys> = (
     props: EventProps,
@@ -36,11 +39,8 @@ export function registerEvents(
     client: Client, 
     events: Event[], 
     msgHist: { role: string, content: string }[],
-    tokens: {
-        channel: string,
-        model: string,
-        clientUid: string
-    }
+    tokens: Tokens,
+    ollama: Ollama
 ): void {
     for (const { key, callback } of events) {
         client.on(key, (...args) => {
@@ -49,7 +49,7 @@ export function registerEvents(
 
             // Handle Errors, call callback, log errors as needed
             try {
-                callback({ client, log, msgHist, tokens }, ...args)
+                callback({ client, log, msgHist, tokens, ollama }, ...args)
             } catch (error) {
                 log('[Uncaught Error]', error)
             }

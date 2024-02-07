@@ -6,7 +6,7 @@ services:
   # setup discord bot container
   discord:
     build: ./                     # find docker file in designated path
-    container_name: discord-ollama
+    container_name: discord
     restart: always               # rebuild container always
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
@@ -14,18 +14,20 @@ services:
       CHANNEL_ID: ${CHANNEL_ID}
       MODEL: ${MODEL}
       CLIENT_UID: ${CLIENT_UID}
-    expose:
-      - 8080
+      OLLAMA_IP: ${OLLAMA_IP}
+      OLLAMA_PORT: ${OLLAMA_PORT}
+    networks:
+      - ollama-net
     volumes: 
-      - .:/src/app                # docker will not make this for you, make it yourself
-    links:
-      - ollama
+      - discord:/src/app          # docker will not make this for you, make it yourself
 
   # setup ollama container
   ollama:
     image: ollama/ollama:latest   # build the image using ollama
     container_name: ollama
     restart: always
+    networks:
+      - ollama-net
     # runtime: nvidia             # use Nvidia Container Toolkit for GPU support
     # devices:
     #   - /dev/nvidia0
@@ -34,5 +36,10 @@ services:
     ports: 
       - 11434:11434
 
+networks:
+  ollama-net:
+    driver: bridge
+
 volumes:
   ollama:
+  discord:
