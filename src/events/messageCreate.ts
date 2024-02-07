@@ -4,7 +4,7 @@ import { embedMessage, event, Events } from '../utils/index.js'
  * Max Message length for free users is 2000 characters (bot or not).
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, tokens }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
     log(`Message created \"${message.content}\" from ${message.author.tag}.`)
 
     // Hard-coded channel to test output there only, in our case "ollama-endpoint"
@@ -23,7 +23,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens }, mess
     })
 
     // Try to query and send embed
-    const response = await embedMessage(message, tokens, msgHist)
+    const response = await embedMessage(message, ollama, tokens, msgHist)
 
     // Try to query and send message
     // log(normalMessage(message, tokens, msgHist))

@@ -5,7 +5,9 @@ export const Keys = {
     channel: getEnvVar('CHANNEL_ID'),
     model: getEnvVar('MODEL'),
     clientUid: getEnvVar('CLIENT_UID'),
-    guildId: getEnvVar('GUILD_ID')
+    guildId: getEnvVar('GUILD_ID'),
+    ipAddress: getEnvVar('OLLAMA_IP'),
+    portAddress: getEnvVar('OLLAMA_PORT')
 } as const // readonly keys
 
 export default Keys

@@ -1,6 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 import { registerEvents } from './utils/events.js'
 import Events from './events/index.js'
+import { Ollama } from 'ollama'
 
 // Import keys/tokens
 import Keys from './keys.js'
@@ -16,6 +17,11 @@ const client = new Client({
     ]
 });
 
+// initialize connection to ollama container
+const ollama = new Ollama({
+    host: `http://${Keys.ipAddress}:${Keys.portAddress}`,
+})
+
 const messageHistory = [
     {
         role: 'system',
@@ -30,7 +36,7 @@ const messageHistory = [
  * @param client the bot reference
  * @param Keys tokens from .env files
  */
-registerEvents(client, Events, messageHistory, Keys)
+registerEvents(client, Events, messageHistory, Keys, ollama)
 
 // Try to log in the client
 await client.login(Keys.clientToken)

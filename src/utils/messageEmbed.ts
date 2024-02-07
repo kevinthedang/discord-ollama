@@ -1,5 +1,5 @@
 import { EmbedBuilder, Message } from 'discord.js'
-import ollama, { ChatResponse } from 'ollama'
+import { ChatResponse, Ollama } from 'ollama'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -8,7 +8,8 @@ import ollama, { ChatResponse } from 'ollama'
  * @param msgHist message history between user and model
  */
 export async function embedMessage(
-    message: Message, 
+    message: Message,
+    ollama: Ollama,
     tokens: {
         channel: string,
         model: string
@@ -44,17 +45,19 @@ export async function embedMessage(
             stream: false
         })
 
+        // dummy message to let user know that query is underway
         const newEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
-            .setDescription(response.message.content)
+            .setDescription(response.message.content || 'No Content to Provided...')
             .setColor('#00FF00')
 
         // edit the message
         sentMessage.edit({ embeds: [newEmbed] })
     } catch(error: any) {
+        console.log(`[Event: messageEmbed] Error creating message: ${error.message}`);
         const errorEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
-            .setDescription(error.error)
+            .setDescription(`Issue creating response: ${error.message}`)
             .setColor('#00FF00')
         
         // send back error
