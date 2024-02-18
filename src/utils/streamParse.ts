@@ -2,6 +2,8 @@ import { AxiosResponse } from 'axios'
 
 /**
  * When running a /api/chat stream, the output needs to be parsed into an array of objects
+ *  This method is used for development purposes and testing
+ * 
  * @param stream Axios response to from Ollama
  */
 export function parseStream(stream: AxiosResponse<any, any>) {
