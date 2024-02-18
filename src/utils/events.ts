@@ -63,7 +63,7 @@ export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): 
 export function registerEvents(
     client: Client, 
     events: Event[], 
-    msgHist: { role: string, content: string }[],
+    msgHist: UserMessage[],
     tokens: Tokens,
     ollama: Ollama
 ): void {
