@@ -54,7 +54,7 @@ export async function embedMessage(
         // edit the message
         sentMessage.edit({ embeds: [newEmbed] })
     } catch(error: any) {
-        console.log(`[Event: messageEmbed] Error creating message: ${error.message}`);
+        console.log(`[Event: messageEmbed] Error creating message: ${error.message}`)
         const errorEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
             .setDescription(`Issue creating response: ${error.message}`)
