@@ -1,5 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js'
-import { registerEvents } from './utils/events.js'
+import { UserMessage, registerEvents } from './utils/events.js'
 import Events from './events/index.js'
 import { Ollama } from 'ollama'
 
@@ -22,7 +22,8 @@ const ollama = new Ollama({
     host: `http://${Keys.ipAddress}:${Keys.portAddress}`,
 })
 
-const messageHistory = [
+// Create Queue managed by Events
+const messageHistory: [UserMessage] = [
     {
         role: 'system',
         content: 'Your name is Ollama GU'

@@ -1,5 +1,6 @@
 import { Message } from 'discord.js'
 import ollama, { ChatResponse } from 'ollama'
+import { UserMessage } from './events.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -13,10 +14,7 @@ export function normalMessage(
         channel: string,
         model: string
     },
-    msgHist: {
-        role: string,
-        content: string
-    }[]
+    msgHist: UserMessage[]
 ) {
     // bot's respnse
     let response: ChatResponse

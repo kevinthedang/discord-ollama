@@ -11,7 +11,7 @@
     "prod": "node .",
     "client": "npm i && npm run build && npm run prod",
     "clean": "docker rmi $(docker images -a -q) -f && docker images -a",
-    "start": "echo \"y\" | docker-compose rm && docker-compose build && docker-compose up"
+    "start": "echo \"y\" | docker-compose rm && docker-compose build --no-cache && docker-compose up"
   },
   "author": "Kevin Dang",
   "license": "ISC",

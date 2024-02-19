@@ -1,5 +1,6 @@
 import { EmbedBuilder, Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
+import { UserMessage } from './events.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -14,10 +15,7 @@ export async function embedMessage(
         channel: string,
         model: string
     },
-    msgHist: {
-        role: string,
-        content: string
-    }[]
+    msgHist: UserMessage[]
 ) {
     // bot response
     let response: ChatResponse
@@ -48,13 +46,13 @@ export async function embedMessage(
         // dummy message to let user know that query is underway
         const newEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
-            .setDescription(response.message.content || 'No Content to Provided...')
+            .setDescription(response.message.content || 'No Content to Provide...')
             .setColor('#00FF00')
 
         // edit the message
         sentMessage.edit({ embeds: [newEmbed] })
     } catch(error: any) {
-        console.log(`[Event: messageEmbed] Error creating message: ${error.message}`);
+        console.log(`[Event: messageEmbed] Error creating message: ${error.message}`)
         const errorEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
             .setDescription(`Issue creating response: ${error.message}`)
