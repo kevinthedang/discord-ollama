@@ -9,9 +9,13 @@
     "dev-mon": "nodemon --config nodemon.json src/index.ts",
     "build": "tsc",
     "prod": "node .",
-    "client": "npm i && npm run build && npm run prod",
+    "client": "npm run build && npm run prod",
     "clean": "docker rmi $(docker images -a -q) -f && docker images -a",
-    "start": "echo \"y\" | docker-compose rm && docker-compose build --no-cache && docker-compose up"
+    "start": "docker-compose build --no-cache && docker-compose up -d",
+    "docker:network": "docker network create ollama-net",
+    "docker:build": "docker build --no-cache -t discord-ollama .",
+    "docker:client": "docker run -d -v discord:/src/app --name discord --network ollama-net discord-ollama",
+    "docker:ollama": "docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama --network ollama-net ollama/ollama:latest"
   },
   "author": "Kevin Dang",
   "license": "ISC",
