@@ -20,12 +20,16 @@ export function registerCommands(client: Client, commands: SlashCommand[]): void
     // ensure the bot is online before registering
     if (!client.application) return
 
+    // map commands into an array of names, used to checking registered commands
+    const commandsToRegister: string[] = commands.map(command => command.name)
+
     // fetch all the commands and delete them
     client.application.commands.fetch().then((fetchedCommands) => {
         for (const command of fetchedCommands.values()) {
-            console.log(`Deleted command ${command.name}`)
-            command.delete()
-                .catch(console.error)
+            if (!commandsToRegister.includes(command.name)) {
+                command.delete().catch(console.error)
+                console.log(`Deleted command ${command.name}`)
+            }
         }
     })
 
