@@ -5,7 +5,7 @@ import { embedMessage, event, Events } from '../utils/index.js'
  * @param message the message received from the channel
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
-    log(`Message created \"${message.content}\" from ${message.author.tag}.`)
+    log(`Message \"${message.content}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Hard-coded channel to test output there only, in our case "ollama-endpoint"
     if (message.channelId != tokens.channel) return

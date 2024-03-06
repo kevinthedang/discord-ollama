@@ -8,7 +8,7 @@ import commands from '../commands/index.js'
 export default event(Events.InteractionCreate, async ({ log, client }, interaction) => {
     if (!interaction.isCommand() || !interaction.isChatInputCommand()) return
     
-    log(`Interaction called \'${interaction.commandName}\' from ${interaction.client.user.tag}.`)
+    log(`Interaction called \'${interaction.commandName}\' from ${interaction.user.tag}.`)
 
     // ensure command exists, otherwise kill event
     const command = commands.find(command => command.name === interaction.commandName)

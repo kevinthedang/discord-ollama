@@ -17,11 +17,11 @@ export const ThreadCreate: SlashCommand = {
         })
 
         // Send a message in the thread
-        thread.send(`**User:** ${interaction.user}`)
+        thread.send(`**User:** ${interaction.user} \n**People in Coversation:** ${thread.memberCount}`)
 
         // user only reply
         return interaction.reply({
-            content: 'I can help you in the Thread below.',
+            content: `I can help you in the Thread below. \n**Thread ID:** ${thread.id}`,
             ephemeral: true
         })
     }

@@ -2,7 +2,7 @@ import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType }
 import { SlashCommand } from '../utils/commands.js'
 
 // 'global' variable to store the message style
-export var embedStyle = true
+export let embedStyle = true
 
 export const MessageStyle: SlashCommand = {
     name: 'message-style',
