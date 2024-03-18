@@ -28,7 +28,7 @@ export function registerCommands(client: Client, commands: SlashCommand[]): void
         for (const command of fetchedCommands.values()) {
             if (!commandsToRegister.includes(command.name)) {
                 command.delete().catch(console.error)
-                console.log(`Deleted command ${command.name}`)
+                console.log(`[Command: ${command.name}] Removed from Discord`)
             }
         }
     })
@@ -41,7 +41,7 @@ export function registerCommands(client: Client, commands: SlashCommand[]): void
         client.application.commands
             .create(command)
             .then((c) => {
-                console.log(`Registered command ${c.name}`)
+                console.log(`[Command: ${c.name}] Registered on Discord`)
                 c.options?.forEach((o) => console.log(`  - ${o.name}`))
             })
 }

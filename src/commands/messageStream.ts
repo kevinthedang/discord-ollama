@@ -1,5 +1,6 @@
 import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
+import { openFile } from '../utils/jsonHandler.js'
 
 export const MessageStream: SlashCommand = {
     name: 'message-stream',
@@ -21,15 +22,11 @@ export const MessageStream: SlashCommand = {
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || channel.type !== ChannelType.GuildText) return
 
-        // we need some sort of way to store these preferences! and by user, we can do this using interaction.user.username
-
-        if (interaction.options.get('stream')?.value)
-            console.log(`yay streaming for ${interaction.user.username}`)
-        else
-            console.log(`sad, no streaming for ${interaction.user.username}`)
+        // save value to json and write to it
+        openFile('config.json', interaction.commandName, interaction.options.get('stream')?.value)
 
         interaction.reply({
-            content: `Message streaming preferences for embed set to: \`idk yet\``,
+            content: `Message streaming preferences for embed set to: \`${interaction.options.get('stream')?.value}\``,
             ephemeral: true
         })
     }
