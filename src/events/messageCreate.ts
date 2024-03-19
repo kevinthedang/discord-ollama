@@ -1,4 +1,5 @@
 import { embedMessage, event, Events } from '../utils/index.js'
+import { getConfig } from '../utils/jsonHandler.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
@@ -23,6 +24,10 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     })
 
     // Try to query and send embed
+    getConfig('config.json', (config) => {
+        console.log(config)
+    })
+
     const response = await embedMessage(message, ollama, tokens, msgHist)
 
     // Try to query and send message
