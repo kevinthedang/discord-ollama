@@ -1,4 +1,5 @@
-import { embedMessage, event, Events } from '../utils/index.js'
+import { ChatResponse } from 'ollama'
+import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
 import { getConfig } from '../utils/jsonHandler.js'
 
 /** 
@@ -24,21 +25,24 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     })
 
     // Try to query and send embed
-    getConfig('config.json', (config) => {
-        console.log(config)
-    })
+    getConfig('config.json', async (config) => {
+        let response: ChatResponse
 
-    const response = await embedMessage(message, ollama, tokens, msgHist)
+        if (config === undefined) return // do user preferences exist? then check style
 
-    // Try to query and send message
-    // log(normalMessage(message, tokens, msgHist))
+        // undefined or false, use normal, otherwise use embed
+        if (config.options.messageStyle)
+            response = await embedMessage(message, ollama, tokens, msgHist)
+        else
+            response = await normalMessage(message, ollama, tokens, msgHist)
 
-    // If something bad happened, remove user query and stop
-    if (response == undefined) { msgHist.pop(); return }
+        // If something bad happened, remove user query and stop
+        if (response == undefined) { msgHist.pop(); return }
 
-    // successful query, save it as history
-    msgHist.push({
-        role: 'assistant',
-        content: response.message.content
+        // successful query, save it as history
+        msgHist.push({ 
+            role: 'assistant', 
+            content: response.message.content 
+        })
     })
 })

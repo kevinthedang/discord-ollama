@@ -1,5 +1,13 @@
 import fs from 'fs'
 
+export interface Configuration {
+    name: string
+    options: {
+        messageStream?: boolean,
+        messageStyle?: boolean
+    }
+}
+
 /**
  * Method to open a file in the working directory and modify/create it
  * 
@@ -20,7 +28,7 @@ export function openFile(filename: string, key: string, value: any) {
             }
         })
     } else {
-        const object = JSON.parse('{}')
+        const object: Configuration = JSON.parse('{}')
 
         // set standard information for config file and options
         object['name'] = 'Discord Ollama Configurations'
@@ -33,7 +41,7 @@ export function openFile(filename: string, key: string, value: any) {
     }
 }
 
-export function getConfig(filename: string, callback: (config: object | undefined) => void): void {
+export function getConfig(filename: string, callback: (config: Configuration | undefined) => void): void {
     // attempt to read the file and get the configuration
     if (fs.existsSync(filename)) {
         fs.readFile(filename, 'utf8', (error, data) => {

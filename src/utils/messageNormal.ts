@@ -1,5 +1,5 @@
 import { Message } from 'discord.js'
-import ollama, { ChatResponse } from 'ollama'
+import { ChatResponse, Ollama } from 'ollama'
 import { UserMessage } from './events.js'
 
 /**
@@ -8,8 +8,9 @@ import { UserMessage } from './events.js'
  * @param tokens tokens to run query
  * @param msgHist message history between user and model
  */
-export function normalMessage(
-    message: Message, 
+export async function normalMessage(
+    message: Message,
+    ollama: Ollama,
     tokens: {
         channel: string,
         model: string
@@ -19,7 +20,7 @@ export function normalMessage(
     // bot's respnse
     let response: ChatResponse
 
-    message.reply('Generating Response . . .').then(async sentMessage => {
+    await message.reply('Generating Response . . .').then(async sentMessage => {
         try {
             // Attempt to query model for message
             response = await ollama.chat({
