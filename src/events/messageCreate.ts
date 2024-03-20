@@ -31,7 +31,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         if (config === undefined) return // do user preferences exist? then check style
 
         // undefined or false, use normal, otherwise use embed
-        if (config.options.messageStyle)
+        if (config.options['message-style'])
             response = await embedMessage(message, ollama, tokens, msgHist)
         else
             response = await normalMessage(message, ollama, tokens, msgHist)

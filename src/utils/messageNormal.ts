@@ -38,7 +38,8 @@ export async function normalMessage(
             // edit the 'generic' response to new message
             sentMessage.edit(response.message.content)
         } catch(error: any) {
-            sentMessage.edit(error.error)
+            console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
+            sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
         }
     })
 

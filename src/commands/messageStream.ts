@@ -4,7 +4,7 @@ import { openFile } from '../utils/jsonHandler.js'
 
 export const MessageStream: SlashCommand = {
     name: 'message-stream',
-    description: 'change preference on message streaming from ollama. WARNING: can be very slow',
+    description: 'change preference on message streaming from ollama. WARNING: can be very slow.',
 
     // user option(s) for setting stream
     options: [

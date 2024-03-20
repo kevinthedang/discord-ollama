@@ -1,10 +1,10 @@
 import fs from 'fs'
 
 export interface Configuration {
-    name: string
+    readonly name: string
     options: {
-        messageStream?: boolean,
-        messageStyle?: boolean
+        'message-stream'?: boolean,
+        'message-style'?: boolean
     }
 }
 
@@ -28,10 +28,9 @@ export function openFile(filename: string, key: string, value: any) {
             }
         })
     } else {
-        const object: Configuration = JSON.parse('{}')
+        const object: Configuration = JSON.parse('{ \"name\": \"Discord Ollama Confirgurations\" }')
 
         // set standard information for config file and options
-        object['name'] = 'Discord Ollama Configurations'
         object['options'] = {
             [key]: value
         }

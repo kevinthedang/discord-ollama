@@ -2,9 +2,6 @@ import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType }
 import { SlashCommand } from '../utils/commands.js'
 import { openFile } from '../utils/jsonHandler.js'
 
-// 'global' variable to store the message style
-export let embedStyle = true
-
 export const MessageStyle: SlashCommand = {
     name: 'message-style',
     description: 'sets the message style to embed or normal',
@@ -29,7 +26,7 @@ export const MessageStyle: SlashCommand = {
         openFile('config.json', interaction.commandName, interaction.options.get('embed')?.value)
 
         interaction.reply({
-            content: `Message style preferences for embed set to: \`${embedStyle}\``,
+            content: `Message style preferences for embed set to: \`${interaction.options.get('embed')?.value}\``,
             ephemeral: true
         })
     }
