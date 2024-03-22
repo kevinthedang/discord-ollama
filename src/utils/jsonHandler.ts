@@ -40,7 +40,7 @@ export function openFile(filename: string, key: string, value: any) {
     }
 }
 
-export function getConfig(filename: string, callback: (config: Configuration | undefined) => void): void {
+export async function getConfig(filename: string, callback: (config: Configuration | undefined) => void): Promise<void> {
     // attempt to read the file and get the configuration
     if (fs.existsSync(filename)) {
         fs.readFile(filename, 'utf8', (error, data) => {

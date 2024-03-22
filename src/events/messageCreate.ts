@@ -1,6 +1,6 @@
 import { ChatResponse } from 'ollama'
 import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
-import { getConfig } from '../utils/jsonHandler.js'
+import { Configuration, getConfig } from '../utils/jsonHandler.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
@@ -24,14 +24,19 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         content: message.content
     })
 
-    let success: boolean = false
+    // Try to query and send embed     
+    try {
+        const config: Configuration = await new Promise((resolve, reject) => {
+            getConfig('config.json', (config) => {
+                if (config === undefined) {
+                    reject(new Error('No Configuration is set up.'))
+                    return
+                }
+                resolve(config)
+            })
+        })
 
-    // Try to query and send embed
-    getConfig('config.json', async (config) => {
-        let response: ChatResponse
-
-        if (config === undefined) return // do user preferences exist? then check style
-        
+        let response: ChatResponse        
 
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
@@ -47,9 +52,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'assistant', 
             content: response.message.content 
         })
-        success = true
-    })
-
-    if (!success)
-        message.reply(`**Response generation failed.**\n\nReason: No Configurations set up!\n\nPlease use any config slash command.`)
+    } catch (error: any) {
+        msgHist.pop() // remove message because of failure
+        message.reply(`**Response generation failed.**\n\nReason: ${error.message}\n\nPlease use any config slash command.`)
+    }
 })
