@@ -7,6 +7,7 @@ WORKDIR /app
 # copy package.json and the lock file into the container, and src files
 COPY ./src ./src
 COPY ./*.json ./
+COPY ./.env ./
 
 # install dependencies, breaks
 RUN npm install

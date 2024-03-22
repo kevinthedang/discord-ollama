@@ -1,11 +1,13 @@
-import { embedMessage, event, Events } from '../utils/index.js'
+import { ChatResponse } from 'ollama'
+import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
+import { Configuration, getConfig } from '../utils/jsonHandler.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
  * @param message the message received from the channel
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
-    log(`Message created \"${message.content}\" from ${message.author.tag}.`)
+    log(`Message \"${message.content}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Hard-coded channel to test output there only, in our case "ollama-endpoint"
     if (message.channelId != tokens.channel) return
@@ -22,18 +24,36 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         content: message.content
     })
 
-    // Try to query and send embed
-    const response = await embedMessage(message, ollama, tokens, msgHist)
+    // Try to query and send embed     
+    try {
+        const config: Configuration = await new Promise((resolve, reject) => {
+            getConfig('config.json', (config) => {
+                if (config === undefined) {
+                    reject(new Error('No Configuration is set up.'))
+                    return
+                }
+                resolve(config)
+            })
+        })
 
-    // Try to query and send message
-    // log(normalMessage(message, tokens, msgHist))
+        let response: ChatResponse        
 
-    // If something bad happened, remove user query and stop
-    if (response == undefined) { msgHist.pop(); return }
+        // undefined or false, use normal, otherwise use embed
+        if (config.options['message-style'])
+            response = await embedMessage(message, ollama, tokens, msgHist)
+        else
+            response = await normalMessage(message, ollama, tokens, msgHist)
 
-    // successful query, save it as history
-    msgHist.push({
-        role: 'assistant',
-        content: response.message.content
-    })
+        // If something bad happened, remove user query and stop
+        if (response == undefined) { msgHist.pop(); return }
+
+        // successful query, save it as history
+        msgHist.push({ 
+            role: 'assistant', 
+            content: response.message.content 
+        })
+    } catch (error: any) {
+        msgHist.pop() // remove message because of failure
+        message.reply(`**Response generation failed.**\n\nReason: ${error.message}\n\nPlease use any config slash command.`)
+    }
 })

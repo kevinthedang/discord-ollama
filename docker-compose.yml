@@ -8,6 +8,7 @@ services:
     build: ./                     # find docker file in designated path
     container_name: discord
     restart: always               # rebuild container always
+    image: discord/bot:0.2.0
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       GUILD_ID: ${GUILD_ID}
@@ -17,7 +18,8 @@ services:
       OLLAMA_IP: ${OLLAMA_IP}
       OLLAMA_PORT: ${OLLAMA_PORT}
     networks:
-      - ollama-net
+      ollama-net:
+        ipv4_address: ${DISCORD_IP}
     volumes: 
       - discord:/src/app          # docker will not make this for you, make it yourself
 
@@ -27,18 +29,25 @@ services:
     container_name: ollama
     restart: always
     networks:
-      - ollama-net
+      ollama-net:
+        ipv4_address: ${OLLAMA_IP}
+
     # runtime: nvidia             # use Nvidia Container Toolkit for GPU support
     # devices:
     #   - /dev/nvidia0
     volumes:
       - ollama:/root/.ollama
     ports: 
-      - 11434:11434
+      - ${OLLAMA_PORT}:${OLLAMA_PORT}
 
+# create a network that supports giving addresses withing a specific subnet
 networks:
   ollama-net:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET_ADDRESS}/16
 
 volumes:
   ollama:
