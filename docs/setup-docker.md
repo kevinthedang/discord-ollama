@@ -4,6 +4,12 @@
 * Please also install [Docker Compose](https://docs.docker.com/compose/install/linux/) for easy running. If not, there are [scripts](#manual-run-with-docker) to set everything up.
 
 ## To Run (with Docker and Docker Compose)
+* With the inclusion of subnets in the `docker-compose.yml`, you will need to set the `SUBNET_ADDRESS`, `OLLAMA_IP`, `OLLAMA_PORT`, and `DISCORD_IP`. Here are some default values if you don't care:
+    * `OLLAMA_IP = 172.18.0.2`
+    * `OLLAMA_PORT = 11434`
+    * `DISCORD_IP = 172.18.0.3`
+    * `SUBNET_ADDRESS = 172.18.0.0`
+    * Don't understand any of this? watch a Networking video to understand subnetting.
 * You will need a model in the container for this to work properly, on Docker Desktop go to the `Containers` tab, select the `ollama` container, and select `Exec` to run as root on your container. Now, run `ollama pull [model name]` to get your model.
     * For Linux Servers, you need another shell to pull the model, or if you run `docker compose build && docker compose up -d`, then it will run in the background to keep your shell. Run `docker exec -it ollama bash` to get into the container and run the samme pull command above.
 * Otherwise, there is no need to install any npm packages for this, you just need to run `npm run start` to pull the containers and spin them up.
