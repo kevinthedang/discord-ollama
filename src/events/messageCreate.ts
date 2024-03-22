@@ -24,11 +24,14 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         content: message.content
     })
 
+    let success: boolean = false
+
     // Try to query and send embed
     getConfig('config.json', async (config) => {
         let response: ChatResponse
 
         if (config === undefined) return // do user preferences exist? then check style
+        
 
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
@@ -44,5 +47,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'assistant', 
             content: response.message.content 
         })
+        success = true
     })
+
+    if (!success)
+        message.reply(`**Response generation failed.**\n\nReason: No Configurations set up!\n\nPlease use any config slash command.`)
 })
