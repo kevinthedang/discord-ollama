@@ -20,9 +20,12 @@
     * `npm run docker:client`
     * `docker ps` to see if the containers are there!
         * Names should be **discord** and **ollama**.
+    * You can also just run `npm run docker:start` now for the above commands.
 * Clean-up:
-    * `docker ps` for the conatiner id's.
+    * `docker ps` for the conatiner id's. Use `-a` flag as necessary.
     * `docker rm -f discord && docker rm -f ollama` to remove the containers.
         * `docker rm -f CONTAINER_ID` do for both containers if naming issues arise.
     * `docker network rm ollama-net` removes the network.
         * `docker network prune` will also work so long as the network is unused.
+* Remove Image:
+    * If you need to remove the image run `docker image rm IMAGE_ID`. You can get the image id by running `docker images`.
