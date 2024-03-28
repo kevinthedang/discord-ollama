@@ -2,7 +2,7 @@
 * Follow this guide to setup [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * If on Windows, download [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) to get the docker engine.
 * Please also install [Docker Compose](https://docs.docker.com/compose/install/linux/) for easy running. If not, there are [scripts](#manual-run-with-docker) to set everything up.
-* **IMPORTANT NOTE**: Currently, it seems like wsl does not like Nvidia Container Toolkit. It will work initially then reset it for some odd reason. For now, it is advised to use an actually Linux machien to run using Docker. If you do not care about utilizing your GPU or don't even have a Nvidia GPU then disregard this.
+* **IMPORTANT NOTE**: Currently, it seems like wsl does not like Nvidia Container Toolkit. It will work initially then reset it for some odd reason. For now, it is advised to use an actually Linux machine to run using Docker. If you do not care about utilizing your GPU or don't even have a Nvidia GPU then disregard this.
 
 ## Nvidia Container Toolkit Setup
 ### Installation with Apt
