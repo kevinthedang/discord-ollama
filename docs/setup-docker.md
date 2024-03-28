@@ -2,6 +2,43 @@
 * Follow this guide to setup [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * If on Windows, download [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) to get the docker engine.
 * Please also install [Docker Compose](https://docs.docker.com/compose/install/linux/) for easy running. If not, there are [scripts](#manual-run-with-docker) to set everything up.
+* **IMPORTANT NOTE**: Currently, it seems like wsl does not like Nvidia Container Toolkit. It will work initially then reset it for some odd reason. For now, it is advised to use an actually Linux machine to run using Docker. If you do not care about utilizing your GPU or don't even have a Nvidia GPU then disregard this.
+
+## Nvidia Container Toolkit Setup
+### Installation with Apt
+* Instructions can be found [here](https://github.com/kevinthedang/discord-ollama/issues/23) in **Steps to reproduce** or below:
+  * Step 1. Configure the production repository on machine:
+```sh
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg \
+  && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list | \
+    sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' | \
+    sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+```
+  * Step 2. Update the packages list from the repository:
+```sh
+sudo apt-get update
+```
+  * Step 3. Install the Nvidia Container Toolkit:
+```sh
+sudo apt-get install -y nvidia-container-toolkit
+```
+
+### Configurating with Docker
+Step 1.Configure the container runtime by using the `nvidia-ctk` command:
+```sh
+sudo nvidia-ctk runtime configure --runtime=docker
+```
+
+The `nvidia-ctk` command modifies the `/etc/docker/daemon.json` file on the host. The file is updated so that Docker can use the NVIDIA Container Runtime.
+
+Step 2. Restart the Docker daemon:
+```sh
+sudo systemctl restart docker
+```
+
+### References for setup
+* Guide to installing [Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
+* [GitHub repository](https://github.com/NVIDIA/nvidia-container-toolkit?tab=readme-ov-file) for Nvidia Container Toolkit
 
 ## To Run (with Docker and Docker Compose)
 * With the inclusion of subnets in the `docker-compose.yml`, you will need to set the `SUBNET_ADDRESS`, `OLLAMA_IP`, `OLLAMA_PORT`, and `DISCORD_IP`. Here are some default values if you don't care:
