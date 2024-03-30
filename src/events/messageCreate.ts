@@ -55,6 +55,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
         openFile('config.json', 'message-style', true)
-        message.reply(`**Response generation failed.**\n\n**Reason:** *${error.message}*\n\nCreating \`config.json\` with \`message-style\` set as \`true\` for embedded messages`)
+        message.reply(`**Response generation failed.**\n\n**Reason:** *${error.message}*\n\nCreating \`config.json\` with \`message-style\` set as \`true\` for embedded messages.\nPlease try chatting again.`)
     }
 })
