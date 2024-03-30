@@ -1,6 +1,6 @@
 import { ChatResponse } from 'ollama'
 import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
-import { Configuration, getConfig } from '../utils/jsonHandler.js'
+import { Configuration, getConfig, openFile } from '../utils/jsonHandler.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
@@ -54,6 +54,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         })
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
-        message.reply(`**Response generation failed.**\n\nReason: ${error.message}\n\nPlease use any config slash command.`)
+        openFile('config.json', 'message-style', true)
+        message.reply(`**Response generation failed.**\n\n**Reason:** *${error.message}*\n\nCreating \`config.json\` with \`message-style\` set as \`true\` for embedded messages`)
     }
 })
