@@ -75,7 +75,7 @@ jobs:
               (docker images | grep -q 'discord/bot' && docker images | grep -qE 'ollama/ollama') || exit 1
 
 
-          - name: Check Images Exist
+          - name: Check Containers Exist
             run: |
               (docker ps | grep -q 'ollama' && docker ps | grep -q 'discord') || exit 1
 
