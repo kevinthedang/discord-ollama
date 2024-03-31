@@ -1,4 +1,4 @@
-name: Test Discord-Ollama Builds
+name: Builds
 run-name: Validate Node and Docker Builds
 on:
     push:
@@ -73,7 +73,6 @@ jobs:
           - name: Check Images Exist
             run: |
               (docker images | grep -q 'discord/bot' && docker images | grep -qE 'ollama/ollama') || exit 1
-
 
           - name: Check Containers Exist
             run: |
