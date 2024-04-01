@@ -22,7 +22,7 @@ export const Disable: SlashCommand = {
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || channel.type !== ChannelType.GuildText) return
 
-        // set the message style
+        // set state of bot chat features
         openFile('config.json', interaction.commandName, interaction.options.get('enabled')?.value)
 
         interaction.reply({
