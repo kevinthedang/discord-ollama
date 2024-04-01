@@ -37,6 +37,7 @@ jobs:
                 echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
                 echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
                 echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+                echo ADMINS = ${{ secrets.ADMINS }} >> .env
 
             - name: Startup Discord Bot Client
               run: |
