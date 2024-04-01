@@ -28,10 +28,10 @@ export const Shutoff: SlashCommand = {
         // create list of superUsers based on string parse
         const superUsers: string[] = JSON.parse(Keys.superUser.replace(/'/g, '"'))
 
-        // validate superuser
-        if (interaction.user.tag in superUsers) {
+        // check if admin or false on shutdown
+        if (interaction.user.tag in superUsers || !(!interaction.options.get('are-you-sure')?.value && interaction.user.tag in superUsers)) {
             interaction.reply({
-                content: `${interaction.user.tag}: You do not have permission to shutoff **${client.user?.tag}**`,
+                content: `Shutdown failed:\n\n${interaction.user.tag}, You do not have permission to shutoff **${client.user?.tag}**, otherwise, you just didn't want to.`,
                 ephemeral: true
             })
             return // stop from shutting down
