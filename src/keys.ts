@@ -7,7 +7,8 @@ export const Keys = {
     clientUid: getEnvVar('CLIENT_UID'),
     guildId: getEnvVar('GUILD_ID'),
     ipAddress: getEnvVar('OLLAMA_IP'),
-    portAddress: getEnvVar('OLLAMA_PORT')
+    portAddress: getEnvVar('OLLAMA_PORT'),
+    superUser: getEnvVar('ADMINS')
 } as const // readonly keys
 
 export default Keys

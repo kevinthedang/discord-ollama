@@ -1,0 +1,33 @@
+import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
+import { SlashCommand } from '../utils/commands.js'
+import { openFile } from '../utils/jsonHandler.js'
+
+export const Disable: SlashCommand = {
+    name: 'toggle-chat',
+    description: 'toggle all chat features, slash commands will still work.',
+
+    // set available user options to pass to the command
+    options: [
+        {
+            name: 'enabled',
+            description: 'true = enabled, false = disabled',
+            type: ApplicationCommandOptionType.Boolean,
+            required: true
+        }
+    ],
+
+    // Query for message information and set the style
+    run: async (client: Client, interaction: CommandInteraction) => {
+        // fetch channel and message
+        const channel = await client.channels.fetch(interaction.channelId)
+        if (!channel || channel.type !== ChannelType.GuildText) return
+
+        // set state of bot chat features
+        openFile('config.json', interaction.commandName, interaction.options.get('enabled')?.value)
+
+        interaction.reply({
+            content: `Chat features has been \`${interaction.options.get('enabled')?.value ?  "enabled" : "disabled" }\``,
+            ephemeral: true
+        })
+    }
+}

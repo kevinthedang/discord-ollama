@@ -4,7 +4,8 @@ export interface Configuration {
     readonly name: string
     options: {
         'message-stream'?: boolean,
-        'message-style'?: boolean
+        'message-style'?: boolean,
+        'toggle-chat'?: boolean
     }
 }
 

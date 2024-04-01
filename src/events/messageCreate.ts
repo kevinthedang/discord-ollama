@@ -28,8 +28,15 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     try {
         const config: Configuration = await new Promise((resolve, reject) => {
             getConfig('config.json', (config) => {
+                // check if config.json exists
                 if (config === undefined) {
-                    reject(new Error('No Configuration is set up.'))
+                    reject(new Error('No Configuration is set up.\n\nCreating \`config.json\` with \`message-style\` set as \`true\` for embedded messages.\nPlease try chatting again.'))
+                    return
+                }
+
+                // check if chat is disabled
+                if(!config.options['toggle-chat']) {
+                    reject(new Error('Admin(s) have disabled chat features.\n\n Please contact your server\'s admin(s).'))
                     return
                 }
                 resolve(config)
@@ -55,6 +62,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
         openFile('config.json', 'message-style', true)
-        message.reply(`**Response generation failed.**\n\n**Reason:** *${error.message}*\n\nCreating \`config.json\` with \`message-style\` set as \`true\` for embedded messages.\nPlease try chatting again.`)
+        message.reply(`**Response generation failed.**\n\n**Reason:** *${error.message}*`)
     }
 })
