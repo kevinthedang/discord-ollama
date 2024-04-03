@@ -48,8 +48,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
 
         let response: ChatResponse    
         
-        log(msgHist)
-
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
             response = await embedMessage(message, ollama, tokens, msgHist)

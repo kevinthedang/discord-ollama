@@ -25,10 +25,6 @@ const ollama = new Ollama({
 
 // Create Queue managed by Events
 const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
-messageHistory.enqueue({
-    role: 'assistant',
-    content: `My name is ${client.user?.username}`
-})
 
 /**
  * register events for bot to listen to in discord
@@ -44,4 +40,10 @@ await client.login(Keys.clientToken)
 .catch((error) => {
     console.error('[Login Error]', error)
     process.exit(1)
+})
+
+// queue up bots name
+messageHistory.enqueue({
+    role: 'assistant',
+    content: `My name is ${client.user?.username}`
 })
