@@ -17,7 +17,7 @@ export class Queue<T> implements IQueue<T> {
      * Set up Queue
      * @param capacity max length of queue
      */
-    constructor(private capacity: number = 5) {}
+    constructor(public capacity: number = 5) {}
 
     /**
      * Put item in front of queue
@@ -58,13 +58,5 @@ export class Queue<T> implements IQueue<T> {
      */
     getItems(): T[] {
         return this.storage
-    }
-
-    /**
-     * Get capacity of the queue
-     * @returns capacity of queue
-     */
-    getCapacity(): number {
-        return this.capacity
     }
 }
