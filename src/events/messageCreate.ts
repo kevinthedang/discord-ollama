@@ -18,15 +18,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     // Only respond if message mentions the bot
     if (!message.mentions.has(tokens.clientUid)) return
 
-    // check if we can push, if not, remove oldest
-    if (msgHist.size() === msgHist.getCapacity()) msgHist.dequeue()
-
-    // push user response
-    msgHist.enqueue({
-        role: 'user',
-        content: message.content
-    })
-
     // Try to query and send embed     
     try {
         const config: Configuration = await new Promise((resolve, reject) => {
@@ -38,15 +29,35 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                 }
 
                 // check if chat is disabled
-                if(!config.options['toggle-chat']) {
+                if (!config.options['toggle-chat']) {
                     reject(new Error('Admin(s) have disabled chat features.\n\n Please contact your server\'s admin(s).'))
                     return
                 }
+
+                // check if there is a set capacity in config
+                if (typeof config.options['history-capacity'] !== 'number')
+                    log(`Capacity is undefined, using default capacity of ${msgHist.capacity}.`)
+                else if (config.options['history-capacity'] === msgHist.capacity)
+                    log(`Capacity matches config as ${msgHist.capacity}, no changes made.`)
+                else {
+                    log(`New Capacity found. Setting Context Capacity to ${config.options['history-capacity']}.`)
+                    msgHist.capacity = config.options['history-capacity']
+                }
+
                 resolve(config)
             })
         })
 
         let response: ChatResponse    
+
+        // check if we can push, if not, remove oldest
+        if (msgHist.size() === msgHist.capacity) msgHist.dequeue()
+
+        // push user response before ollama query
+        msgHist.enqueue({
+            role: 'user',
+            content: message.content
+        })
         
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
@@ -58,9 +69,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         if (response == undefined) { msgHist.pop(); return }
 
         // if queue is full, remove the oldest message
-        if (msgHist.size() === msgHist.getCapacity()) msgHist.dequeue()
+        if (msgHist.size() === msgHist.capacity) msgHist.dequeue()
 
-        // successful query, save it as history
+        // successful query, save it in context history
         msgHist.enqueue({ 
             role: 'assistant', 
             content: response.message.content 

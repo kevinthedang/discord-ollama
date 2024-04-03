@@ -4,11 +4,13 @@ import { MessageStyle } from './messageStyle.js'
 import { MessageStream } from './messageStream.js'
 import { Disable } from './disable.js'
 import { Shutoff } from './shutoff.js'
+import { Capacity } from './capacity.js'
 
 export default [
     ThreadCreate,
     MessageStyle,
     MessageStream,
     Disable,
-    Shutoff
+    Shutoff,
+    Capacity
 ] as SlashCommand[]
