@@ -23,10 +23,7 @@
 ## Environment
 * You will need two environment files:
   * `.env`: for running the bot
-    * `CLIENT_TOKEN`: the token for the bot to log in
-    * `CHANNEL_ID`: the id of the channel you wish for the bot to listen in
-    * `MODEL`: the mode you wish to use
-    * `BOT_UID`: the user id the bot goes by (the id of the discord user)
+    * Please refer to `.env.sample` for all environment variables to include
   * `.env.dev.local`: also runs the bot, but with development variables
     * Currently there are no differences between the two, but when needed, you may add environment variables as needed.
 

@@ -1,5 +1,26 @@
-# Discord Ollama Integration [![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC_BY--NC_4.0-darkgreen.svg)](https://creativecommons.org/licenses/by-nc/4.0/) [![Release Badge](https://img.shields.io/github/v/release/kevinthedang/discord-ollama?logo=github)](https://github.com/kevinthedang/discord-ollama/releases/latest)
-Ollama is an AI model management tool that allows users to install and use custom large language models locally. The goal is to create a discord bot that will utilize Ollama and chat with it on a Discord server! Also, allow others to create their own models personalized for their own servers!
+<div align="center">
+    <p><a href="#"><a href="https://ollama.ai/"><img alt="ollama" src="./imgs/ollama-icon.png" width="200px" /></a><img alt="+" src="./imgs/grey-plus.png" width="100px" /></a><a href="https://discord.com/"><img alt="discord" src="./imgs/discord-icon.png" width="190px" /></a></p>
+    <h1>Discord Ollama Integration</h1>
+    <h3><a href="#"></a>Ollama as your Discord AI Assistant</h3>
+    <p><a href="#"></a><a href="https://creativecommons.org/licenses/by-nc/4.0/"><img alt="License" src="https://img.shields.io/badge/License-CC_BY--NC_4.0-darkgreen.svg" /></a>
+    <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/kevinthedang/discord-ollama?logo=github" /></a>
+    <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/build-test.yml"><img alt="Build Status" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/build-test.yml/badge.svg" /></a>
+</div>
+
+## About/Goals
+Ollama is an AI model management tool that allows users to install and use custom large language models locally.  
+The project aims to:
+* [x] Create a Discord bot that will utilize Ollama and chat to chat with users! 
+  * [ ] User Preferences on Chat
+  * [ ] Message Persistance on Channels and Threads
+  * [x] Containerization with Docker
+  * [x] Slash Commands Compatible
+  * [ ] Generated Token Length Handling for >2000 or >6000 characters
+  * [ ] External WebUI Integration
+  * [ ] Administrator Role Compatible
+* [ ] Allow others to create their own models personalized for their own servers!
+  * [ ] Documentation on creating your own LLM
+  * [ ] Documentation on web scrapping and cleaning
 
 ## Environment Setup
 * Clone this repo using `git clone https://github.com/kevinthedang/discord-ollama.git` or just use [GitHub Desktop](https://desktop.github.com/) to clone the repo.

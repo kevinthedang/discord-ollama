@@ -37,9 +37,12 @@ jobs:
                 echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
                 echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
                 echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
-
+                echo ADMINS = ${{ secrets.ADMINS }} >> .env
+              
+              # set -e ensures if nohup fails, this section fails
             - name: Startup Discord Bot Client
               run: |
+                set -e
                 nohup npm run prod &
 
     Discord-Ollama-Container-Build: # test docker build and run

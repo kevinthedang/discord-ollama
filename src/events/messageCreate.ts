@@ -18,8 +18,11 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     // Only respond if message mentions the bot
     if (!message.mentions.has(tokens.clientUid)) return
 
+    // check if we can push, if not, remove oldest
+    if (msgHist.size() === msgHist.getCapacity()) msgHist.dequeue()
+
     // push user response
-    msgHist.push({
+    msgHist.enqueue({
         role: 'user',
         content: message.content
     })
@@ -43,8 +46,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             })
         })
 
-        let response: ChatResponse        
-
+        let response: ChatResponse    
+        
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
             response = await embedMessage(message, ollama, tokens, msgHist)
@@ -54,14 +57,17 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // If something bad happened, remove user query and stop
         if (response == undefined) { msgHist.pop(); return }
 
+        // if queue is full, remove the oldest message
+        if (msgHist.size() === msgHist.getCapacity()) msgHist.dequeue()
+
         // successful query, save it as history
-        msgHist.push({ 
+        msgHist.enqueue({ 
             role: 'assistant', 
             content: response.message.content 
         })
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
         openFile('config.json', 'message-style', true)
-        message.reply(`**Response generation failed.**\n\n**Reason:** *${error.message}*`)
+        message.reply(`**Error Occurred:**\n\n**Reason:** *${error.message}*`)
     }
 })

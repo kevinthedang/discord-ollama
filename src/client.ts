@@ -2,6 +2,7 @@ import { Client, GatewayIntentBits } from 'discord.js'
 import { UserMessage, registerEvents } from './utils/events.js'
 import Events from './events/index.js'
 import { Ollama } from 'ollama'
+import { Queue } from './queues/queue.js'
 
 // Import keys/tokens
 import Keys from './keys.js'
@@ -23,12 +24,7 @@ const ollama = new Ollama({
 })
 
 // Create Queue managed by Events
-const messageHistory: [UserMessage] = [
-    {
-        role: 'system',
-        content: 'Your name is Ollama GU'
-    }
-]
+const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
 
 /**
  * register events for bot to listen to in discord
@@ -44,4 +40,10 @@ await client.login(Keys.clientToken)
 .catch((error) => {
     console.error('[Login Error]', error)
     process.exit(1)
+})
+
+// queue up bots name
+messageHistory.enqueue({
+    role: 'assistant',
+    content: `My name is ${client.user?.username}`
 })
