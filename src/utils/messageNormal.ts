@@ -1,6 +1,7 @@
 import { Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
 import { UserMessage } from './events.js'
+import { Queue } from '../queues/queue.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -15,7 +16,7 @@ export async function normalMessage(
         channel: string,
         model: string
     },
-    msgHist: UserMessage[]
+    msgHist: Queue<UserMessage>
 ) {
     // bot's respnse
     let response: ChatResponse
@@ -25,7 +26,7 @@ export async function normalMessage(
             // Attempt to query model for message
             response = await ollama.chat({
                 model: tokens.model,
-                messages: msgHist,
+                messages: msgHist.getItems(),
                 options: {
                     num_thread: 8, // remove if optimization needed further
                     mirostat: 1,

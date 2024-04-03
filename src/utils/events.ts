@@ -1,5 +1,6 @@
-import type { ClientEvents, Awaitable, Client } from 'discord.js'
+import type { ClientEvents, Awaitable, Client, User } from 'discord.js'
 import { Ollama } from 'ollama'
+import { Queue } from '../queues/queue.js'
 
 // Export events through here to reduce amount of imports
 export { Events } from 'discord.js'
@@ -33,7 +34,7 @@ export type UserMessage = {
 export interface EventProps {
     client: Client
     log: LogMethod
-    msgHist: { role: string, content: string }[]
+    msgHist: Queue<UserMessage>
     tokens: Tokens,
     ollama: Ollama
 }
@@ -63,7 +64,7 @@ export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): 
 export function registerEvents(
     client: Client, 
     events: Event[], 
-    msgHist: UserMessage[],
+    msgHist: Queue<UserMessage>,
     tokens: Tokens,
     ollama: Ollama
 ): void {
