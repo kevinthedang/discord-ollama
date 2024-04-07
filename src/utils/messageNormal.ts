@@ -21,7 +21,7 @@ export async function normalMessage(
     // bot's respnse
     let response: ChatResponse
 
-    await message.reply('Generating Response . . .').then(async sentMessage => {
+    await message.channel.send('Generating Response . . .').then(async sentMessage => {
         try {
             // Attempt to query model for message
             response = await ollama.chat({
@@ -35,9 +35,13 @@ export async function normalMessage(
                 },
                 stream: false
             })
-            
-            // edit the 'generic' response to new message
-            sentMessage.edit(response.message.content)
+
+            // check if message length > discord max for normal messages
+            if (response.message.content.length > 2000) {
+                sentMessage.edit(response.message.content.slice(0, 2000))
+                message.channel.send(response.message.content.slice(2000))
+            } else // edit the 'generic' response to new message
+                sentMessage.edit(response.message.content)            
         } catch(error: any) {
             console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
             sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
