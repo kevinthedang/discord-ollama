@@ -15,7 +15,7 @@ The project aims to:
   * [ ] Message Persistance on Channels and Threads
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
-  * [ ] Generated Token Length Handling for >2000 or >6000 characters
+  * [x] Generated Token Length Handling for >2000 ~~or >6000 characters~~
   * [ ] External WebUI Integration
   * [ ] Administrator Role Compatible
 * [ ] Allow others to create their own models personalized for their own servers!
