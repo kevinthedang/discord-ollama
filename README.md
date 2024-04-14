@@ -2,7 +2,7 @@
     <p><a href="#"><a href="https://ollama.ai/"><img alt="ollama" src="./imgs/ollama-icon.png" width="200px" /></a><img alt="+" src="./imgs/grey-plus.png" width="100px" /></a><a href="https://discord.com/"><img alt="discord" src="./imgs/discord-icon.png" width="190px" /></a></p>
     <h1>Discord Ollama Integration</h1>
     <h3><a href="#"></a>Ollama as your Discord AI Assistant</h3>
-    <p><a href="#"></a><a href="https://creativecommons.org/licenses/by-nc/4.0/"><img alt="License" src="https://img.shields.io/badge/License-CC_BY--NC_4.0-darkgreen.svg" /></a>
+    <p><a href="#"></a><a href="https://creativecommons.org/licenses/by/4.0/"><img alt="License" src="https://img.shields.io/badge/License-CC_BY_4.0-darkgreen.svg" /></a>
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/kevinthedang/discord-ollama?logo=github" /></a>
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/build-test.yml"><img alt="Build Status" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/build-test.yml/badge.svg" /></a>
 </div>
@@ -16,6 +16,7 @@ The project aims to:
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
   * [x] Generated Token Length Handling for >2000 ~~or >6000 characters~~
+    * [ ] Token Length Handling of any message size
   * [ ] External WebUI Integration
   * [ ] Administrator Role Compatible
 * [ ] Allow others to create their own models personalized for their own servers!
@@ -49,4 +50,4 @@ The project aims to:
 * [Kevin Dang](https://github.com/kevinthedang)
 * [Jonathan Smoley](https://github.com/JT2M0L3Y)
 
-[discord-ollama](https://github.com/kevinthedang/discord-ollama) © 2023 by [Kevin Dang](https://github.com/kevinthedang) is licensed under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/?ref=chooser-v1)
+[discord-ollama](https://github.com/kevinthedang/discord-ollama) © 2023 by [Kevin Dang](https://github.com/kevinthedang) is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
