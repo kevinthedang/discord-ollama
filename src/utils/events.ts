@@ -15,7 +15,6 @@ export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents ob
  * @param clientUid the discord id for the bot
  */
 export type Tokens = {
-    channel: string,
     model: string,
     clientUid: string
 }

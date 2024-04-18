@@ -10,8 +10,7 @@ import { clean } from '../utils/mentionClean.js'
 export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
     log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
-    // Hard-coded channel to test output there only, in our case "ollama-endpoint"
-    if (message.channelId != tokens.channel) return
+    // need new check for "open/active" threads here!
 
     // Do not respond if bot talks in the chat
     if (message.author.tag === message.client.user.tag) return
