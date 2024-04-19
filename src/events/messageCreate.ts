@@ -51,7 +51,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         let response: ChatResponse    
 
         // check if we can push, if not, remove oldest
-        if (msgHist.size() === msgHist.capacity) msgHist.dequeue()
+        while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
 
         // push user response before ollama query
         msgHist.enqueue({
@@ -69,7 +69,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         if (response == undefined) { msgHist.pop(); return }
 
         // if queue is full, remove the oldest message
-        if (msgHist.size() === msgHist.capacity) msgHist.dequeue()
+        while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
 
         // successful query, save it in context history
         msgHist.enqueue({ 
