@@ -6,7 +6,7 @@ export interface Configuration {
         'message-stream'?: boolean,
         'message-style'?: boolean,
         'toggle-chat'?: boolean,
-        'history-capacity'?: number
+        'modify-capacity'?: number
     }
 }
 
