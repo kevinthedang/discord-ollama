@@ -40,6 +40,8 @@ services:
     ports: 
       - ${OLLAMA_PORT}:${OLLAMA_PORT}
 
+# Put Redis Container here?
+
 # create a network that supports giving addresses withing a specific subnet
 networks:
   ollama-net:

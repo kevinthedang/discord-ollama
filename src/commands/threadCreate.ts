@@ -1,6 +1,5 @@
 import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import Keys from '../keys.js'
 
 export const ThreadCreate: SlashCommand = {
     name: 'thread',
@@ -18,6 +17,8 @@ export const ThreadCreate: SlashCommand = {
         //         content: `${channel.client.user} cannot create **Chat Thread** with **${interaction.user.username}** here.\n\nChannel **${channel.name}** is not valid. Please ask an Admin for what channel or find **${Keys.channel}**.`,
         //         ephemeral: true
         //     })
+
+        // handle storing 
 
         const thread = await (channel as TextChannel).threads.create({
             name: `support-${Date.now()}`,
