@@ -36,13 +36,13 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                 }
 
                 // check if there is a set capacity in config
-                if (typeof config.options['history-capacity'] !== 'number')
+                if (typeof config.options['modify-capacity'] !== 'number')
                     log(`Capacity is undefined, using default capacity of ${msgHist.capacity}.`)
-                else if (config.options['history-capacity'] === msgHist.capacity)
+                else if (config.options['modify-capacity'] === msgHist.capacity)
                     log(`Capacity matches config as ${msgHist.capacity}, no changes made.`)
                 else {
-                    log(`New Capacity found. Setting Context Capacity to ${config.options['history-capacity']}.`)
-                    msgHist.capacity = config.options['history-capacity']
+                    log(`New Capacity found. Setting Context Capacity to ${config.options['modify-capacity']}.`)
+                    msgHist.capacity = config.options['modify-capacity']
                 }
 
                 resolve(config)
@@ -52,7 +52,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         let response: ChatResponse    
 
         // check if we can push, if not, remove oldest
-        if (msgHist.size() === msgHist.capacity) msgHist.dequeue()
+        while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
 
         // push user response before ollama query
         msgHist.enqueue({
@@ -70,7 +70,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         if (response == undefined) { msgHist.pop(); return }
 
         // if queue is full, remove the oldest message
-        if (msgHist.size() === msgHist.capacity) msgHist.dequeue()
+        while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
 
         // successful query, save it in context history
         msgHist.enqueue({ 
