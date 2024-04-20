@@ -1,13 +1,14 @@
 import { ChatResponse } from 'ollama'
 import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
 import { Configuration, getConfig, openFile } from '../utils/jsonHandler.js'
+import { clean } from '../utils/mentionClean.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
  * @param message the message received from the channel
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
-    log(`Message \"${message.content}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
+    log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Hard-coded channel to test output there only, in our case "ollama-endpoint"
     if (message.channelId != tokens.channel) return
@@ -24,7 +25,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             getConfig('config.json', (config) => {
                 // check if config.json exists
                 if (config === undefined) {
-                    reject(new Error('No Configuration is set up.\n\nCreating \`config.json\` with \`message-style\` set as \`true\` for embedded messages.\nPlease try chatting again.'))
+                    reject(new Error('No Configuration is set up.\n\nCreating \`config.json\` with \`message-style\` set as \`false\` for regular messages.\nPlease try chatting again.'))
                     return
                 }
 
@@ -56,7 +57,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // push user response before ollama query
         msgHist.enqueue({
             role: 'user',
-            content: message.content
+            content: clean(message.content)
         })
         
         // undefined or false, use normal, otherwise use embed
@@ -78,7 +79,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         })
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
-        openFile('config.json', 'message-style', true)
+        openFile('config.json', 'message-style', false)
         message.reply(`**Error Occurred:**\n\n**Reason:** *${error.message}*`)
     }
 })
