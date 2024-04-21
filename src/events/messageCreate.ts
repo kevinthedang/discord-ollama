@@ -67,7 +67,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
-            response = '' // await embedMessage(message, ollama, tokens, msgHist)
+            response = await embedMessage(message, ollama, tokens, msgHist, shouldStream)
         else
             response = await normalMessage(message, ollama, tokens, msgHist, shouldStream)
 

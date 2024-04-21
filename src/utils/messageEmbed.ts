@@ -1,6 +1,6 @@
 import { EmbedBuilder, Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
-import { UserMessage } from './events.js'
+import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
 import { Queue } from '../queues/queue.js'
 
 /**
@@ -16,10 +16,12 @@ export async function embedMessage(
         channel: string,
         model: string
     },
-    msgHist: Queue<UserMessage>
-) {
+    msgHist: Queue<UserMessage>,
+    stream: boolean
+): Promise<string> {
     // bot response
-    let response: ChatResponse
+    let response: ChatResponse | AsyncGenerator<ChatResponse, any, unknown>
+    let result: string = ''
 
     // initial message to client
     const botMessage = new EmbedBuilder()
@@ -30,28 +32,43 @@ export async function embedMessage(
     // send the message
     const sentMessage = await message.channel.send({ embeds: [botMessage] })
 
-    try {
-        // Attempt to query model for message
-        response = await ollama.chat({
-            model: tokens.model,
-            messages: msgHist.getItems(),
-            options: {
-                num_thread: 8, // remove if optimization needed further
-                mirostat: 1,
-                mirostat_tau: 2.0,
-                top_k: 70
-            },
-            stream: false
-        })
+    // create params
+    const params: ChatParams = {
+        model: tokens.model,
+        ollama: ollama,
+        msgHist: msgHist.getItems()
+    }
 
-        // dummy message to let user know that query is underway
-        const newEmbed = new EmbedBuilder()
+    try {
+        // check if embed needs to stream
+        if (stream) {
+            response = await streamResponse(params)
+
+            for await (const portion of response) {
+                result += portion.message.content
+
+                // new embed per token...
+                const newEmbed = new EmbedBuilder()
+                .setTitle(`Responding to ${message.author.tag}`)
+                .setDescription(result || 'No Content Yet...')
+                .setColor('#00FF00')
+
+                // edit the message
+                sentMessage.edit({ embeds: [newEmbed] })
+            }
+        } else {
+            response = await blockResponse(params)
+            result = response.message.content
+
+            // only need to create 1 embed again
+            const newEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
-            .setDescription(response.message.content || 'No Content to Provide...')
+            .setDescription(result || 'No Content to Provide...')
             .setColor('#00FF00')
 
-        // edit the message
-        sentMessage.edit({ embeds: [newEmbed] })
+            // edit the message
+            sentMessage.edit({ embeds: [newEmbed] })
+        }
     } catch(error: any) {
         console.log(`[Util: messageEmbed] Error creating message: ${error.message}`)
         const errorEmbed = new EmbedBuilder()
@@ -64,5 +81,5 @@ export async function embedMessage(
     } 
 
     // Hope there is a response! undefined otherwie
-    return response!!
+    return result
 }
