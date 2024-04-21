@@ -1,6 +1,6 @@
 {
   "name": "discord-ollama",
-  "version": "0.4.0",
+  "version": "0.4.2",
   "description": "Ollama Integration into discord",
   "main": "build/index.js",
   "exports": "./build/index.js",
@@ -24,7 +24,6 @@
   "author": "Kevin Dang",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.2",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
     "ollama": "^0.5.0"

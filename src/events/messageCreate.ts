@@ -19,6 +19,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     // Only respond if message mentions the bot
     if (!message.mentions.has(tokens.clientUid)) return
 
+    let shouldStream = false
+
     // Try to query and send embed     
     try {
         const config: Configuration = await new Promise((resolve, reject) => {
@@ -45,11 +47,14 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                     msgHist.capacity = config.options['modify-capacity']
                 }
 
+                // set stream state
+                shouldStream = config.options['message-stream'] as boolean || false
+
                 resolve(config)
             })
         })
 
-        let response: ChatResponse    
+        let response: string    
 
         // check if we can push, if not, remove oldest
         while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
@@ -62,9 +67,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
-            response = await embedMessage(message, ollama, tokens, msgHist)
+            response = await embedMessage(message, ollama, tokens, msgHist, shouldStream)
         else
-            response = await normalMessage(message, ollama, tokens, msgHist)
+            response = await normalMessage(message, ollama, tokens, msgHist, shouldStream)
 
         // If something bad happened, remove user query and stop
         if (response == undefined) { msgHist.pop(); return }
@@ -75,7 +80,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // successful query, save it in context history
         msgHist.enqueue({ 
             role: 'assistant', 
-            content: response.message.content 
+            content: response
         })
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
