@@ -20,6 +20,18 @@ export type Tokens = {
     clientUid: string
 }
 
+/**
+ * Parameters to run the chat query
+ * @param model the model to run
+ * @param ollama ollama api client
+ * @param msgHist message history
+ */
+export type ChatParams = {
+    model: string, 
+    ollama: Ollama, 
+    msgHist: UserMessage[]
+}
+
 /** 
  * Format for the messages to be stored when communicating when the bot
  * @param role either assistant, user, or system
