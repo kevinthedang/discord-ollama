@@ -39,7 +39,7 @@ export async function normalMessage(
                     result += portion.message.content
 
                     // resent current output, THIS WILL BE SLOW due to discord limits!
-                    sentMessage.edit(result)
+                    sentMessage.edit(result || 'No Content Yet...')
                 }
             }
             else {
