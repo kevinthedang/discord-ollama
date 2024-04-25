@@ -37,7 +37,6 @@ jobs:
                 echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
                 echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
                 echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
-                echo ADMINS = ${{ secrets.ADMINS }} >> .env
               
               # set -e ensures if nohup fails, this section fails
             - name: Startup Discord Bot Client
@@ -68,7 +67,6 @@ jobs:
               echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
               echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
               echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
-              echo ADMINS = ${{ secrets.ADMINS }} >> .env
 
           - name: Setup Docker Network and Images
             run: |

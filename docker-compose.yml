@@ -17,7 +17,6 @@ services:
       CLIENT_UID: ${CLIENT_UID}
       OLLAMA_IP: ${OLLAMA_IP}
       OLLAMA_PORT: ${OLLAMA_PORT}
-      ADMINS: ${ADMINS}
     networks:
       ollama-net:
         ipv4_address: ${DISCORD_IP}
