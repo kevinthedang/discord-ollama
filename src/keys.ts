@@ -8,7 +8,6 @@ export const Keys = {
     guildId: getEnvVar('GUILD_ID'),
     ipAddress: getEnvVar('OLLAMA_IP'),
     portAddress: getEnvVar('OLLAMA_PORT'),
-    superUser: getEnvVar('ADMINS')
 } as const // readonly keys
 
 export default Keys

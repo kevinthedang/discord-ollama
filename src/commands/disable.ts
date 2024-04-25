@@ -4,7 +4,7 @@ import { openFile } from '../utils/jsonHandler.js'
 
 export const Disable: SlashCommand = {
     name: 'toggle-chat',
-    description: 'toggle all chat features, slash commands will still work.',
+    description: 'toggle all chat features, Adminstrator Only.',
 
     // set available user options to pass to the command
     options: [
@@ -21,6 +21,15 @@ export const Disable: SlashCommand = {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || channel.type !== ChannelType.GuildText) return
+
+        // check if runner is an admin
+        if (!interaction.memberPermissions?.has('Administrator')) {
+            interaction.reply({
+                content: `${interaction.commandName} is an Administrator Command.\n\nYou, ${interaction.member?.user.username}, are not an Administrator in this server.\nPlease contact an admin to use this command.`,
+                ephemeral: true
+            })
+            return
+        }
 
         // set state of bot chat features
         openFile('config.json', interaction.commandName, interaction.options.get('enabled')?.value)
