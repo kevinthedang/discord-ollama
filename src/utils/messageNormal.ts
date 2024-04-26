@@ -49,8 +49,17 @@ export async function normalMessage(
                 // check if message length > discord max for normal messages
                 if (result.length > 2000) {
                     sentMessage.edit(result.slice(0, 2000))
-                    message.channel.send(result.slice(2000))
-                } else // edit the 'generic' response to new message
+                    result = result.slice(2000)
+
+                    // handle for rest of message that is >2000
+                    while (result.length > 2000) {
+                        message.channel.send(result.slice(0, 2000))
+                        result = result.slice(2000)
+                    }
+
+                    // last part of message
+                    message.channel.send(result)
+                } else // edit the 'generic' response to new message since <2000
                     sentMessage.edit(result)
             }            
         } catch(error: any) {
@@ -59,6 +68,6 @@ export async function normalMessage(
         }
     })
 
-    // return the string representation of response
+    // return the string representation of ollama query response
     return result
 }
