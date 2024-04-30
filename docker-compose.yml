@@ -8,7 +8,7 @@ services:
     build: ./                     # find docker file in designated path
     container_name: discord
     restart: always               # rebuild container always
-    image: discord/bot:0.4.3
+    image: discord/bot:0.4.4
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       GUILD_ID: ${GUILD_ID}
