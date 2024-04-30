@@ -16,9 +16,9 @@ The project aims to:
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
   * [x] Generated Token Length Handling for >2000 ~~or >6000 characters~~
-    * [ ] Token Length Handling of any message size
+    * [x] Token Length Handling of any message size
   * [ ] External WebUI Integration
-  * [ ] Administrator Role Compatible
+  * [x] Administrator Role Compatible
 * [ ] Allow others to create their own models personalized for their own servers!
   * [ ] Documentation on creating your own LLM
   * [ ] Documentation on web scrapping and cleaning
