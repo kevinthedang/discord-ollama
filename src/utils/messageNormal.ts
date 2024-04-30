@@ -2,7 +2,6 @@ import { Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
 import { Queue } from '../queues/queue.js'
-import { channel } from 'diagnostics_channel'
 
 /**
  * Method to send replies as normal text on discord like any other user
