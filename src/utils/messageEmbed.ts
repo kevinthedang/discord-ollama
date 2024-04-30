@@ -51,7 +51,7 @@ export async function embedMessage(
                 if (result.length > 6000) {
                     const errorEmbed = new EmbedBuilder()
                     .setTitle(`Responding to ${message.author.tag}`)
-                    .setDescription(result || 'No Content Yet...')
+                    .setDescription(`Response length ${result.length} has exceeded Discord maximum.\n\nLong Stream messages not supported.`)
                     .setColor('#00FF00')
 
                     // send error

@@ -2,6 +2,7 @@ import { Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
 import { Queue } from '../queues/queue.js'
+import { channel } from 'diagnostics_channel'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -37,6 +38,12 @@ export async function normalMessage(
                 for await (const portion of response) {
                     // append token to message
                     result += portion.message.content
+
+                    // exceeds handled length
+                    if (result.length > 2000) {
+                        message.channel.send(`Response length ${result.length} has exceeded Discord maximum.\n\nLong Stream messages not supported.`)
+                        break // stop stream
+                    }
 
                     // resent current output, THIS WILL BE SLOW due to discord limits!
                     sentMessage.edit(result || 'No Content Yet...')
