@@ -48,7 +48,7 @@ export async function embedMessage(
                 result += portion.message.content
 
                 // exceeds handled length
-                if (result.length > 6000) {
+                if (result.length > 5000) {
                     const errorEmbed = new EmbedBuilder()
                     .setTitle(`Responding to ${message.author.tag}`)
                     .setDescription(`Response length ${result.length} has exceeded Discord maximum.\n\nLong Stream messages not supported.`)
@@ -73,27 +73,27 @@ export async function embedMessage(
             result = response.message.content
 
             // long message, split into different embeds sadly.
-            if (result.length > 6000) {
+            if (result.length > 5000) {
                 const firstEmbed = new EmbedBuilder()
                 .setTitle(`Responding to ${message.author.tag}`)
-                .setDescription(result.slice(0, 6000) || 'No Content to Provide...')
+                .setDescription(result.slice(0, 5000) || 'No Content to Provide...')
                 .setColor('#00FF00')
 
                 // replace first embed
                 sentMessage.edit({ embeds: [firstEmbed] })
 
                 // take the rest out
-                result = result.slice(6000)
+                result = result.slice(5000)
 
                 // handle the rest
-                while (result.length > 6000) {
+                while (result.length > 5000) {
                     const whileEmbed = new EmbedBuilder()
                     .setTitle(`Responding to ${message.author.tag}`)
-                    .setDescription(result.slice(0, 6000) || 'No Content to Provide...')
+                    .setDescription(result.slice(0, 5000) || 'No Content to Provide...')
                     .setColor('#00FF00')
 
                     message.channel.send({ embeds: [whileEmbed] })
-                    result = result.slice(6000)
+                    result = result.slice(5000)
                 }
 
                 const lastEmbed = new EmbedBuilder()
