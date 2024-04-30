@@ -47,27 +47,72 @@ export async function embedMessage(
             for await (const portion of response) {
                 result += portion.message.content
 
+                // exceeds handled length
+                if (result.length > 6000) {
+                    const errorEmbed = new EmbedBuilder()
+                    .setTitle(`Responding to ${message.author.tag}`)
+                    .setDescription(result || 'No Content Yet...')
+                    .setColor('#00FF00')
+
+                    // send error
+                    message.channel.send({ embeds: [errorEmbed] })
+                    break // cancel loop and stop
+                }
+
                 // new embed per token...
-                const newEmbed = new EmbedBuilder()
+                const streamEmbed = new EmbedBuilder()
                 .setTitle(`Responding to ${message.author.tag}`)
                 .setDescription(result || 'No Content Yet...')
                 .setColor('#00FF00')
 
                 // edit the message
-                sentMessage.edit({ embeds: [newEmbed] })
+                sentMessage.edit({ embeds: [streamEmbed] })
             }
         } else {
             response = await blockResponse(params)
             result = response.message.content
 
-            // only need to create 1 embed again
-            const newEmbed = new EmbedBuilder()
-            .setTitle(`Responding to ${message.author.tag}`)
-            .setDescription(result || 'No Content to Provide...')
-            .setColor('#00FF00')
+            // long message, split into different embeds sadly.
+            if (result.length > 6000) {
+                const firstEmbed = new EmbedBuilder()
+                .setTitle(`Responding to ${message.author.tag}`)
+                .setDescription(result.slice(0, 6000) || 'No Content to Provide...')
+                .setColor('#00FF00')
 
-            // edit the message
-            sentMessage.edit({ embeds: [newEmbed] })
+                // replace first embed
+                sentMessage.edit({ embeds: [firstEmbed] })
+
+                // take the rest out
+                result = result.slice(6000)
+
+                // handle the rest
+                while (result.length > 6000) {
+                    const whileEmbed = new EmbedBuilder()
+                    .setTitle(`Responding to ${message.author.tag}`)
+                    .setDescription(result.slice(0, 6000) || 'No Content to Provide...')
+                    .setColor('#00FF00')
+
+                    message.channel.send({ embeds: [whileEmbed] })
+                    result = result.slice(6000)
+                }
+
+                const lastEmbed = new EmbedBuilder()
+                .setTitle(`Responding to ${message.author.tag}`)
+                .setDescription(result || 'No Content to Provide...')
+                .setColor('#00FF00')
+
+                // rest of the response
+                message.channel.send({ embeds: [lastEmbed] })
+            } else {
+                // only need to create 1 embed, handles 6000 characters
+                const newEmbed = new EmbedBuilder()
+                .setTitle(`Responding to ${message.author.tag}`)
+                .setDescription(result || 'No Content to Provide...')
+                .setColor('#00FF00')
+
+                // edit the message
+                sentMessage.edit({ embeds: [newEmbed] })
+            }
         }
     } catch(error: any) {
         console.log(`[Util: messageEmbed] Error creating message: ${error.message}`)
