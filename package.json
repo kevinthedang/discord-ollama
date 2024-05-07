@@ -33,7 +33,8 @@
     "nodemon": "^3.0.2",
     "ts-node": "^10.9.2",
     "tsx": "^4.6.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.6.0"
   },
   "type": "module",
   "engines": {
