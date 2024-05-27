@@ -1,0 +1,71 @@
+name: Tests
+run-name: Test source code for errors
+on:
+  push:
+    branches:
+      - unit-testing
+
+jobs:
+  Discord-Node-Test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node Environment v18.18.2
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.18.2
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: |
+          npm install
+
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo GUILD_ID = ${{ secrets.GUILD_ID }} >> .env
+          echo CHANNEL_ID = ${{ secrets.CHANNEL_ID }} >> .env
+          echo MODEL = ${{ secrets.MODEL }} >> .env
+          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+
+      - name: Test Application
+        run: |
+          npm run test:run
+
+  Discord-Ollama-Container-Test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node Environment v18.18.2
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.18.2
+          cache: "npm"
+
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo GUILD_ID = ${{ secrets.GUILD_ID }} >> .env
+          echo CHANNEL_ID = ${{ secrets.CHANNEL_ID }} >> .env
+          echo MODEL = ${{ secrets.MODEL }} >> .env
+          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+
+      - name: Setup Docker Network and Images
+        run: |
+          npm run docker:start-cpu
+
+      - name: Test Docker Container
+        run: |
+          npm run docker:test
