@@ -1,6 +1,6 @@
 import { ChatResponse } from 'ollama'
 import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
-import { Configuration, getConfig, openFile } from '../utils/jsonHandler.js'
+import { Configuration, getConfig, openConfig } from '../utils/jsonHandler.js'
 import { clean } from '../utils/mentionClean.js'
 
 /** 
@@ -83,7 +83,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         })
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
-        openFile('config.json', 'message-style', false)
+        openConfig('config.json', 'message-style', false)
         message.reply(`**Error Occurred:**\n\n**Reason:** *${error.message}*`)
     }
 })

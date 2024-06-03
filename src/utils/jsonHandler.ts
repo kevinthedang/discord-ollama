@@ -17,12 +17,12 @@ export interface Configuration {
  * @param key key value to access
  * @param value new value to assign
  */
-export function openFile(filename: string, key: string, value: any) {
+export function openConfig(filename: string, key: string, value: any) {
     // check if the file exists, if not then make the config file
     if (fs.existsSync(filename)) {
         fs.readFile(filename, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: openFile] Incorrect file format`)
+                console.log(`[Error: openConfig] Incorrect file format`)
             else {
                 const object = JSON.parse(data)
                 object['options'][key] = value
@@ -38,7 +38,7 @@ export function openFile(filename: string, key: string, value: any) {
         }
 
         fs.writeFileSync(filename, JSON.stringify(object, null, 2))
-        console.log(`[Util: openFile] Created 'config.json' in working directory`)
+        console.log(`[Util: openConfig] Created 'config.json' in working directory`)
     }
 }
 

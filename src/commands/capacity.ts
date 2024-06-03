@@ -1,6 +1,6 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openFile } from '../utils/jsonHandler.js'
+import { openConfig } from '../utils/jsonHandler.js'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
@@ -23,7 +23,7 @@ export const Capacity: SlashCommand = {
         if (!channel || channel.type !== ChannelType.GuildText) return
 
         // set state of bot chat features
-        openFile('config.json', interaction.commandName, interaction.options.get('context-capacity')?.value)
+        openConfig('config.json', interaction.commandName, interaction.options.get('context-capacity')?.value)
 
         interaction.reply({
             content: `Message History Capacity has been set to \`${interaction.options.get('context-capacity')?.value}\``,

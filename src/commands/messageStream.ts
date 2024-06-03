@@ -1,6 +1,6 @@
 import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openFile } from '../utils/jsonHandler.js'
+import { openConfig } from '../utils/jsonHandler.js'
 
 export const MessageStream: SlashCommand = {
     name: 'message-stream',
@@ -23,7 +23,7 @@ export const MessageStream: SlashCommand = {
         if (!channel || channel.type !== ChannelType.GuildText) return
 
         // save value to json and write to it
-        openFile('config.json', interaction.commandName, interaction.options.get('stream')?.value)
+        openConfig('config.json', interaction.commandName, interaction.options.get('stream')?.value)
 
         interaction.reply({
             content: `Message streaming preferences for embed set to: \`${interaction.options.get('stream')?.value}\``,
