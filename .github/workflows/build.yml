@@ -1,0 +1,81 @@
+name: Builds
+run-name: Validate Node and Docker Builds
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Discord-Node-Build: # test if the node install and run
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node Environment v18.18.2
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.18.2
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: |
+          npm install
+
+      - name: Build Application
+        run: |
+          npm run build
+
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo GUILD_ID = ${{ secrets.GUILD_ID }} >> .env
+          echo CHANNEL_ID = ${{ secrets.CHANNEL_ID }} >> .env
+          echo MODEL = ${{ secrets.MODEL }} >> .env
+          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+
+        # set -e ensures if nohup fails, this section fails
+      - name: Startup Discord Bot Client
+        run: |
+          set -e
+          nohup npm run prod &
+
+  Discord-Ollama-Container-Build: # test docker build and run
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node Environment v18.18.2
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18.18.2
+          cache: "npm"
+
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo GUILD_ID = ${{ secrets.GUILD_ID }} >> .env
+          echo CHANNEL_ID = ${{ secrets.CHANNEL_ID }} >> .env
+          echo MODEL = ${{ secrets.MODEL }} >> .env
+          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+
+      - name: Setup Docker Network and Images
+        run: |
+          npm run docker:start-cpu
+
+      - name: Check Images Exist
+        run: |
+          (docker images | grep -q 'discord/bot' && docker images | grep -qE 'ollama/ollama') || exit 1
+
+      - name: Check Containers Exist
+        run: |
+          (docker ps | grep -q 'ollama' && docker ps | grep -q 'discord') || exit 1
