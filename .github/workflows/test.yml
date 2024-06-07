@@ -3,7 +3,7 @@ run-name: Test source code for errors
 on:
   push:
     branches:
-      - unit-testing
+      - master
 
 jobs:
   Discord-Node-Test:
