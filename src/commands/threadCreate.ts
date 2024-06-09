@@ -18,8 +18,6 @@ export const ThreadCreate: SlashCommand = {
         //         ephemeral: true
         //     })
 
-        // handle storing 
-
         const thread = await (channel as TextChannel).threads.create({
             name: `support-${Date.now()}`,
             reason: `Support ticket ${Date.now()}`
@@ -27,6 +25,9 @@ export const ThreadCreate: SlashCommand = {
 
         // Send a message in the thread
         thread.send(`**User:** ${interaction.user} \n**People in Coversation:** ${thread.memberCount}`)
+
+        // handle storing this chat.
+        // store: thread.id, thread.name
 
         // user only reply
         return interaction.reply({

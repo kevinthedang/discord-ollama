@@ -29,7 +29,7 @@ export function openConfig(filename: string, key: string, value: any) {
                 fs.writeFileSync(filename, JSON.stringify(object, null, 2))
             }
         })
-    } else {
+    } else { // work on dynamic file creation
         const object: Configuration = JSON.parse('{ \"name\": \"Discord Ollama Confirgurations\" }')
 
         // set standard information for config file and options
