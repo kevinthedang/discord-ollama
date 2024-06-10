@@ -29,7 +29,7 @@ export const ThreadCreate: SlashCommand = {
 
         // handle storing this chat channel
         // store: thread.id, thread.name
-        openThreadInfo(`data/${thread.id}.json`, thread)
+        openThreadInfo(`${thread.id}.json`, thread)
 
         // user only reply
         return interaction.reply({

@@ -64,13 +64,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'user',
             content: clean(message.content)
         })
-
-        openThreadInfo(`${message.channelId}.json`, 
-            client.channels.fetch(message.channelId) as unknown as ThreadChannel, 
-            { 
-                role: 'user', 
-                content: clean(message.content) 
-            })
         
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
@@ -90,12 +83,11 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             content: response
         })
 
+        // only update the json on success
         openThreadInfo(`${message.channelId}.json`, 
             client.channels.fetch(message.channelId) as unknown as ThreadChannel, 
-            { 
-                role: 'assistant', 
-                content: response 
-            })
+            msgHist.getItems()
+        )
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
         openConfig('config.json', 'message-style', false)

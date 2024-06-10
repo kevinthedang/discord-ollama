@@ -1,4 +1,5 @@
 import { ThreadChannel } from 'discord.js'
+import { UserMessage } from './events.js'
 import fs from 'fs'
 import path from 'path'
 
@@ -72,27 +73,28 @@ export async function getConfig(filename: string, callback: (config: Configurati
  * @param thread the thread with all of the interactions
  * @param message message contents and from who
  */
-export function openThreadInfo(filename: string, thread: ThreadChannel, message: object = {}) {
+export function openThreadInfo(filename: string, thread: ThreadChannel, messages: UserMessage[] = []) {
     // check if the file exists, if not then make the config file
-    if (fs.existsSync(filename)) {
-        fs.readFile(filename, 'utf8', (error, data) => {
+    const fullFileName = `data/${filename}`
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
                 console.log(`[Error: openConfig] Incorrect file format`)
             else {
                 const object = JSON.parse(data)
-                object['messages'].push(message)
-                fs.writeFileSync(filename, JSON.stringify(object, null, 2))
+                object['messages'] = messages as []
+                fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
             }
         })
     } else { // work on dynamic file creation
         const object: Configuration = JSON.parse(`{ \"id\": \"${thread?.id}\", \"name\": \"${thread?.name}\", \"messages\": []}`)
 
-        const directory = path.dirname(filename)
+        const directory = path.dirname(fullFileName)
         if (!fs.existsSync(directory))
             fs.mkdirSync(directory, { recursive: true })
 
         // only creating it, no need to add anything
-        fs.writeFileSync(filename, JSON.stringify(object, null, 2))
-        console.log(`[Util: openThreadInfo] Created '${filename}' in working directory`)
+        fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
+        console.log(`[Util: openThreadInfo] Created '${fullFileName}' in working directory`)
     }
 }
