@@ -53,10 +53,18 @@ export class Queue<T> implements IQueue<T> {
     }
 
     /**
-     * Geet the queue as an array
+     * Get the queue as an array
      * @returns a array of T items
      */
     getItems(): T[] {
         return this.storage
+    }
+
+    /**
+     * Set a new queue to modify
+     * @param newQueue new queue of T[] to modify
+     */
+    setQueue(newQueue: T[]): void {
+        this.storage = newQueue
     }
 }

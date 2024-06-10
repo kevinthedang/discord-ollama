@@ -13,6 +13,12 @@ export interface Configuration {
     }
 }
 
+export interface Thread {
+    readonly id: string
+    readonly name: string
+    messages: UserMessage[]
+}
+
 /**
  * Method to open a file in the working directory and modify/create it
  * 
@@ -96,5 +102,27 @@ export function openThreadInfo(filename: string, thread: ThreadChannel, messages
         // only creating it, no need to add anything
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
         console.log(`[Util: openThreadInfo] Created '${fullFileName}' in working directory`)
+    }
+}
+
+/**
+ * Method to obtain the configurations of the message chat/thread
+ * 
+ * @param filename name of the configuration file to get
+ * @param callback function to allow a promise from getting the config
+ */
+export async function getThread(filename: string, callback: (config: Thread | undefined) => void): Promise<void> {
+    // attempt to read the file and get the configuration
+    const fullFileName = `data/${filename}`
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
+            if (error) {
+                callback(undefined) 
+                return // something went wrong... stop
+            }
+            callback(JSON.parse(data))
+        })
+    } else {
+        callback(undefined) // file not found
     }
 }

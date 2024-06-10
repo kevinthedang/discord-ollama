@@ -1,6 +1,5 @@
-import { ChatResponse } from 'ollama'
-import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
-import { Configuration, getConfig, openConfig, openThreadInfo } from '../utils/jsonHandler.js'
+import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
+import { Configuration, getConfig, getThread, openConfig, openThreadInfo } from '../utils/jsonHandler.js'
 import { clean } from '../utils/mentionClean.js'
 import { ThreadChannel } from 'discord.js'
 
@@ -54,7 +53,20 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             })
         })
 
-        let response: string    
+        // response string for ollama to put its response
+        let response: string
+
+        const threadMessages: UserMessage[] = await new Promise((resolve, reject) => {
+            // set new queue to modify
+            getThread(`${message.channelId}.json`, (threadInfo) => {
+                if (threadInfo?.messages)
+                    resolve(threadInfo.messages)
+                else
+                    reject(new Error(`Channel/Thread ${message.channelId} does not exist.`))
+            })
+        })
+
+        msgHist.setQueue(threadMessages)
 
         // check if we can push, if not, remove oldest
         while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
