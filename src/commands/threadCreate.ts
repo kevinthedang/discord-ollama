@@ -1,5 +1,6 @@
 import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
+import { openThreadInfo } from '../utils/jsonHandler.js'
 
 export const ThreadCreate: SlashCommand = {
     name: 'thread',
@@ -19,15 +20,16 @@ export const ThreadCreate: SlashCommand = {
         //     })
 
         const thread = await (channel as TextChannel).threads.create({
-            name: `support-${Date.now()}`,
+            name: `${client.user?.username}-support-${Date.now()}`,
             reason: `Support ticket ${Date.now()}`
         })
 
         // Send a message in the thread
         thread.send(`**User:** ${interaction.user} \n**People in Coversation:** ${thread.memberCount}`)
 
-        // handle storing this chat.
+        // handle storing this chat channel
         // store: thread.id, thread.name
+        openThreadInfo(`data/${thread.id}.json`, thread)
 
         // user only reply
         return interaction.reply({

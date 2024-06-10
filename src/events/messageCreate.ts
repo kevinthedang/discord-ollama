@@ -1,13 +1,14 @@
 import { ChatResponse } from 'ollama'
 import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
-import { Configuration, getConfig, openConfig } from '../utils/jsonHandler.js'
+import { Configuration, getConfig, openConfig, openThreadInfo } from '../utils/jsonHandler.js'
 import { clean } from '../utils/mentionClean.js'
+import { ThreadChannel } from 'discord.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
     log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // need new check for "open/active" threads here!
@@ -63,6 +64,13 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'user',
             content: clean(message.content)
         })
+
+        openThreadInfo(`${message.channelId}.json`, 
+            client.channels.fetch(message.channelId) as unknown as ThreadChannel, 
+            { 
+                role: 'user', 
+                content: clean(message.content) 
+            })
         
         // undefined or false, use normal, otherwise use embed
         if (config.options['message-style'])
@@ -81,6 +89,13 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'assistant', 
             content: response
         })
+
+        openThreadInfo(`${message.channelId}.json`, 
+            client.channels.fetch(message.channelId) as unknown as ThreadChannel, 
+            { 
+                role: 'assistant', 
+                content: response 
+            })
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
         openConfig('config.json', 'message-style', false)
