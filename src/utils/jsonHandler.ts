@@ -92,7 +92,7 @@ export function openThreadInfo(filename: string, thread: ThreadChannel, messages
                 fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
             }
         })
-    } else { // work on dynamic file creation
+    } else { // file doesn't exist, create it
         const object: Configuration = JSON.parse(`{ \"id\": \"${thread?.id}\", \"name\": \"${thread?.name}\", \"messages\": []}`)
 
         const directory = path.dirname(fullFileName)
