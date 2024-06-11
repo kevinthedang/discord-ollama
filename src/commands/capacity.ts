@@ -1,6 +1,6 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openFile } from '../utils/jsonHandler.js'
+import { openConfig } from '../utils/jsonHandler.js'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
@@ -20,10 +20,10 @@ export const Capacity: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.GuildText) return
+        if (!channel || channel.type !== ChannelType.PublicThread) return
 
         // set state of bot chat features
-        openFile('config.json', interaction.commandName, interaction.options.get('context-capacity')?.value)
+        openConfig('config.json', interaction.commandName, interaction.options.get('context-capacity')?.value)
 
         interaction.reply({
             content: `Message History Capacity has been set to \`${interaction.options.get('context-capacity')?.value}\``,

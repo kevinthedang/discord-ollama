@@ -1,6 +1,6 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openFile } from '../utils/jsonHandler.js'
+import { openConfig } from '../utils/jsonHandler.js'
 
 export const MessageStyle: SlashCommand = {
     name: 'message-style',
@@ -20,10 +20,10 @@ export const MessageStyle: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.GuildText) return
+        if (!channel || channel.type !== ChannelType.PublicThread) return
 
         // set the message style
-        openFile('config.json', interaction.commandName, interaction.options.get('embed')?.value)
+        openConfig('config.json', interaction.commandName, interaction.options.get('embed')?.value)
 
         interaction.reply({
             content: `Message style preferences for embed set to: \`${interaction.options.get('embed')?.value}\``,

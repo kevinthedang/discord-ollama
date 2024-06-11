@@ -1,17 +1,25 @@
-import { ChatResponse } from 'ollama'
-import { embedMessage, event, Events, normalMessage } from '../utils/index.js'
-import { Configuration, getConfig, openFile } from '../utils/jsonHandler.js'
+import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
+import { Configuration, getConfig, getThread, openConfig, openThreadInfo } from '../utils/jsonHandler.js'
 import { clean } from '../utils/mentionClean.js'
+import { ThreadChannel } from 'discord.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
     log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
-    // Hard-coded channel to test output there only, in our case "ollama-endpoint"
-    if (message.channelId != tokens.channel) return
+    // need new check for "open/active" threads here!
+    const threadMessages: UserMessage[] = await new Promise((resolve) => {
+        // set new queue to modify
+        getThread(`${message.channelId}.json`, (threadInfo) => {
+            if (threadInfo?.messages)
+                resolve(threadInfo.messages)
+            else
+                log(`Channel/Thread ${message.channelId} does not exist.`)
+        }) 
+    })
 
     // Do not respond if bot talks in the chat
     if (message.author.tag === message.client.user.tag) return
@@ -54,7 +62,11 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             })
         })
 
-        let response: string    
+        // response string for ollama to put its response
+        let response: string
+
+        // set up new queue
+        msgHist.setQueue(threadMessages)
 
         // check if we can push, if not, remove oldest
         while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
@@ -82,9 +94,15 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'assistant', 
             content: response
         })
+
+        // only update the json on success
+        openThreadInfo(`${message.channelId}.json`, 
+            client.channels.fetch(message.channelId) as unknown as ThreadChannel, 
+            msgHist.getItems()
+        )
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
-        openFile('config.json', 'message-style', false)
+        openConfig('config.json', 'message-style', false)
         message.reply(`**Error Occurred:**\n\n**Reason:** *${error.message}*`)
     }
 })

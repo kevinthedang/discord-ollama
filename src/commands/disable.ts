@@ -1,6 +1,6 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openFile } from '../utils/jsonHandler.js'
+import { openConfig } from '../utils/jsonHandler.js'
 
 export const Disable: SlashCommand = {
     name: 'toggle-chat',
@@ -32,7 +32,7 @@ export const Disable: SlashCommand = {
         }
 
         // set state of bot chat features
-        openFile('config.json', interaction.commandName, interaction.options.get('enabled')?.value)
+        openConfig('config.json', interaction.commandName, interaction.options.get('enabled')?.value)
 
         interaction.reply({
             content: `Chat features has been \`${interaction.options.get('enabled')?.value ?  "enabled" : "disabled" }\``,

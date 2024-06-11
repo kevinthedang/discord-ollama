@@ -13,7 +13,6 @@ export async function embedMessage(
     message: Message,
     ollama: Ollama,
     tokens: {
-        channel: string,
         model: string
     },
     msgHist: Queue<UserMessage>,
