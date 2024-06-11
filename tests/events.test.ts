@@ -18,6 +18,6 @@ describe('#events', () => {
     // test specific events in the object
     it('references specific events', () => {
         const eventsString = events.map(e => e.key.toString()).join(', ')
-        expect(eventsString).toBe('ready, messageCreate, interactionCreate')
+        expect(eventsString).toBe('ready, messageCreate, interactionCreate, threadDelete')
     })
 })
