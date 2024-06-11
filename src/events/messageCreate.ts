@@ -11,6 +11,15 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // need new check for "open/active" threads here!
+    const threadMessages: UserMessage[] = await new Promise((resolve) => {
+        // set new queue to modify
+        getThread(`${message.channelId}.json`, (threadInfo) => {
+            if (threadInfo?.messages)
+                resolve(threadInfo.messages)
+            else
+                log(`Channel/Thread ${message.channelId} does not exist.`)
+        }) 
+    })
 
     // Do not respond if bot talks in the chat
     if (message.author.tag === message.client.user.tag) return
@@ -56,16 +65,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // response string for ollama to put its response
         let response: string
 
-        const threadMessages: UserMessage[] = await new Promise((resolve, reject) => {
-            // set new queue to modify
-            getThread(`${message.channelId}.json`, (threadInfo) => {
-                if (threadInfo?.messages)
-                    resolve(threadInfo.messages)
-                else
-                    reject(new Error(`Channel/Thread ${message.channelId} does not exist.`))
-            })
-        })
-
+        // set up new queue
         msgHist.setQueue(threadMessages)
 
         // check if we can push, if not, remove oldest
