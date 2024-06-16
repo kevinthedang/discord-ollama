@@ -1,5 +1,5 @@
 name: Tests
-run-name: Test source code for errors
+run-name: Unit Tests
 on:
   push:
     branches:
