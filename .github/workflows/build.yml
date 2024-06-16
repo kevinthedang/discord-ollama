@@ -1,7 +1,7 @@
 name: Builds
 run-name: Validate Node and Docker Builds
 on:
-  pull_request:
+  push:
     branches:
       - master
 

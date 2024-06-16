@@ -11,7 +11,6 @@ export async function streamResponse(params: ChatParams): Promise<AsyncGenerator
         model: params.model,
         messages: params.msgHist,
         options: {
-            num_thread: 8, // remove if optimization needed further
             mirostat: 1,
             mirostat_tau: 2.0,
             top_k: 70
@@ -30,7 +29,6 @@ export async function blockResponse(params: ChatParams): Promise<ChatResponse> {
         model: params.model,
         messages: params.msgHist,
         options: {
-            num_thread: 8, // remove if optimization needed further
             mirostat: 1,
             mirostat_tau: 2.0,
             top_k: 70
