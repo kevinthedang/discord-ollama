@@ -32,19 +32,23 @@ export async function normalMessage(
 
             // run query based on stream preference, true = stream, false = block
             if (stream) {
-                response = await streamResponse(params)
+                let messageBlock: Message = sentMessage
+                response = await streamResponse(params) // THIS WILL BE SLOW due to discord limits!
                 for await (const portion of response) {
-                    // append token to message
-                    result += portion.message.content
+                    // check if over discord message limit
+                    if (result.length + portion.message.content.length > 2000) {
+                        result = portion.message.content
 
-                    // exceeds handled length
-                    if (result.length > 2000) {
-                        message.channel.send(`Response length ${result.length} has exceeded Discord maximum.\n\nLong Stream messages not supported.`)
-                        break // stop stream
-                    }
-
-                    // resent current output, THIS WILL BE SLOW due to discord limits!
-                    sentMessage.edit(result || 'No Content Yet...')
+                        // new message block, wait for it to send and assign new block to respond.
+                        await message.channel.send("Creating new stream block...").then(sentMessage => { messageBlock = sentMessage })
+                    } else {
+                        result += portion.message.content
+                        
+                        // ensure block is not empty
+                        if (result.length > 5)
+                            messageBlock.edit(result) 
+                    }         
+                    console.log(result)
                 }
             }
             else {
