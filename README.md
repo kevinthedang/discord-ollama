@@ -42,8 +42,6 @@ The project aims to:
 * [NodeJS](https://nodejs.org/en)
     * This project uses `v20.10.0+` (npm `10.2.5`). Consider using [nvm](https://github.com/nvm-sh/nvm) for multiple NodeJS versions.
         * To run dev in `ts-node`, using `v18.18.2` is recommended. 
-        > [!CAUTION]
-        > `v18.X.X` or `lts/hydrogen` will not run properly for `npm run dev-mon`.
         * To run dev with `tsx`, you can use `v20.10.0` or earlier.
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
 * [Ollama](https://ollama.ai/)
@@ -51,6 +49,9 @@ The project aims to:
 
 > [!NOTE]
 > For Nvidia GPU setup, **install** `nvidia container toolkit/runtime` then **configure** it with Docker to utilize Nvidia driver.
+
+> [!CAUTION]
+> `v18.X.X` or `lts/hydrogen` will not run properly for `npm run dev-mon`.
 
 * [Discord Developer Portal](https://discord.com/developers/docs/intro)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
