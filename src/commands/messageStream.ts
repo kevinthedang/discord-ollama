@@ -26,7 +26,7 @@ export const MessageStream: SlashCommand = {
         openConfig('config.json', interaction.commandName, interaction.options.get('stream')?.value)
 
         interaction.reply({
-            content: `Message streaming preferences for embed set to: \`${interaction.options.get('stream')?.value}\``,
+            content: `Message streaming preferences set to: \`${interaction.options.get('stream')?.value}\``,
             ephemeral: true
         })
     }

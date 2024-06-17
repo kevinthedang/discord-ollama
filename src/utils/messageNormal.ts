@@ -2,6 +2,7 @@ import { Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
 import { Queue } from '../queues/queue.js'
+import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -19,7 +20,7 @@ export async function normalMessage(
     stream: boolean
 ): Promise<string> {
     // bot's respnse
-    let response: ChatResponse | AsyncGenerator<ChatResponse, any, unknown>
+    let response: ChatResponse | AbortableAsyncIterator<ChatResponse>
     let result: string = ''
 
     await message.channel.send('Generating Response . . .').then(async sentMessage => {

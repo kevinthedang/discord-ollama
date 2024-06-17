@@ -1,5 +1,5 @@
 # use node LTS image for version 18
-FROM node:18.18.2
+FROM node:hydrogen-alpine
 
 # set working directory inside container
 WORKDIR /app
