@@ -4,6 +4,14 @@ on:
   pull_request:
     branches:
       - master
+    paths:
+      - '!docs/**'
+      - '!imgs/**'
+      - '!.github/**'
+      - '.github/workflows/**'
+      - '!.gitignore'
+      - '!LICENSE'
+      - '!README'
 
 jobs:
   Discord-Node-Test:
