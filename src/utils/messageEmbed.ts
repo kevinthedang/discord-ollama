@@ -2,6 +2,7 @@ import { EmbedBuilder, Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
 import { Queue } from '../queues/queue.js'
+import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -19,7 +20,7 @@ export async function embedMessage(
     stream: boolean
 ): Promise<string> {
     // bot response
-    let response: ChatResponse | AsyncGenerator<ChatResponse, any, unknown>
+    let response: ChatResponse | AbortableAsyncIterator<ChatResponse>
     let result: string = ''
 
     // initial message to client

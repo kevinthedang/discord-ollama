@@ -13,10 +13,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment v18.18.2
+      - name: Set up Node Environment lts/hydrogen
         uses: actions/setup-node@v4
         with:
-          node-version: 18.18.2
+          node-version: lts/hydrogen
           cache: "npm"
 
       - name: Install Project Dependencies
@@ -50,10 +50,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment v18.18.2
+      - name: Set up Node Environment lts/hydrogen
         uses: actions/setup-node@v4
         with:
-          node-version: 18.18.2
+          node-version: lts/hydrogen
           cache: "npm"
 
       - name: Create Environment Variables

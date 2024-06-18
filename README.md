@@ -14,9 +14,11 @@ The project aims to:
 * [x] Create a Discord bot that will utilize Ollama and chat to chat with users! 
   * [ ] User Preferences on Chat
   * [ ] Message Persistance on Channels and Threads
+    * [x] Threads
+    * [ ] Channels
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
-  * [x] Generated Token Length Handling for >2000 ~~or >6000 characters~~
+  * [x] Generated Token Length Handling for >2000
     * [x] Token Length Handling of any message size
   * [ ] External WebUI Integration
   * [x] Administrator Role Compatible
@@ -28,20 +30,29 @@ The project aims to:
 * Clone this repo using `git clone https://github.com/kevinthedang/discord-ollama.git` or just use [GitHub Desktop](https://desktop.github.com/) to clone the repo.
 * You will need a `.env` file in the root of the project directory with the bot's token. There is a `.env.sample` is provided for you as a reference for what environment variables.
     * For example, `CLIENT_TOKEN = [Bot Token]`
-* Please refer to the docs for bot setup. **NOTE**: These guides assume you already know how to setup a bot account for discord.
+* Please refer to the docs for bot setup.
     * [Local Machine Setup](./docs/setup-local.md)
     * [Docker Setup for Servers and Local Machines](./docs/setup-docker.md)
         * Local use is not recommended.
 
+> [!NOTE]
+> These guides assume you already know how to setup a bot account for discord. Documentation will be added later.
+
 ## Resources
 * [NodeJS](https://nodejs.org/en)
     * This project uses `v20.10.0+` (npm `10.2.5`). Consider using [nvm](https://github.com/nvm-sh/nvm) for multiple NodeJS versions.
-        * To run dev in `ts-node`, using `v18.18.2` is recommended. **CAUTION**: `v18.19.0` or `lts/hydrogen` will not run properly.
+        * To run dev in `ts-node`, using `v18.18.2` is recommended. 
         * To run dev with `tsx`, you can use `v20.10.0` or earlier.
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
 * [Ollama](https://ollama.ai/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
-    * **IMPORTANT**: For Nvidia GPU setup, **install** `nvidia container toolkit/runtime` then **configure** it with Docker to utilize Nvidia driver.
+
+> [!NOTE]
+> For Nvidia GPU setup, **install** `nvidia container toolkit/runtime` then **configure** it with Docker to utilize Nvidia driver.
+
+> [!CAUTION]
+> `v18.X.X` or `lts/hydrogen` will not run properly for `npm run dev-mon`.
+
 * [Discord Developer Portal](https://discord.com/developers/docs/intro)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 * [Setting up Docker (Ubuntu 20.04)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)

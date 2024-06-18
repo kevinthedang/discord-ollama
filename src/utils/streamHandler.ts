@@ -1,12 +1,13 @@
 import { ChatResponse } from "ollama"
 import { ChatParams } from "./index.js"
+import { AbortableAsyncIterator } from "ollama/src/utils.js"
 
 /**
  * Method to query the Ollama client for async generation
  * @param params 
  * @returns Asyn
  */
-export async function streamResponse(params: ChatParams): Promise<AsyncGenerator<ChatResponse, any, unknown>> {
+export async function streamResponse(params: ChatParams): Promise<AbortableAsyncIterator<ChatResponse>> {
     return await params.ollama.chat({
         model: params.model,
         messages: params.msgHist,
@@ -16,7 +17,7 @@ export async function streamResponse(params: ChatParams): Promise<AsyncGenerator
             top_k: 70
         },
         stream: true
-    })
+    }) as unknown as AbortableAsyncIterator<ChatResponse>
 }
 
 /**
