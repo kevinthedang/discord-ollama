@@ -6,6 +6,7 @@ import { Disable } from './disable.js'
 import { Shutoff } from './shutoff.js'
 import { Capacity } from './capacity.js'
 import { PrivateThreadCreate } from './threadPrivateCreate.js'
+import { ChannelToggle } from './channelToggle.js'
 
 export default [
     ThreadCreate,
@@ -14,5 +15,6 @@ export default [
     MessageStream,
     Disable,
     Shutoff,
-    Capacity
+    Capacity,
+    ChannelToggle
 ] as SlashCommand[]
