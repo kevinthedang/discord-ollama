@@ -13,9 +13,9 @@ Ollama is an AI model management tool that allows users to install and use custo
 The project aims to:
 * [x] Create a Discord bot that will utilize Ollama and chat to chat with users! 
   * [ ] User Preferences on Chat
-  * [ ] Message Persistance on Channels and Threads
+  * [x] Message Persistance on Channels and Threads
     * [x] Threads
-    * [ ] Channels
+    * [x] Channels
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
   * [x] Generated Token Length Handling for >2000
