@@ -20,7 +20,7 @@ export const MessageStream: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // verify channel
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.PublicThread) return
+        if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
 
         // save value to json and write to it
         openConfig('config.json', interaction.commandName, interaction.options.get('stream')?.value)

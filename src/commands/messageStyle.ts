@@ -20,7 +20,7 @@ export const MessageStyle: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.PublicThread) return
+        if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
 
         // set the message style
         openConfig('config.json', interaction.commandName, interaction.options.get('embed')?.value)
