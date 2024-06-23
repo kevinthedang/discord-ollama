@@ -2,31 +2,32 @@ import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction }
 import { SlashCommand } from '../utils/commands.js'
 import { openConfig } from '../utils/jsonHandler.js'
 
-export const MessageStream: SlashCommand = {
-    name: 'message-stream',
-    description: 'change preference on message streaming from ollama. WARNING: can be very slow.',
+export const ChannelToggle: SlashCommand = {
+    name: 'channel-toggle',
+    description: 'toggles channel or thread usage.',
 
-    // user option(s) for setting stream
+    // set user option for toggling
     options: [
         {
-            name: 'stream',
-            description: 'enable or disable stream preference',
+            name: 'toggle-channel',
+            description: 'toggle channel usage, otherwise threads',
             type: ApplicationCommandOptionType.Boolean,
             required: true
         }
     ],
 
-    // change preferences based on command
+    // Query for chatting preference
     run: async (client: Client, interaction: CommandInteraction) => {
-        // verify channel
+        // fetch channel location
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
 
-        // save value to json and write to it
-        openConfig('config.json', interaction.commandName, interaction.options.get('stream')?.value)
+
+        // set state of bot channel preferences
+        openConfig('config.json', interaction.commandName, interaction.options.get('toggle-channel')?.value)
 
         interaction.reply({
-            content: `Message streaming preferences set to: \`${interaction.options.get('stream')?.value}\``,
+            content: `Channel Preferences have for Regular Channels set to \`${interaction.options.get('toggle-channel')?.value}\``,
             ephemeral: true
         })
     }
