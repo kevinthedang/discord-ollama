@@ -60,7 +60,10 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                     log(`New Capacity found. Setting Context Capacity to ${config.options['modify-capacity']}.`)
                     msgHist.capacity = config.options['modify-capacity']
                 }
-    
+
+                // check if a model is set
+                
+
                 // set stream state
                 shouldStream = config.options['message-stream'] as boolean || false
     
