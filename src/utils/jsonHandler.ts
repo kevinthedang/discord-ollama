@@ -10,7 +10,8 @@ export interface Configuration {
         'message-style'?: boolean,
         'toggle-chat'?: boolean,
         'modify-capacity'?: number,
-        'channel-toggle'?: boolean
+        'channel-toggle'?: boolean,
+        'model'?: string
     }
 }
 
