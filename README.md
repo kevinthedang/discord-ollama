@@ -20,8 +20,11 @@ The project aims to:
   * [x] Slash Commands Compatible
   * [x] Generated Token Length Handling for >2000
     * [x] Token Length Handling of any message size
-  * [ ] External WebUI Integration
+  * [ ] User vs. Server Preferences
+  * [ ] Redis Caching
   * [x] Administrator Role Compatible
+  * [ ] Multi-User Chat Generation (Multiple users chatting at the same time)
+  * [ ] Automatic and Manual model pulling through the Discord client
 * [ ] Allow others to create their own models personalized for their own servers!
   * [ ] Documentation on creating your own LLM
   * [ ] Documentation on web scrapping and cleaning
@@ -33,25 +36,21 @@ The project aims to:
 * Please refer to the docs for bot setup.
     * [Local Machine Setup](./docs/setup-local.md)
     * [Docker Setup for Servers and Local Machines](./docs/setup-docker.md)
+        * Nvidia is recommended for now, but support for other GPUs should be development.
         * Local use is not recommended.
-
-> [!NOTE]
-> These guides assume you already know how to setup a bot account for discord. Documentation will be added later.
+    * [Creating a Discord App](./docs/setup-discord-app.md)
 
 ## Resources
 * [NodeJS](https://nodejs.org/en)
-    * This project uses `v20.10.0+` (npm `10.2.5`). Consider using [nvm](https://github.com/nvm-sh/nvm) for multiple NodeJS versions.
-        * To run dev in `ts-node`, using `v18.18.2` is recommended. 
+    * This project runs on `lts\hydrogen`.
+        * To run dev in `ts-node`/`nodemon`, using `v18.18.2` is recommended. 
         * To run dev with `tsx`, you can use `v20.10.0` or earlier.
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
-* [Ollama](https://ollama.ai/)
+* [Ollama](https://ollama.com/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
 
-> [!NOTE]
-> For Nvidia GPU setup, **install** `nvidia container toolkit/runtime` then **configure** it with Docker to utilize Nvidia driver.
-
 > [!CAUTION]
-> `v18.X.X` or `lts/hydrogen` will not run properly for `npm run dev-mon`.
+> `v18.X.X` or `lts/hydrogen` will not run properly for `npm run dev-mon`. It is recommended to just use `npm run dev-tsx` for development. The nodemon version will likely be removed in a future update.
 
 * [Discord Developer Portal](https://discord.com/developers/docs/intro)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)

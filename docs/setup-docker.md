@@ -47,6 +47,7 @@ sudo systemctl restart docker
     * `DISCORD_IP = 172.18.0.3`
     * `SUBNET_ADDRESS = 172.18.0.0`
     * Don't understand any of this? watch a Networking video to understand subnetting.
+    * You also need all environment variables shown in [`.env.sample`](../.env.sample)
 * You will need a model in the container for this to work properly, on Docker Desktop go to the `Containers` tab, select the `ollama` container, and select `Exec` to run as root on your container. Now, run `ollama pull [model name]` to get your model.
     * For Linux Servers, you need another shell to pull the model, or if you run `docker compose build && docker compose up -d`, then it will run in the background to keep your shell. Run `docker exec -it ollama bash` to get into the container and run the samme pull command above.
 * Otherwise, there is no need to install any npm packages for this, you just need to run `npm run start` to pull the containers and spin them up.
@@ -54,6 +55,7 @@ sudo systemctl restart docker
     * `docker compose stop`
     * `docker compose rm`
     * `docker ps` to check if containers have been removed.
+    * This may not work if the nvidia installation was done incorrectly. If this is the case, please utilize the [Manual "Clean-up"](#manual-run-with-docker) shown below.
 * You can also use `npm run clean` to clean up the containers and remove the network to address a possible `Address already in use` problem.
 
 ## Manual Run (with Docker)
