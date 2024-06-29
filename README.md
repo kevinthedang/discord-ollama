@@ -38,6 +38,7 @@ The project aims to:
     * [Docker Setup for Servers and Local Machines](./docs/setup-docker.md)
         * Nvidia is recommended for now, but support for other GPUs should be development.
         * Local use is not recommended.
+    * [Creating a Discord App](./docs/setup-discord-app.md)
 
 ## Resources
 * [NodeJS](https://nodejs.org/en)
