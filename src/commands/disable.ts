@@ -32,7 +32,7 @@ export const Disable: SlashCommand = {
         }
 
         // set state of bot chat features
-        openConfig('config.json', interaction.commandName, interaction.options.get('enabled')?.value)
+        openConfig(`${interaction.channel?.id}-config.json`, interaction.commandName, interaction.options.get('enabled')?.value)
 
         interaction.reply({
             content: `Chat features has been \`${interaction.options.get('enabled')?.value ?  "enabled" : "disabled" }\``,
