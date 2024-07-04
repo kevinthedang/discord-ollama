@@ -24,7 +24,7 @@ export const ChannelToggle: SlashCommand = {
 
 
         // set state of bot channel preferences
-        openConfig('config.json', interaction.commandName, interaction.options.get('toggle-channel')?.value)
+        openConfig(`${interaction.guildId}-config.json`, interaction.commandName, interaction.options.get('toggle-channel')?.value)
 
         interaction.reply({
             content: `Channel Preferences have for Regular Channels set to \`${interaction.options.get('toggle-channel')?.value}\``,

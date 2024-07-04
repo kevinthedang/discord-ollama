@@ -1,30 +1,38 @@
 import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
-import { Configuration, getChannelInfo, getConfig, getThread, openChannelInfo, openConfig, openThreadInfo } from '../utils/jsonHandler.js'
+import { getChannelInfo, getServerConfig, getThread, getUserConfig, openChannelInfo, openConfig, openThreadInfo, ServerConfig, UserConfig } from '../utils/jsonHandler.js'
 import { clean } from '../utils/mentionClean.js'
 import { TextChannel, ThreadChannel } from 'discord.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
+ * Bot supports infinite lengths for normal messages.
+ * 
  * @param message the message received from the channel
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
     log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Do not respond if bot talks in the chat
-    if (message.author.tag === message.client.user.tag) return
+    if (message.author.username === message.client.user.username) return
 
     // Only respond if message mentions the bot
     if (!message.mentions.has(tokens.clientUid)) return
 
+    // default stream to false
     let shouldStream = false
-
-    // Try to query and send embed     
+ 
     try {
-        const config: Configuration = await new Promise((resolve, reject) => {
-            getConfig('config.json', (config) => {
+        // Retrieve Server/Guild Preferences
+        const serverConfig: ServerConfig = await new Promise((resolve, reject) => {
+            getServerConfig(`${message.guildId}-config.json`, (config) => {
                 // check if config.json exists
                 if (config === undefined) {
-                    reject(new Error('No Configuration is set up.\n\nCreating \`config.json\` with \`message-style\` set as \`false\` for regular messages.\nPlease try chatting again.'))
+                    // Allowing chat options to be available
+                    openConfig(`${message.guildId}-config.json`, 'toggle-chat', true)
+
+                    // default to channel scope chats
+                    openConfig(`${message.guildId}-config.json`, 'channel-toggle', true)
+                    reject(new Error('No Server Preferences is set up.\n\nCreating default server preferences file...\nPlease try chatting again.'))
                     return
                 }
 
@@ -38,10 +46,23 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                 if (config.options['channel-toggle']) {
                     openChannelInfo(message.channelId,
                         message.channel as TextChannel, 
-                        message.author.tag
+                        message.author.username
                     )
                 }
 
+                resolve(config)
+            })
+        })
+
+        // Retrieve User Preferences
+        const userConfig: UserConfig = await new Promise((resolve, reject) => {
+            getUserConfig(`${message.author.username}-config.json`, (config) => {
+                if (config === undefined) {
+                    openConfig(`${message.author.username}-config.json`, 'message-style', false)
+                    reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular messages.\nPlease try chatting again.'))
+                    return
+                }
+    
                 // check if there is a set capacity in config
                 if (typeof config.options['modify-capacity'] !== 'number')
                     log(`Capacity is undefined, using default capacity of ${msgHist.capacity}.`)
@@ -51,23 +72,25 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                     log(`New Capacity found. Setting Context Capacity to ${config.options['modify-capacity']}.`)
                     msgHist.capacity = config.options['modify-capacity']
                 }
-
+    
                 // set stream state
                 shouldStream = config.options['message-stream'] as boolean || false
-
+    
                 resolve(config)
             })
         })
 
+        
+
         // need new check for "open/active" threads/channels here!
         const chatMessages: UserMessage[] = await new Promise((resolve) => {
             // set new queue to modify
-            if (config.options['channel-toggle']) {
-                getChannelInfo(`${message.channelId}-${message.author.tag}.json`, (channelInfo) => {
+            if (serverConfig.options['channel-toggle']) {
+                getChannelInfo(`${message.channelId}-${message.author.username}.json`, (channelInfo) => {
                     if (channelInfo?.messages)
                         resolve(channelInfo.messages)
                     else
-                        log(`Channel ${message.channel}-${message.author.tag} does not exist.`)
+                        log(`Channel ${message.channel}-${message.author.username} does not exist.`)
                 })
             } else {
                 getThread(`${message.channelId}.json`, (threadInfo) => {
@@ -95,7 +118,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         })
         
         // undefined or false, use normal, otherwise use embed
-        if (config.options['message-style'])
+        if (userConfig.options['message-style'])
             response = await embedMessage(message, ollama, tokens, msgHist, shouldStream)
         else
             response = await normalMessage(message, ollama, tokens, msgHist, shouldStream)
@@ -113,7 +136,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         })
 
         // only update the json on success
-        if (config.options['channel-toggle']) {
+        if (serverConfig.options['channel-toggle']) {
             openChannelInfo(message.channelId, 
                 message.channel as TextChannel, 
                 message.author.tag, 
@@ -127,7 +150,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         }
     } catch (error: any) {
         msgHist.pop() // remove message because of failure
-        openConfig('config.json', 'message-style', false)
         message.reply(`**Error Occurred:**\n\n**Reason:** *${error.message}*`)
     }
 })

@@ -3,15 +3,39 @@ import { UserMessage } from './events.js'
 import fs from 'fs'
 import path from 'path'
 
+export interface UserConfiguration {
+    'message-stream'?: boolean,
+    'message-style'?: boolean,
+    'modify-capacity': number
+}
+
+export interface ServerConfiguration {
+    'toggle-chat'?: boolean,
+    'channel-toggle'?: boolean
+}
+
+/**
+ * Parent Configuration interface
+ * 
+ * @see ServerConfiguration server settings per guild
+ * @see UserConfiguration user configurations (only for the user for any server)
+ */
 export interface Configuration {
     readonly name: string
-    options: {
-        'message-stream'?: boolean,
-        'message-style'?: boolean,
-        'toggle-chat'?: boolean,
-        'modify-capacity'?: number,
-        'channel-toggle'?: boolean
-    }
+    options: UserConfiguration | ServerConfiguration
+}
+
+/**
+ * User config to use outside of this file
+ */
+export interface UserConfig {
+    readonly name: string
+    options: UserConfiguration
+}
+
+export interface ServerConfig {
+    readonly name: string
+    options: ServerConfiguration
 }
 
 export interface Thread {
@@ -27,6 +51,14 @@ export interface Channel {
     messages: UserMessage[]
 }
 
+function isUserConfigurationKey(key: string): key is keyof UserConfiguration {
+    return ['message-stream', 'message-style', 'modify-capacity'].includes(key);
+}
+
+function isServerConfigurationKey(key: string): key is keyof ServerConfiguration {
+    return ['toggle-chat', 'channel-toggle'].includes(key);
+}
+
 /**
  * Method to open a file in the working directory and modify/create it
  * 
@@ -34,27 +66,34 @@ export interface Channel {
  * @param key key value to access
  * @param value new value to assign
  */
+// add type of change (server, user)
 export function openConfig(filename: string, key: string, value: any) {
+    const fullFileName = `data/${filename}`
+    
     // check if the file exists, if not then make the config file
-    if (fs.existsSync(filename)) {
-        fs.readFile(filename, 'utf8', (error, data) => {
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
                 console.log(`[Error: openConfig] Incorrect file format`)
             else {
                 const object = JSON.parse(data)
                 object['options'][key] = value
-                fs.writeFileSync(filename, JSON.stringify(object, null, 2))
+                fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
             }
         })
     } else { // work on dynamic file creation
-        const object: Configuration = JSON.parse('{ \"name\": \"Discord Ollama Confirgurations\" }')
+        let object: Configuration
+        if (isServerConfigurationKey(key))
+            object = JSON.parse('{ \"name\": \"Server Confirgurations\" }')
+        else
+            object = JSON.parse('{ \"name\": \"User Confirgurations\" }')
 
         // set standard information for config file and options
         object['options'] = {
             [key]: value
         }
 
-        fs.writeFileSync(filename, JSON.stringify(object, null, 2))
+        fs.writeFileSync(`data/${filename}`, JSON.stringify(object, null, 2))
         console.log(`[Util: openConfig] Created '${filename}' in working directory`)
     }
 }
@@ -65,10 +104,35 @@ export function openConfig(filename: string, key: string, value: any) {
  * @param filename name of the configuration file to get
  * @param callback function to allow a promise from getting the config
  */
-export async function getConfig(filename: string, callback: (config: Configuration | undefined) => void): Promise<void> {
+export async function getServerConfig(filename: string, callback: (config: ServerConfig | undefined) => void): Promise<void> {
+    const fullFileName = `data/${filename}`
+
     // attempt to read the file and get the configuration
-    if (fs.existsSync(filename)) {
-        fs.readFile(filename, 'utf8', (error, data) => {
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
+            if (error) {
+                callback(undefined) 
+                return // something went wrong... stop
+            }
+            callback(JSON.parse(data))
+        })
+    } else {
+        callback(undefined) // file not found
+    }
+}
+
+/**
+ * Method to obtain the configurations of the message chat/thread
+ * 
+ * @param filename name of the configuration file to get
+ * @param callback function to allow a promise from getting the config
+ */
+export async function getUserConfig(filename: string, callback: (config: UserConfig | undefined) => void): Promise<void> {
+    const fullFileName = `data/${filename}`
+
+    // attempt to read the file and get the configuration
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error) {
                 callback(undefined) 
                 return // something went wrong... stop
