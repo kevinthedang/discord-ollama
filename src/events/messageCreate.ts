@@ -5,6 +5,8 @@ import { TextChannel, ThreadChannel } from 'discord.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
+ * Bot supports infinite lengths for normal messages.
+ * 
  * @param message the message received from the channel
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
