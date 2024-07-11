@@ -23,7 +23,7 @@ export const MessageStyle: SlashCommand = {
         if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
 
         // set the message style
-        openConfig(`${interaction.client.user.username}-config.json`, interaction.commandName, interaction.options.get('embed')?.value)
+        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('embed')?.value)
 
         interaction.reply({
             content: `Message style preferences for embed set to: \`${interaction.options.get('embed')?.value}\``,

@@ -23,7 +23,7 @@ export const Capacity: SlashCommand = {
         if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
 
         // set state of bot chat features
-        openConfig(`${interaction.client.user.username}-config.json`, interaction.commandName, interaction.options.get('context-capacity')?.value)
+        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('context-capacity')?.value)
 
         interaction.reply({
             content: `Message History Capacity has been set to \`${interaction.options.get('context-capacity')?.value}\``,
