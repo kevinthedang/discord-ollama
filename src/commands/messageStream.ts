@@ -23,7 +23,7 @@ export const MessageStream: SlashCommand = {
         if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
 
         // save value to json and write to it
-        openConfig(`${interaction.client.user.username}-config.json`, interaction.commandName, interaction.options.get('stream')?.value)
+        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('stream')?.value)
 
         interaction.reply({
             content: `Message streaming preferences set to: \`${interaction.options.get('stream')?.value}\``,
