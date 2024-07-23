@@ -1,5 +1,5 @@
 import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
-import { getChannelInfo, getServerConfig, getThread, getUserConfig, openChannelInfo, openConfig, openThreadInfo, ServerConfig, UserConfig } from '../utils/jsonHandler.js'
+import { getChannelInfo, getServerConfig, getThread, getUserConfig, openChannelInfo, openConfig, openThreadInfo, ServerConfig, UserConfig } from '../utils/index.js'
 import { clean } from '../utils/mentionClean.js'
 import { TextChannel, ThreadChannel } from 'discord.js'
 

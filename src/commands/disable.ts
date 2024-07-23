@@ -1,6 +1,6 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openConfig } from '../utils/jsonHandler.js'
+import { openConfig } from '../utils/index.js'
 
 export const Disable: SlashCommand = {
     name: 'toggle-chat',
