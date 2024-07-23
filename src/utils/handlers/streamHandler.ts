@@ -1,5 +1,5 @@
 import { ChatResponse } from "ollama"
-import { ChatParams } from "./index.js"
+import { ChatParams } from "../index.js"
 import { AbortableAsyncIterator } from "ollama/src/utils.js"
 
 /**

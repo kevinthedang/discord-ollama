@@ -1,4 +1,4 @@
-import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey } from './index.js'
+import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey } from '../index.js'
 import fs from 'fs'
 
 /**

@@ -1,6 +1,6 @@
 import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openThreadInfo } from '../utils/chatHistoryHandler.js'
+import { openThreadInfo } from '../utils/index.js'
 
 export const ThreadCreate: SlashCommand = {
     name: 'thread',
