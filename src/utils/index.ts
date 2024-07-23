@@ -4,7 +4,7 @@ export * from './events.js'
 export * from './messageEmbed.js'
 export * from './messageNormal.js'
 export * from './commands.js'
-export * from './fileTypes.js'
+export * from './configInterfaces.js'
 
 // handler imports
 export * from './handlers/chatHistoryHandler.js'
