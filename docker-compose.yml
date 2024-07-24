@@ -1,5 +1,4 @@
-# creates the docker compose 
-version: '3.7'
+# creates the docker compose
 
 # build individual services 
 services:
