@@ -59,6 +59,51 @@ export async function getThread(filename: string, callback: (config: Thread | un
 }
 
 /**
+ * Method to check if a thread history file exists
+ * 
+ * @param channel parent thread of the requested thread (can be GuildText)
+ * @returns true if channel does not exist, false otherwise
+ */
+async function checkChannelInfoExists(channel: TextChannel, user: string) {
+    // thread exist handler
+    const isThread: boolean = await new Promise((resolve) => {
+        getThread(`${channel.id}-${user}.json`, (threadInfo) => {
+            if (threadInfo?.messages)
+                resolve(true)
+            else
+                resolve(false)
+        })
+    })
+    return isThread
+}
+
+/**
+ * Method to clear channel history for requesting user
+ * 
+ * @param filename guild id string
+ * @param channel the TextChannel in the Guild
+ * @param user username of user
+ * @returns nothing
+ */
+export async function clearChannelInfo(filename: string, channel: TextChannel, user: string): Promise<void> {
+    const channelInfoExists: boolean = await checkChannelInfoExists(channel, user)
+
+    // If thread does not exist, file can't be found
+    if (!channelInfoExists) return
+
+    const fullFileName = `data/${filename}-${user}.json`
+    fs.readFile(fullFileName, 'utf8', (error, data) => {
+        if (error)
+            console.log(`[Error: openChannelInfo] Incorrect file format`)
+        else {
+            const object = JSON.parse(data)
+            object['messages'] =  [] // cleared history
+            fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
+        }
+    })
+}
+
+/**
  * Method to open the channel history
  * 
  * @param filename name of the json file for the channel by user
@@ -67,19 +112,6 @@ export async function getThread(filename: string, callback: (config: Thread | un
  * @param messages their messages
  */
 export async function openChannelInfo(filename: string, channel: TextChannel, user: string, messages: UserMessage[] = []): Promise<void> {
-    // thread exist handler
-    const isThread: boolean = await new Promise((resolve) => {
-        getThread(`${channel.id}.json`, (threadInfo) => {
-            if (threadInfo?.messages)
-                resolve(true)
-            else
-                resolve(false)
-        })
-    })
-
-    // This is an existing thread, don't create another json
-    if (isThread) return
-
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
