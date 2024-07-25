@@ -67,8 +67,8 @@ export async function getThread(filename: string, callback: (config: Thread | un
 async function checkChannelInfoExists(channel: TextChannel, user: string) {
     // thread exist handler
     const isThread: boolean = await new Promise((resolve) => {
-        getThread(`${channel.id}-${user}.json`, (threadInfo) => {
-            if (threadInfo?.messages)
+        getThread(`${channel.id}-${user}.json`, (channelInfo) => {
+            if (channelInfo?.messages)
                 resolve(true)
             else
                 resolve(false)
@@ -122,6 +122,18 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
  * @param messages their messages
  */
 export async function openChannelInfo(filename: string, channel: TextChannel, user: string, messages: UserMessage[] = []): Promise<void> {
+    const isThread: boolean = await new Promise((resolve) => {
+        getThread(`${channel.id}.json`, (threadInfo) => {
+            if (threadInfo?.messages)
+                resolve(true)
+            else
+                resolve(false)
+        })
+    })
+
+    // this is a thread channel, do not duplicate files
+    if (isThread) return
+
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
