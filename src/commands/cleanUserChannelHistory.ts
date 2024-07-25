@@ -15,13 +15,18 @@ export const ClearUserChannelHistory: SlashCommand = {
         if (!channel || channel.type !== ChannelType.GuildText) return
 
         // clear channel info for user
-        await clearChannelInfo(interaction.channelId, 
+        const successfulWipe = await clearChannelInfo(interaction.channelId, 
             interaction.channel as TextChannel, 
             interaction.user.username)
-        
-        interaction.reply({
-            content: `Channel history in ${channel.name} cleared for ${interaction.user.username}`,
-            ephemeral: true
-        })
+        if (successfulWipe)
+            interaction.reply({ 
+                content: `Channel history in **${channel.name}** cleared for **${interaction.user.username}**.`, 
+                ephemeral: true
+            })
+        else
+            interaction.reply({ 
+                content: `Channel history could not be found for **${interaction.user.username}** in **${channel.name}**.\n\nPlease chat with **${client.user?.username}** to start a chat history.`, 
+                ephemeral: true
+            })
     }
 }
