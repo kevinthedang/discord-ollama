@@ -19,7 +19,7 @@ export const ThreadCreate: SlashCommand = {
         })
 
         // Send a message in the thread
-        thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your prompt.`)
+        thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your prompt.\n\nIf I do not respond, ensure \`channel-toggle\` is set to \`false\``)
 
         // handle storing this chat channel
         // store: thread.id, thread.name
