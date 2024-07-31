@@ -20,8 +20,7 @@ export const ChannelToggle: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel location
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== (ChannelType.PublicThread && ChannelType.GuildText)) return
-
+        if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return
 
         // set state of bot channel preferences
         openConfig(`${interaction.guildId}-config.json`, interaction.commandName, interaction.options.get('toggle-channel')?.value)
