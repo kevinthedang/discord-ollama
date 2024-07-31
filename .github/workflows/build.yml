@@ -2,7 +2,7 @@ name: Builds
 run-name: Validate Node and Docker Builds
 on:
   workflow_run:
-    workflows: ["Tests"]
+    workflows: [Tests]
     types:
       - completed
 
