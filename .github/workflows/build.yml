@@ -1,21 +1,10 @@
 name: Builds
 run-name: Validate Node and Docker Builds
 on:
-  pull_request:
-    branches:
-      - master
-    paths:
-      - '*'
-      - 'package*.json'
-      - 'src/**'
-      - 'tests/**'
-      - '!docs/**'
-      - '!imgs/**'
-      - '!.github/**'
-      - '.github/workflows/**'
-      - '!.gitignore'
-      - '!LICENSE'
-      - '!README'
+  workflow_fun:
+    workflows: ["Tests"]
+    types:
+      - completed
 
 jobs:
   Discord-Node-Build: # test if the node install and run
