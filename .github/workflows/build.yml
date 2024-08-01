@@ -1,10 +1,9 @@
 name: Builds
 run-name: Validate Node and Docker Builds
 on:
-  workflow_run:
-    workflows: [Tests]
-    types:
-      - completed
+  push:
+    branches:
+      - master # runs after Pull Request is merged
 
 jobs:
   Discord-Node-Build: # test if the node install and run
