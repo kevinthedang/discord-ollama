@@ -18,8 +18,8 @@
     "docker:start-cpu": "npm run docker:network && npm run docker:build && npm run docker:client && npm run docker:ollama-cpu",
     "docker:clean": "docker rm -f discord && docker rm -f ollama && docker rmi $(docker images --filter \"dangling=true\" -q --no-trunc)",
     "docker:network": "docker network create --subnet=172.18.0.0/16 ollama-net",
-    "docker:build": "docker build --no-cache -t discord/bot:$(node -p \"require('./package.json').version\") .",
-    "docker:client": "docker run -d -v discord:/src/app --name discord --network ollama-net --ip 172.18.0.3 discord/bot:$(node -p \"require('./package.json').version\")",
+    "docker:build": "docker build --no-cache -t kevinthedang/discord-ollama:$(node -p \"require('./package.json').version\") .",
+    "docker:client": "docker run -d -v discord:/src/app --name discord --network ollama-net --ip 172.18.0.3 kevinthedang/discord-ollama:$(node -p \"require('./package.json').version\")",
     "docker:ollama": "docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama --network ollama-net --ip 172.18.0.2 ollama/ollama:latest",
     "docker:ollama-cpu": "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama --network ollama-net --ip 172.18.0.2 ollama/ollama:latest"
   },
