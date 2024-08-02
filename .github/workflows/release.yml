@@ -36,6 +36,10 @@ jobs:
       - name: Build Image
         run: |
           npm run docker:build
+
+      - name: Build Image as Latest
+        run: |
+          npm run docker:build-latest
       
       - name: Log into Docker
         run: |
@@ -44,3 +48,4 @@ jobs:
       - name: Release Docker Image
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/discord-ollama:${{ env.VERSION }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/discord-ollama:latest
