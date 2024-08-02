@@ -43,9 +43,9 @@ jobs:
       
       - name: Log into Docker
         run: |
-          docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASS }}
+          docker login --username ${{ vars.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }}
 
       - name: Release Docker Image
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/discord-ollama:${{ env.VERSION }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/discord-ollama:latest
+          docker push ${{ vars.DOCKER_USER }}/discord-ollama:${{ env.VERSION }}
+          docker push ${{ vars.DOCKER_USER }}/discord-ollama:latest
