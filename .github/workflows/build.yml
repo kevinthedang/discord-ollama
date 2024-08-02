@@ -72,7 +72,7 @@ jobs:
 
       - name: Check Images Exist
         run: |
-          (docker images | grep -q 'discord/bot' && docker images | grep -qE 'ollama/ollama') || exit 1
+          (docker images | grep -q 'kevinthedang/discord-ollama' && docker images | grep -qE 'ollama/ollama') || exit 1
 
       - name: Check Containers Exist
         run: |
