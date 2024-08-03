@@ -1,5 +1,6 @@
 import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey } from '../index.js'
 import fs from 'fs'
+import path from 'path'
 
 /**
  * Method to open a file in the working directory and modify/create it
@@ -34,6 +35,10 @@ export function openConfig(filename: string, key: string, value: any) {
         object['options'] = {
             [key]: value
         }
+
+        const directory = path.dirname(fullFileName)
+        if (!fs.existsSync(directory))
+            fs.mkdirSync(directory, { recursive: true })
 
         fs.writeFileSync(`data/${filename}`, JSON.stringify(object, null, 2))
         console.log(`[Util: openConfig] Created '${filename}' in working directory`)
