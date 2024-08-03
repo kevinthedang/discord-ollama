@@ -1,4 +1,4 @@
-name: release
+name: Deploy
 run-name: Release Docker Image
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'v*'
 
 jobs:
-  Deploy-Image:
+  Release-Docker-Image:
     runs-on: ubuntu-latest
     environment: release
     timeout-minutes: 3
