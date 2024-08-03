@@ -11,7 +11,6 @@ services:
     image: kevinthedang/discord-ollama:0.5.9
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
-      GUILD_ID: ${GUILD_ID}
       MODEL: ${MODEL}
       CLIENT_UID: ${CLIENT_UID}
       OLLAMA_IP: ${OLLAMA_IP}
