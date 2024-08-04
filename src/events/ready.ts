@@ -1,6 +1,6 @@
-import { event, Events, registerCommands } from '../utils/index.js'
 import { ActivityType } from 'discord.js'
 import commands from '../commands/index.js'
+import { event, Events, registerCommands } from '../utils/index.js'
 
 // Log when the bot successfully logs in and export it
 export default event(Events.ClientReady, ({ log }, client) => {

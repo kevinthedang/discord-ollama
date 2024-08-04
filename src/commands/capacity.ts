@@ -1,6 +1,5 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
-import { SlashCommand } from '../utils/commands.js'
-import { openConfig } from '../utils/index.js'
+import { SlashCommand, openConfig } from '../utils/index.js'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
@@ -17,7 +16,10 @@ export const Capacity: SlashCommand = {
     ],
 
     // Query for message information and set the style
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (
+        client: Client,
+        interaction: CommandInteraction
+    ) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return

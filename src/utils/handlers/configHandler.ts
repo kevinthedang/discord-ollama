@@ -1,4 +1,4 @@
-import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey } from '../index.js'
+import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey, LogMethod } from '../index.js'
 import fs from 'fs'
 import path from 'path'
 
@@ -16,9 +16,10 @@ export function openConfig(filename: string, key: string, value: any) {
     // check if the file exists, if not then make the config file
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
-            if (error)
-                console.log(`[Error: openConfig] Incorrect file format`)
-            else {
+            if (error) {
+                const log: LogMethod = console.log.bind(console, '[Error: openConfig]')
+                log('Incorrect file format')
+            } else {
                 const object = JSON.parse(data)
                 object['options'][key] = value
                 fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
@@ -41,7 +42,8 @@ export function openConfig(filename: string, key: string, value: any) {
             fs.mkdirSync(directory, { recursive: true })
 
         fs.writeFileSync(`data/${filename}`, JSON.stringify(object, null, 2))
-        console.log(`[Util: openConfig] Created '${filename}' in working directory`)
+        const log: LogMethod = console.log.bind(console, '[Util: openConfig]')
+        log(`Created '${filename}' in working directory`)
     }
 }
 

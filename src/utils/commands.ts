@@ -1,4 +1,5 @@
 import { CommandInteraction, ChatInputApplicationCommandData, Client, ApplicationCommandOption } from 'discord.js'
+import { LogMethod } from './index.js'
 
 /**
  * interface for how slash commands should be run
@@ -7,6 +8,7 @@ export interface SlashCommand extends ChatInputApplicationCommandData {
     run: (
         client: Client,
         interaction: CommandInteraction,
+        log?: LogMethod,
         options?: ApplicationCommandOption[]
     ) => void
 }
@@ -16,7 +18,10 @@ export interface SlashCommand extends ChatInputApplicationCommandData {
  * @param client the bot reference
  * @param commands commands to register to the bot
  */
-export function registerCommands(client: Client, commands: SlashCommand[]): void {
+export function registerCommands(
+    client: Client,
+    commands: SlashCommand[]
+): void {
     // ensure the bot is online before registering
     if (!client.application) return
 
@@ -28,7 +33,10 @@ export function registerCommands(client: Client, commands: SlashCommand[]): void
         for (const command of fetchedCommands.values()) {
             if (!commandsToRegister.includes(command.name)) {
                 command.delete().catch(console.error)
-                console.log(`[Command: ${command.name}] Removed from Discord`)
+
+                // Create a new log method for this event
+                const log = console.log.bind(console, `[Command: ${command.name}]`)
+                log(`Removed from Discord`)
             }
         }
     })
@@ -41,7 +49,11 @@ export function registerCommands(client: Client, commands: SlashCommand[]): void
         client.application.commands
             .create(command)
             .then((c) => {
-                console.log(`[Command: ${c.name}] Registered on Discord`)
+                // console.log(`[Command: ${c.name}] Registered on Discord`)
+                
+                // Create a new log method for this event
+                const log = console.log.bind(console, `[Command: ${c.name}]`)
+                log(`Registered on Discord`)
                 c.options?.forEach((o) => console.log(`  - ${o.name}`))
             })
 }

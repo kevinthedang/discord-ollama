@@ -1,7 +1,10 @@
-import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
-import { getChannelInfo, getServerConfig, getThread, getUserConfig, openChannelInfo, openConfig, openThreadInfo, ServerConfig, UserConfig } from '../utils/index.js'
-import { clean } from '../utils/mentionClean.js'
 import { TextChannel, ThreadChannel } from 'discord.js'
+import {
+    embedMessage, event, Events, normalMessage, UserMessage,
+    getChannelInfo, getServerConfig, getThread, getUserConfig,
+    openChannelInfo, openConfig, openThreadInfo, ServerConfig,
+    UserConfig, clean
+} from '../utils/index.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).
@@ -20,7 +23,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
 
     // default stream to false
     let shouldStream = false
- 
+
     try {
         // Retrieve Server/Guild Preferences
         const serverConfig: ServerConfig = await new Promise((resolve, reject) => {
@@ -45,7 +48,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                 // ensure channel json exists, if not create it
                 if (config.options['channel-toggle']) {
                     openChannelInfo(message.channelId,
-                        message.channel as TextChannel, 
+                        message.channel as TextChannel,
                         message.author.username
                     )
                 }
@@ -62,7 +65,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                     reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular messages.\nPlease try chatting again.'))
                     return
                 }
-    
+
                 // check if there is a set capacity in config
                 if (typeof config.options['modify-capacity'] !== 'number')
                     log(`Capacity is undefined, using default capacity of ${msgHist.capacity}.`)
@@ -72,15 +75,13 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                     log(`New Capacity found. Setting Context Capacity to ${config.options['modify-capacity']}.`)
                     msgHist.capacity = config.options['modify-capacity']
                 }
-    
+
                 // set stream state
                 shouldStream = config.options['message-stream'] as boolean || false
-    
+
                 resolve(config)
             })
         })
-
-        
 
         // need new check for "open/active" threads/channels here!
         const chatMessages: UserMessage[] = await new Promise((resolve) => {
@@ -98,7 +99,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
                         resolve(threadInfo.messages)
                     else
                         log(`Thread ${message.channelId} does not exist.`)
-                }) 
+                })
             }
         })
 
@@ -116,7 +117,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             role: 'user',
             content: clean(message.content)
         })
-        
+
         // undefined or false, use normal, otherwise use embed
         if (userConfig.options['message-style'])
             response = await embedMessage(message, ollama, tokens, msgHist, shouldStream)
@@ -130,21 +131,21 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         while (msgHist.size() >= msgHist.capacity) msgHist.dequeue()
 
         // successful query, save it in context history
-        msgHist.enqueue({ 
-            role: 'assistant', 
+        msgHist.enqueue({
+            role: 'assistant',
             content: response
         })
 
         // only update the json on success
         if (serverConfig.options['channel-toggle']) {
-            openChannelInfo(message.channelId, 
-                message.channel as TextChannel, 
-                message.author.tag, 
+            openChannelInfo(message.channelId,
+                message.channel as TextChannel,
+                message.author.tag,
                 msgHist.getItems()
             )
         } else {
-            openThreadInfo(`${message.channelId}.json`, 
-                client.channels.fetch(message.channelId) as unknown as ThreadChannel, 
+            openThreadInfo(`${message.channelId}.json`,
+                client.channels.fetch(message.channelId) as unknown as ThreadChannel,
                 msgHist.getItems()
             )
         }

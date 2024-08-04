@@ -1,11 +1,11 @@
-import type { ClientEvents, Awaitable, Client, User } from 'discord.js'
+import type { ClientEvents, Awaitable, Client } from 'discord.js'
 import { Ollama } from 'ollama'
 import { Queue } from '../queues/queue.js'
+import { LogMethod } from './index.js'
 
 // Export events through here to reduce amount of imports
 export { Events } from 'discord.js'
 
-export type LogMethod = (...args: unknown[]) => void
 export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents object
 
 /**
@@ -26,8 +26,8 @@ export type Tokens = {
  * @param msgHist message history
  */
 export type ChatParams = {
-    model: string, 
-    ollama: Ollama, 
+    model: string,
+    ollama: Ollama,
     msgHist: UserMessage[]
 }
 
@@ -73,8 +73,8 @@ export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): 
  * @param ollama the initialized ollama instance
  */
 export function registerEvents(
-    client: Client, 
-    events: Event[], 
+    client: Client,
+    events: Event[],
     msgHist: Queue<UserMessage>,
     tokens: Tokens,
     ollama: Ollama

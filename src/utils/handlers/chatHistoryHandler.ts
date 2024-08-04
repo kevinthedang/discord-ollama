@@ -1,5 +1,5 @@
 import { TextChannel, ThreadChannel } from 'discord.js'
-import { Configuration, Thread, Channel, UserMessage } from '../index.js'
+import { Configuration, Thread, Channel, UserMessage, LogMethod } from '../index.js'
 import fs from 'fs'
 import path from 'path'
 
@@ -15,9 +15,10 @@ export function openThreadInfo(filename: string, thread: ThreadChannel, messages
     const fullFileName = `data/${filename}`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
-            if (error)
-                console.log(`[Error: openThreadInfo] Incorrect file format`)
-            else {
+            if (error) {
+                const log: LogMethod = console.log.bind(console, `[Error: openThreadInfo]`)
+                log('Incorrect file format')
+            } else {
                 const object = JSON.parse(data)
                 object['messages'] = messages as []
                 fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
@@ -32,7 +33,8 @@ export function openThreadInfo(filename: string, thread: ThreadChannel, messages
 
         // only creating it, no need to add anything
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: openThreadInfo] Created '${fullFileName}' in working directory`)
+        const log: LogMethod = console.log.bind(console, `[Util: openThreadInfo]`)
+        log(`Created '${fullFileName}' in working directory`)
     }
 }
 
@@ -48,7 +50,7 @@ export async function getThread(filename: string, callback: (config: Thread | un
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error) {
-                callback(undefined) 
+                callback(undefined)
                 return // something went wrong... stop
             }
             callback(JSON.parse(data))
@@ -95,9 +97,10 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     const fullFileName = `data/${filename}-${user}.json`
     const cleanedHistory: boolean = await new Promise((resolve) => {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
-            if (error)
-                console.log(`[Error: openChannelInfo] Incorrect file format`)
-            else {
+            if (error) {
+                const log: LogMethod = console.log.bind(console, `[Error: clearChannelInfo]`)
+                log('Incorrect file format')
+            } else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0) // already empty, let user know
                     resolve(false)
@@ -137,9 +140,10 @@ export async function openChannelInfo(filename: string, channel: TextChannel, us
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
-            if (error)
-                console.log(`[Error: openChannelInfo] Incorrect file format`)
-            else {
+            if (error) {
+                const log: LogMethod = console.log.bind(console, `[Error: openChannelInfo]`)
+                log('Incorrect file format')
+            } else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0)
                     object['messages'] = messages as []
@@ -157,7 +161,8 @@ export async function openChannelInfo(filename: string, channel: TextChannel, us
 
         // only creating it, no need to add anything
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: openChannelInfo] Created '${fullFileName}' in working directory`)
+        const log: LogMethod = console.log.bind(console, `[Util: openChannelInfo]`)
+        log(`Created '${fullFileName}' in working directory`)
     }
 }
 
@@ -172,7 +177,7 @@ export async function getChannelInfo(filename: string, callback: (config: Channe
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error) {
-                callback(undefined) 
+                callback(undefined)
                 return // something went wrong... stop
             }
             callback(JSON.parse(data))

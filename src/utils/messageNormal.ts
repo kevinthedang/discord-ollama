@@ -1,6 +1,6 @@
 import { Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
-import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
+import { ChatParams, UserMessage, streamResponse, blockResponse, LogMethod } from './index.js'
 import { Queue } from '../queues/queue.js'
 import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 
@@ -73,7 +73,8 @@ export async function normalMessage(
                     sentMessage.edit(result)
             }            
         } catch(error: any) {
-            console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
+            const log = console.log.bind(console, `[Util: messageNormal]`)
+            log(`Error creating message: ${error.message}`)
             sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
         }
     })

@@ -1,5 +1,5 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
-import { SlashCommand } from '../utils/commands.js'
+import { SlashCommand } from '../utils/index.js'
 
 export const Shutoff: SlashCommand = {
     name: 'shutoff',
@@ -41,7 +41,7 @@ export const Shutoff: SlashCommand = {
 
         // Shutoff cleared, do it
         interaction.reply({
-            content: `${client.user?.tag} is ${interaction.options.get('are-you-sure')?.value ?  "shutting down now." : "not shutting down." }`,
+            content: `${client.user?.tag} is ${interaction.options.get('are-you-sure')?.value ? "shutting down now." : "not shutting down."}`,
             ephemeral: true
         })
 

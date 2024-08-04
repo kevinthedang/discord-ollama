@@ -1,6 +1,6 @@
 import { EmbedBuilder, Message } from 'discord.js'
 import { ChatResponse, Ollama } from 'ollama'
-import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
+import { ChatParams, UserMessage, streamResponse, blockResponse, LogMethod } from './index.js'
 import { Queue } from '../queues/queue.js'
 import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 
@@ -114,8 +114,9 @@ export async function embedMessage(
                 sentMessage.edit({ embeds: [newEmbed] })
             }
         }
-    } catch(error: any) {
-        console.log(`[Util: messageEmbed] Error creating message: ${error.message}`)
+    } catch (error: any) {
+        const log = console.log.bind(console, `[Util: messageEmbed]`)
+        log(`Error creating message: ${error.message}`)
         const errorEmbed = new EmbedBuilder()
             .setTitle(`Responding to ${message.author.tag}`)
             .setDescription(`**Response generation failed.**\n\nReason: ${error.message}`)
