@@ -35,19 +35,17 @@ The project aims to:
 * You will need a `.env` file in the root of the project directory with the bot's token. There is a `.env.sample` is provided for you as a reference for what environment variables.
     * For example, `CLIENT_TOKEN = [Bot Token]`
 * Please refer to the docs for bot setup.
+    * [Creating a Discord App](./docs/setup-discord-app.md)
     * [Local Machine Setup](./docs/setup-local.md)
     * [Docker Setup for Servers and Local Machines](./docs/setup-docker.md)
         * Nvidia is recommended for now, but support for other GPUs should be development.
         * Local use is not recommended.
-    * [Creating a Discord App](./docs/setup-discord-app.md)
-
 ## Resources
 * [NodeJS](https://nodejs.org/en)
     * This project runs on `lts\hydrogen`. 
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
 * [Ollama](https://ollama.com/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
-* [Discord Developer Portal](https://discord.com/developers/docs/intro)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 * [Setting up Docker (Ubuntu 20.04)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * [Setting up Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
