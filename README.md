@@ -43,16 +43,10 @@ The project aims to:
 
 ## Resources
 * [NodeJS](https://nodejs.org/en)
-    * This project runs on `lts\hydrogen`.
-        * To run dev in `ts-node`/`nodemon`, using `v18.18.2` is recommended. 
-        * To run dev with `tsx`, you can use `v20.10.0` or earlier.
+    * This project runs on `lts\hydrogen`. 
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
 * [Ollama](https://ollama.com/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
-
-> [!CAUTION]
-> `v18.X.X` or `lts/hydrogen` will not run properly for `npm run dev-mon`. It is recommended to just use `npm run dev-tsx` for development. The nodemon version will likely be removed in a future update.
-
 * [Discord Developer Portal](https://discord.com/developers/docs/intro)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 * [Setting up Docker (Ubuntu 20.04)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
