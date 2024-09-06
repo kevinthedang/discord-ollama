@@ -56,7 +56,7 @@ sudo systemctl restart docker
     * `docker compose rm`
     * `docker ps` to check if containers have been removed.
     * This may not work if the nvidia installation was done incorrectly. If this is the case, please utilize the [Manual "Clean-up"](#manual-run-with-docker) shown below.
-* You can also use `npm run clean` to clean up the containers and remove the network to address a possible `Address already in use` problem.
+* You can also use `npm run clean` to clean up the containers and remove the network to address a possible `Address already in use` problem. This script does not have to end without error to work.
 
 ## Manual Run (with Docker)
 * Run the following commands:
