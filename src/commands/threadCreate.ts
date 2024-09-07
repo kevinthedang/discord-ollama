@@ -1,6 +1,6 @@
-import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
+import { ChannelType, Client, CommandInteraction, TextChannel, ThreadChannel } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openThreadInfo } from '../utils/index.js'
+import { openChannelInfo } from '../utils/index.js'
 
 export const ThreadCreate: SlashCommand = {
     name: 'thread',
@@ -19,11 +19,12 @@ export const ThreadCreate: SlashCommand = {
         })
 
         // Send a message in the thread
-        thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your prompt.\n\nIf I do not respond, ensure \`channel-toggle\` is set to \`false\``)
+        thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your prompt.`)
 
         // handle storing this chat channel
-        // store: thread.id, thread.name
-        openThreadInfo(`${thread.id}.json`, thread)
+        openChannelInfo(thread.id, 
+            thread as ThreadChannel, 
+            interaction.user.tag)
 
         // user only reply
         return interaction.reply({

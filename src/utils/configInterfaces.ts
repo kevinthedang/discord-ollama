@@ -8,7 +8,6 @@ export interface UserConfiguration {
 
 export interface ServerConfiguration {
     'toggle-chat'?: boolean,
-    'channel-toggle'?: boolean
 }
 
 /**
@@ -54,5 +53,5 @@ export interface Channel {
  * @returns true if command is from Server Config, false otherwise
  */
 export function isServerConfigurationKey(key: string): key is keyof ServerConfiguration {
-    return ['toggle-chat', 'channel-toggle'].includes(key);
+    return ['toggle-chat'].includes(key);
 }
