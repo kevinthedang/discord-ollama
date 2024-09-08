@@ -7,19 +7,25 @@ import fs from 'fs'
  */
 export default event(Events.ThreadDelete, ({ log }, thread: ThreadChannel) => {
     // iterate through every guild member in the thread and delete their history, except the bot
-    log(thread.guildMembers)
-    for (const member in thread.guildMembers)
-        log(member)
+    // log(thread.guildMembers)
+    for (const [id, guildMember] of thread.guildMembers) {
+        log(`Removing ${guildMember.user.username} from ${thread.name}`)
 
-    const filePath = `data/${thread.id}-${thread.guildMembers}.json`
-    if (fs.existsSync(filePath)) {
-        fs.unlink(filePath, (error) => {
-            if (error)
-                log(`Error deleting file ${filePath}`, error)
-            else
-                log(`Successfully deleted ${filePath} thread info`)
-        })
-    } else {
-        log(`File ${filePath} does not exist.`)
+        // bot wont have a chat history.
+        if (!guildMember.user.bot) {
+            const filePath = `data/${thread.id}-${guildMember.user.username}.json`
+            if (fs.existsSync(filePath)) {
+                fs.unlink(filePath, (error) => {
+                    if (error)
+                        log(`Error deleting file ${filePath}`, error)
+                    else
+                        log(`Successfully deleted ${filePath} thread info`)
+                })
+            } else {
+                log(`File ${filePath} does not exist.`)
+            }
+        }
     }
+
+    
 })
