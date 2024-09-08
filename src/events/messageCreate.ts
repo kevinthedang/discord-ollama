@@ -9,7 +9,7 @@ import { TextChannel } from 'discord.js'
  * 
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
     log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Do not respond if bot talks in the chat

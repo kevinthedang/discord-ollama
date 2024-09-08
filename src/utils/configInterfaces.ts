@@ -34,12 +34,6 @@ export interface ServerConfig {
     options: ServerConfiguration
 }
 
-export interface Thread {
-    readonly id: string
-    readonly name: string
-    messages: UserMessage[]
-}
-
 export interface Channel {
     readonly id: string
     readonly name: string

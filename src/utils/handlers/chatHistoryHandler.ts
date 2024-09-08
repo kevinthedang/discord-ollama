@@ -1,5 +1,5 @@
 import { TextChannel, ThreadChannel } from 'discord.js'
-import { Configuration, Thread, Channel, UserMessage } from '../index.js'
+import { Configuration, Channel, UserMessage } from '../index.js'
 import fs from 'fs'
 import path from 'path'
 

@@ -6,7 +6,12 @@ import fs from 'fs'
  * Event to remove the associated .json file for a thread once deleted
  */
 export default event(Events.ThreadDelete, ({ log }, thread: ThreadChannel) => {
-    const filePath = `data/${thread.id}.json`
+    // iterate through every guild member in the thread and delete their history, except the bot
+    log(thread.guildMembers)
+    for (const member in thread.guildMembers)
+        log(member)
+
+    const filePath = `data/${thread.id}-${thread.guildMembers}.json`
     if (fs.existsSync(filePath)) {
         fs.unlink(filePath, (error) => {
             if (error)
