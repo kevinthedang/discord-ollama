@@ -70,15 +70,34 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         })
 
         // need new check for "open/active" threads/channels here!
-        const chatMessages: UserMessage[] = await new Promise((resolve) => {
+        let chatMessages: UserMessage[] = await new Promise((resolve) => {
             // set new queue to modify
             getChannelInfo(`${message.channelId}-${message.author.username}.json`, (channelInfo) => {
                 if (channelInfo?.messages)
                     resolve(channelInfo.messages)
-                else
-                    log(`Channel/Thread ${message.channel}-${message.author.username} does not exist.`)
+                else {
+                    log(`Channel/Thread ${message.channel}-${message.author.username} does not exist. File will be created shortly...`)
+                    resolve([])
+                }
             })
         })
+
+        if (chatMessages.length === 0) {
+            chatMessages = await new Promise((resolve, reject) => {
+                openChannelInfo(message.channelId, 
+                    message.channel as TextChannel,
+                    message.author.tag
+                )
+                getChannelInfo(`${message.channelId}-${message.author.username}.json`, (channelInfo) => {
+                    if (channelInfo?.messages)
+                        resolve(channelInfo.messages)
+                    else {
+                        log(`Channel/Thread ${message.channel}-${message.author.username} does not exist. File will be created shortly...`)
+                        reject(new Error(`Failed to find ${message.author.username}'s history. Try chatting again.`))
+                    }
+                })
+            })
+        }
 
         // response string for ollama to put its response
         let response: string
