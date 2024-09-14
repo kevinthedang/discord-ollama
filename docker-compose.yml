@@ -7,7 +7,7 @@ services:
     build: ./                     # find docker file in designated path
     container_name: discord
     restart: always               # rebuild container always
-    image: kevinthedang/discord-ollama:0.5.10
+    image: kevinthedang/discord-ollama:0.5.11
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       MODEL: ${MODEL}

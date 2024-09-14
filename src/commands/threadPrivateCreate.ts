@@ -1,6 +1,6 @@
-import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
+import { ChannelType, Client, CommandInteraction, TextChannel, ThreadChannel } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
-import { openThreadInfo } from '../utils/index.js'
+import { openChannelInfo } from '../utils/index.js'
 
 export const PrivateThreadCreate: SlashCommand = {
     name: 'private-thread',
@@ -23,7 +23,10 @@ export const PrivateThreadCreate: SlashCommand = {
 
         // handle storing this chat channel
         // store: thread.id, thread.name
-        openThreadInfo(`${thread.id}.json`, thread)
+        openChannelInfo(thread.id, 
+            thread as ThreadChannel,
+            interaction.user.tag
+        )
 
         // user only reply
         return interaction.reply({
