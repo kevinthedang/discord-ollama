@@ -1,5 +1,5 @@
 import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
-import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openConfig, ServerConfig, UserConfig } from '../utils/index.js'
+import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openConfig, UserConfig, getAttachmentData } from '../utils/index.js'
 import { clean } from '../utils/mentionClean.js'
 import { TextChannel } from 'discord.js'
 
@@ -102,6 +102,10 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // response string for ollama to put its response
         let response: string
 
+        // get message attachment if exists
+        const messageAttachment: string[] = await getAttachmentData(message.attachments.first())
+        log(messageAttachment)
+
         // set up new queue
         msgHist.setQueue(chatMessages)
 
@@ -111,7 +115,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // push user response before ollama query
         msgHist.enqueue({
             role: 'user',
-            content: clean(message.content)
+            content: clean(message.content),
+            images: messageAttachment
         })
         
         // undefined or false, use normal, otherwise use embed
@@ -129,7 +134,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // successful query, save it in context history
         msgHist.enqueue({ 
             role: 'assistant', 
-            content: response
+            content: response,
+            images: messageAttachment
         })
 
         // only update the json on success

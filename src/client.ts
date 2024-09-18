@@ -45,5 +45,6 @@ await client.login(Keys.clientToken)
 // queue up bots name
 messageHistory.enqueue({
     role: 'assistant',
-    content: `My name is ${client.user?.username}`
+    content: `My name is ${client.user?.username}`,
+    images: []
 })
