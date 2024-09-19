@@ -1,5 +1,11 @@
 import { Attachment } from "discord.js"
 
+/**
+ * Method to convert a Discord attachment url to an array buffer
+ * 
+ * @param url Discord Attachment Url
+ * @returns array buffer from Attachment Url
+ */
 async function getAttachmentBuffer(url: string): Promise<ArrayBuffer> {
     // Get the data from the image
     const response = await fetch(url)
@@ -12,6 +18,12 @@ async function getAttachmentBuffer(url: string): Promise<ArrayBuffer> {
     return await response.arrayBuffer()
 }
 
+/**
+ * Method to convert an array buffer to a Base64 String
+ * 
+ * @param buffer Array Buffer from attachment
+ * @returns converted Base64 string
+ */
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
     // Converting to Uint8Array
     const uint8Array = new Uint8Array(buffer)
@@ -25,6 +37,12 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
     return Buffer.from(binary, 'binary').toString('base64')
 }
 
+/**
+ * Method to retrieve the Base64 Array of provided Message Attachment
+ * 
+ * @param attachment Message Attachment from Discord
+ * @returns Base64 string array
+ */
 export async function getAttachmentData(attachment: Attachment | undefined): Promise<string[]> {
     const url: string = attachment !== undefined ? attachment.url : "Missing Url"
 
