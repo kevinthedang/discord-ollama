@@ -116,7 +116,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         msgHist.enqueue({
             role: 'user',
             content: clean(message.content),
-            images: messageAttachment
+            images: messageAttachment || []
         })
         
         // undefined or false, use normal, otherwise use embed
@@ -135,7 +135,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         msgHist.enqueue({ 
             role: 'assistant', 
             content: response,
-            images: messageAttachment
+            images: messageAttachment || []
         })
 
         // only update the json on success
