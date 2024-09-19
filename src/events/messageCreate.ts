@@ -104,7 +104,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
 
         // get message attachment if exists
         const messageAttachment: string[] = await getAttachmentData(message.attachments.first())
-        log(messageAttachment)
 
         // set up new queue
         msgHist.setQueue(chatMessages)
