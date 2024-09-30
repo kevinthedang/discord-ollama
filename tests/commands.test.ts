@@ -2,7 +2,7 @@
 // expect takes a value from an expression
 // it marks a test case
 import { describe, expect, it } from 'vitest'
-import commands from '../src/commands'
+import commands from '../src/commands/index.js'
 
 /**
  * Commands test suite, tests the commands object

@@ -1,4 +1,4 @@
-import type { ClientEvents, Awaitable, Client, User } from 'discord.js'
+import type { ClientEvents, Awaitable, Client } from 'discord.js'
 import { Ollama } from 'ollama'
 import { Queue } from '../queues/queue.js'
 

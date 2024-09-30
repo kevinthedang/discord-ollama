@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import events from '../src/events'
+import events from '../src/events/index.js'
 
 /**
  * Events test suite, tests the events object

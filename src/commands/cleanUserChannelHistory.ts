@@ -1,6 +1,5 @@
 import { ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
-import { SlashCommand } from '../utils/commands.js'
-import { clearChannelInfo } from '../utils/index.js'
+import { clearChannelInfo, SlashCommand } from '../utils/index.js'
 
 export const ClearUserChannelHistory: SlashCommand = {
     name: 'clear-user-channel-history',

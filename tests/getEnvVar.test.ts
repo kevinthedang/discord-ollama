@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getEnvVar } from '../src/utils'
+import { getEnvVar } from '../src/utils/index.js'
 
 /**
  * getEnvVar test suite, tests the getEnvVar function

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clean } from '../src/utils/mentionClean'
-import { getEnvVar } from '../src/utils'
+import { getEnvVar, clean } from '../src/utils/index.js'
 
 /**
  * MentionClean test suite, tests the clean function
