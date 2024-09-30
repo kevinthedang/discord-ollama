@@ -1,0 +1,68 @@
+name: Coverage
+run-name: Code Coverage
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '*'
+      - 'package*.json'
+      - 'src/**'
+      - 'tests/**'
+      - '!docs/**'
+      - '!imgs/**'
+      - '!.github/**'
+      - '.github/workflows/**'
+      - '!.gitignore'
+      - '!LICENSE'
+      - '!README'
+
+jobs:
+  Discord-Node-Coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node Environment lts/hydrogen
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/hydrogen
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: |
+          npm install
+
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo MODEL = ${{ secrets.MODEL }} >> .env
+          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+
+      - name: Collect Code Coverage
+        run: |
+          LINES="$(npm run test:coverage | tail -2 | head -1)"
+          TOKENS=($LINES)
+          echo "COVERAGE=${TOKENS[1]}" >> $GITHUB_ENV
+          REF=${{ github.ref }}
+          IFS='/' read -ra PATHS <<< "$REF"
+          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
+          echo $BRANCH_NAME
+          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+      
+      - name: Upload Code Coverage
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: ${{ secrets.GIST_ID }}
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.COVERAGE }}
+          namedLogo: vitest
+          maxColorRange: 100
+          minColorRange: 0
