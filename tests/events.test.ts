@@ -9,7 +9,7 @@ import events from '../src/events'
  * @param name name of the test suite
  * @param fn function holding tests to run
  */
-describe('#events', () => {
+describe('Events Existence', () => {
     // test definition of events object
     it('references defined object', () => {
         expect(typeof events).toBe('object')
