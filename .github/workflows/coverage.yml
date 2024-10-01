@@ -47,9 +47,8 @@ jobs:
 
       - name: Collect Code Coverage
         run: |
-          LINES="$(npm run test:coverage | tail -2 | head -1)"
-          TOKENS=($LINES)
-          echo "COVERAGE=${TOKENS[2]}" >> $GITHUB_ENV
+          LINE_PCT=$(npm run test:coverage | tail -2 | head -1 | awk '{print $3}')
+          echo "COVERAGE=$LINE_PCT" >> $GITHUB_ENV
       
       - name: Upload Code Coverage
         uses: schneegans/dynamic-badges-action@v1.7.0
