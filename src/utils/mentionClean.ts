@@ -8,7 +8,7 @@ import Keys from "../keys.js"
  *  - replace function works well for this
  * 
  * @param message 
- * @returns 
+ * @returns message without client id
  */
 export function clean(message: string): string {
     const cleanedMessage: string = message.replace(`<@${Keys.clientUid}>`, '').trim()

@@ -1,7 +1,6 @@
-import { embedMessage, event, Events, normalMessage, UserMessage } from '../utils/index.js'
-import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openConfig, UserConfig, getAttachmentData } from '../utils/index.js'
-import { clean } from '../utils/mentionClean.js'
 import { TextChannel } from 'discord.js'
+import { embedMessage, event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
+import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openConfig, UserConfig, getAttachmentData } from '../utils/index.js'
 
 /** 
  * Max Message length for free users is 2000 characters (bot or not).

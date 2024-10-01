@@ -1,6 +1,5 @@
 import { ChannelType, Client, CommandInteraction, TextChannel, ThreadChannel } from 'discord.js'
-import { SlashCommand } from '../utils/commands.js'
-import { openChannelInfo } from '../utils/index.js'
+import { openChannelInfo, SlashCommand } from '../utils/index.js'
 
 export const PrivateThreadCreate: SlashCommand = {
     name: 'private-thread',

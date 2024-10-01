@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getEnvVar } from '../src/utils'
+import { getEnvVar } from '../src/utils/index.js'
 
 /**
  * getEnvVar test suite, tests the getEnvVar function
@@ -7,7 +7,7 @@ import { getEnvVar } from '../src/utils'
  * @param name name of the test suite
  * @param fn function holding tests to run
  */
-describe('#getEnvVar', () => {
+describe('Environment Setup', () => {
     // dummy set of keys
     const keys = {
         clientToken: 'CLIENT_TOKEN',

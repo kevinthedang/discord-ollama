@@ -1,0 +1,51 @@
+name: Coverage
+run-name: Code Coverage
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  Discord-Node-Coverage:
+    runs-on: ubuntu-latest
+    environment: coverage
+    timeout-minutes: 2
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node Environment lts/hydrogen
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/hydrogen
+          cache: "npm"
+
+      - name: Install Project Dependencies
+        run: |
+          npm install
+
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo MODEL = ${{ secrets.MODEL }} >> .env
+          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+
+      - name: Collect Code Coverage
+        run: |
+          LINE_PCT=$(npm run test:coverage | tail -2 | head -1 | awk '{print $3}')
+          echo "COVERAGE=$LINE_PCT" >> $GITHUB_ENV
+      
+      - name: Upload Code Coverage
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GIST_SECRET }}
+          gistID: ${{ vars.GIST_ID }}
+          filename: coverage.json
+          label: Coverage
+          message: ${{ env.COVERAGE }}
+          valColorRange: ${{ env.COVERAGE }}
+          maxColorRange: 100
+          minColorRange: 0

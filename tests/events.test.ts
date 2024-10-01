@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import events from '../src/events'
+import events from '../src/events/index.js'
 
 /**
  * Events test suite, tests the events object
@@ -9,7 +9,7 @@ import events from '../src/events'
  * @param name name of the test suite
  * @param fn function holding tests to run
  */
-describe('#events', () => {
+describe('Events Existence', () => {
     // test definition of events object
     it('references defined object', () => {
         expect(typeof events).toBe('object')

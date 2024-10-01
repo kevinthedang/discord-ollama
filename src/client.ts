@@ -1,10 +1,8 @@
 import { Client, GatewayIntentBits } from 'discord.js'
-import { UserMessage, registerEvents } from './utils/events.js'
-import Events from './events/index.js'
 import { Ollama } from 'ollama'
 import { Queue } from './queues/queue.js'
-
-// Import keys/tokens
+import { UserMessage, registerEvents } from './utils/index.js'
+import Events from './events/index.js'
 import Keys from './keys.js'
 
 
@@ -26,13 +24,7 @@ const ollama = new Ollama({
 // Create Queue managed by Events
 const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
 
-/**
- * register events for bot to listen to in discord
- * @param messageHistory message history for the llm
- * @param Events events to register
- * @param client the bot reference
- * @param Keys tokens from .env files
- */
+// register all events
 registerEvents(client, Events, messageHistory, Keys, ollama)
 
 // Try to log in the client

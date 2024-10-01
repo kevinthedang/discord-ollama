@@ -5,6 +5,7 @@ export * from './messageEmbed.js'
 export * from './messageNormal.js'
 export * from './commands.js'
 export * from './configInterfaces.js'
+export * from './mentionClean.js'
 
 // handler imports
 export * from './handlers/chatHistoryHandler.js'

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Queue } from '../src/queues/queue'
+import { Queue } from '../src/queues/queue.js'
 
 /**
  * Queue test suite, tests the Queue class
@@ -7,7 +7,7 @@ import { Queue } from '../src/queues/queue'
  * @param name name of the test suite
  * @param fn function holding tests to run
  */
-describe('#queue', () => {
+describe('Queue Structure', () => {
     let queue= new Queue<string>()
 
     // test for queue creation

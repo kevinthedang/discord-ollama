@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { clean } from '../src/utils/mentionClean'
-import { getEnvVar } from '../src/utils'
+import { getEnvVar, clean } from '../src/utils/index.js'
 
 /**
  * MentionClean test suite, tests the clean function
@@ -8,7 +7,7 @@ import { getEnvVar } from '../src/utils'
  * @param name name of the test suite
  * @param fn function holding tests to run
  */
-describe('#clean', () => {
+describe('Mentions Cleaned', () => {
     // test for id removal from message
     it('removes the mention from a message', () => {
         const message = `<@${getEnvVar('CLIENT_UID')}> Hello, World!`

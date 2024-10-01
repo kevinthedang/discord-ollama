@@ -1,6 +1,5 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
-import { SlashCommand } from '../utils/commands.js'
-import { openConfig } from '../utils/index.js'
+import { openConfig, SlashCommand } from '../utils/index.js'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
