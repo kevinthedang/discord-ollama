@@ -49,12 +49,7 @@ jobs:
         run: |
           LINES="$(npm run test:coverage | tail -2 | head -1)"
           TOKENS=($LINES)
-          echo "COVERAGE=${TOKENS[1]}" >> $GITHUB_ENV
-          REF=${{ github.ref }}
-          IFS='/' read -ra PATHS <<< "$REF"
-          BRANCH_NAME="${PATHS[1]}_${PATHS[2]}"
-          echo $BRANCH_NAME
-          echo "BRANCH=$(echo ${BRANCH_NAME})" >> $GITHUB_ENV
+          echo "COVERAGE=${TOKENS[2]}" >> $GITHUB_ENV
       
       - name: Upload Code Coverage
         uses: schneegans/dynamic-badges-action@v1.7.0
@@ -64,6 +59,5 @@ jobs:
           filename: coverage.json
           label: Coverage
           message: ${{ env.COVERAGE }}
-          namedLogo: vitest
           maxColorRange: 100
           minColorRange: 0
