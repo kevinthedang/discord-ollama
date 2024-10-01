@@ -20,6 +20,7 @@ on:
 jobs:
   Discord-Node-Coverage:
     runs-on: ubuntu-latest
+    environment: coverage
     timeout-minutes: 2
     steps:
       - name: Checkout Repository
@@ -59,7 +60,7 @@ jobs:
         uses: schneegans/dynamic-badges-action@v1.7.0
         with:
           auth: ${{ secrets.GIST_SECRET }}
-          gistID: ${{ secrets.GIST_ID }}
+          gistID: ${{ vars.GIST_ID }}
           filename: coverage.json
           label: Coverage
           message: ${{ env.COVERAGE }}
