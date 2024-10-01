@@ -4,6 +4,14 @@
   Changes:
     10-01-2024 - Jonathan Smoley
 -->
+
+## Naming Conventions
+* Branches
+  * prefix your branch name with the type of contribution:
+    * features: `'feature/**'`
+    * releases: `'releases/**'`
+    * bugs: `'bug/**'`
+
 ## Run the Bot
 * Refer to all sections below before running the bot.
 * You should now have `Ollama`, `NodeJS`, ran `npm install`.

@@ -1,21 +1,9 @@
 name: Coverage
 run-name: Code Coverage
 on:
-  pull_request:
+  push:
     branches:
       - master
-    paths:
-      - '*'
-      - 'package*.json'
-      - 'src/**'
-      - 'tests/**'
-      - '!docs/**'
-      - '!imgs/**'
-      - '!.github/**'
-      - '.github/workflows/**'
-      - '!.gitignore'
-      - '!LICENSE'
-      - '!README'
 
 jobs:
   Discord-Node-Coverage:
