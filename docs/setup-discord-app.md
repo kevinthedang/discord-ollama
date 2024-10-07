@@ -18,10 +18,6 @@
 
 ![Token](../imgs/tutorial/token.png)
 
-* You will also need your App's **Client ID**, navigate to **OAuth2** and copy your id.
-
-![Client Id](../imgs/tutorial/client-id.png)
-
 * That should be all of the environment variables needed from Discord, now we need this app on your server.
 * Navigate to **Installation** and Copy the provided **Install Link** to allow your App to your server.
 * You should set the **Guild Install** permissions as you like, for this purpose we will allow admin priviledges for now. Ensure the **bot** scope is added to do this.

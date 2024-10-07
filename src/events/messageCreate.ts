@@ -8,14 +8,16 @@ import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openCo
  * 
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama }, message) => {
-    log(`Message \"${clean(message.content)}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
+export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
+    const clientId = client.user!!.id
+    const cleanedMessage = clean(message.content, clientId)
+    log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Do not respond if bot talks in the chat
     if (message.author.username === message.client.user.username) return
 
     // Only respond if message mentions the bot
-    if (!message.mentions.has(tokens.clientUid)) return
+    if (!message.mentions.has(clientId)) return
 
     // default stream to false
     let shouldStream = false
@@ -113,7 +115,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         // push user response before ollama query
         msgHist.enqueue({
             role: 'user',
-            content: clean(message.content),
+            content: cleanedMessage,
             images: messageAttachment || []
         })
         
