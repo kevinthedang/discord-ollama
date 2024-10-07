@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { getEnvVar, clean } from '../src/utils/index.js'
+import { clean } from '../src/utils/index.js'
+
+// Sample UID for testing
+const sampleId = '123456789'
 
 /**
  * MentionClean test suite, tests the clean function
@@ -10,7 +13,7 @@ import { getEnvVar, clean } from '../src/utils/index.js'
 describe('Mentions Cleaned', () => {
     // test for id removal from message
     it('removes the mention from a message', () => {
-        const message = `<@${getEnvVar('CLIENT_UID')}> Hello, World!`
-        expect(clean(message)).toBe('Hello, World!')
+        const message = `<@${sampleId}> Hello, World!`
+        expect(clean(message, sampleId)).toBe('Hello, World!')
     })
 })

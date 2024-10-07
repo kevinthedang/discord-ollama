@@ -40,7 +40,6 @@ jobs:
           touch .env
           echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
           echo MODEL = ${{ secrets.MODEL }} >> .env
-          echo CLIENT_UID = ${{ secrets.CLIENT_UID }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
 

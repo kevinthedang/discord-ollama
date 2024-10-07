@@ -14,7 +14,7 @@
 ## To Run Locally (without Docker)
 * Run `npm install` to install the npm packages.
 * Ensure that your [.env](../.env.sample) file's `OLLAMA_IP` is `127.0.0.1` to work properly.
-    * You only need your `CLIENT_TOKEN`, `MODEL`, `CLIENT_UID`, `OLLAMA_IP`, `OLLAMA_PORT`.
+    * You only need your `CLIENT_TOKEN`, `MODEL`, `OLLAMA_IP`, `OLLAMA_PORT`.
     * The ollama ip and port should just use it's defaults by nature. If not, utilize `OLLAMA_IP = 127.0.0.1` and `OLLAMA_PORT = 11434`.
 * Now, you can run the bot by running `npm run client` which will build and run the decompiled typescript and run the setup for ollama.
     * **IMPORTANT**: This must be ran in the wsl/Linux instance to work properly! Using Command Prompt/Powershell/Git Bash/etc. will not work on Windows (at least in my experience).

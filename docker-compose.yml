@@ -11,7 +11,6 @@ services:
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       MODEL: ${MODEL}
-      CLIENT_UID: ${CLIENT_UID}
       OLLAMA_IP: ${OLLAMA_IP}
       OLLAMA_PORT: ${OLLAMA_PORT}
     networks:

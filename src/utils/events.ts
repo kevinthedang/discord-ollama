@@ -10,13 +10,10 @@ export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents ob
 
 /**
  * Tokens to run the bot as intended
- * @param channel the channel where the bot will respond to queries
  * @param model chosen model for the ollama to utilize
- * @param clientUid the discord id for the bot
  */
 export type Tokens = {
     model: string,
-    clientUid: string
 }
 
 /**

@@ -10,7 +10,7 @@ import Keys from "../keys.js"
  * @param message 
  * @returns message without client id
  */
-export function clean(message: string): string {
-    const cleanedMessage: string = message.replace(`<@${Keys.clientUid}>`, '').trim()
+export function clean(message: string, clientId: string): string {
+    const cleanedMessage: string = message.replace(`<@${clientId}>`, '').trim()
     return cleanedMessage
 }
