@@ -17,7 +17,7 @@ const client = new Client({
 });
 
 // initialize connection to ollama container
-const ollama = new Ollama({
+export const ollama = new Ollama({
     host: `http://${Keys.ipAddress}:${Keys.portAddress}`,
 })
 
