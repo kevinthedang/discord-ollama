@@ -13,9 +13,7 @@ import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 export async function embedMessage(
     message: Message,
     ollama: Ollama,
-    tokens: {
-        model: string
-    },
+    model: string,
     msgHist: Queue<UserMessage>,
     stream: boolean
 ): Promise<string> {
@@ -34,7 +32,7 @@ export async function embedMessage(
 
     // create params
     const params: ChatParams = {
-        model: tokens.model,
+        model: model,
         ollama: ollama,
         msgHist: msgHist.getItems()
     }

@@ -108,6 +108,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
 
         // get message attachment if exists
         const messageAttachment: string[] = await getAttachmentData(message.attachments.first())
+        const model: string = userConfig.options['switch-model']
 
         // set up new queue
         msgHist.setQueue(chatMessages)
@@ -124,9 +125,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         
         // undefined or false, use normal, otherwise use embed
         if (userConfig.options['message-style'])
-            response = await embedMessage(message, ollama, tokens, msgHist, shouldStream)
+            response = await embedMessage(message, ollama, model, msgHist, shouldStream)
         else
-            response = await normalMessage(message, ollama, tokens, msgHist, shouldStream)
+            response = await normalMessage(message, ollama, model, msgHist, shouldStream)
 
         // If something bad happened, remove user query and stop
         if (response == undefined) { msgHist.pop(); return }

@@ -13,9 +13,7 @@ import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 export async function normalMessage(
     message: Message,
     ollama: Ollama,
-    tokens: {
-        model: string
-    },
+    model: string,
     msgHist: Queue<UserMessage>,
     stream: boolean
 ): Promise<string> {
@@ -26,7 +24,7 @@ export async function normalMessage(
     await message.channel.send('Generating Response . . .').then(async sentMessage => {
         try {
             const params: ChatParams = {
-                model: tokens.model,
+                model: model,
                 ollama: ollama,
                 msgHist: msgHist.getItems()
             } 
