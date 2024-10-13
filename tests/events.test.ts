@@ -1,13 +1,21 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import events from '../src/events/index.js'
+
+/**
+ * Mocking ollama found in client.ts because pullModel.ts
+ * relies on the existence on ollama. To prevent the mock,
+ * we will have to pass through ollama to the commands somehow.
+ */
+vi.mock('../src/client.js', () => ({
+    ollama: {
+        pull: vi.fn() // Mock the pull method found with ollama
+    }
+}))
 
 /**
  * Events test suite, tests the events object
  * Each event is to be tested elsewhere, this file
  * is to ensure that the events object is defined.
- * 
- * @param name name of the test suite
- * @param fn function holding tests to run
  */
 describe('Events Existence', () => {
     // test definition of events object
