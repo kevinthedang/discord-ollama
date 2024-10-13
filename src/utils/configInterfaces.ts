@@ -3,7 +3,8 @@ import { UserMessage } from './index.js'
 export interface UserConfiguration {
     'message-stream'?: boolean,
     'message-style'?: boolean,
-    'modify-capacity': number
+    'modify-capacity': number,
+    'switch-model': string
 }
 
 export interface ServerConfiguration {

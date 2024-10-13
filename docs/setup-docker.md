@@ -2,7 +2,9 @@
 * Follow this guide to setup [Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * If on Windows, download [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) to get the docker engine.
 * Please also install [Docker Compose](https://docs.docker.com/compose/install/linux/) for easy running. If not, there are [scripts](#manual-run-with-docker) to set everything up.
-* **IMPORTANT NOTE**: Currently, it seems like wsl does not like Nvidia Container Toolkit. It will work initially then reset it for some odd reason. For now, it is advised to use an actually Linux machine to run using Docker. If you do not care about utilizing your GPU or don't even have a Nvidia GPU then disregard this.
+
+> [!IMPORTANT]  
+> Currently, it seems like wsl does not like Nvidia Container Toolkit. It will work initially then reset it for some odd reason. For now, it is advised to use an actually Linux machine to run using Docker. If you do not care about utilizing your GPU or don't even have a Nvidia GPU then disregard this.
 
 ## Nvidia Container Toolkit Setup
 ### Installation with Apt
@@ -48,8 +50,6 @@ sudo systemctl restart docker
     * `SUBNET_ADDRESS = 172.18.0.0`
     * Don't understand any of this? watch a Networking video to understand subnetting.
     * You also need all environment variables shown in [`.env.sample`](../.env.sample)
-* You will need a model in the container for this to work properly, on Docker Desktop go to the `Containers` tab, select the `ollama` container, and select `Exec` to run as root on your container. Now, run `ollama pull [model name]` to get your model.
-    * For Linux Servers, you need another shell to pull the model, or if you run `docker compose build && docker compose up -d`, then it will run in the background to keep your shell. Run `docker exec -it ollama bash` to get into the container and run the samme pull command above.
 * Otherwise, there is no need to install any npm packages for this, you just need to run `npm run start` to pull the containers and spin them up.
 * For cleaning up on Linux (or Windows), run the following commands:
     * `docker compose stop`

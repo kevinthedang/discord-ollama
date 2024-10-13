@@ -7,15 +7,13 @@ import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 /**
  * Method to send replies as normal text on discord like any other user
  * @param message message sent by the user
- * @param tokens tokens to run query
+ * @param model name of model to run query
  * @param msgHist message history between user and model
  */
 export async function embedMessage(
     message: Message,
     ollama: Ollama,
-    tokens: {
-        model: string
-    },
+    model: string,
     msgHist: Queue<UserMessage>,
     stream: boolean
 ): Promise<string> {
@@ -34,7 +32,7 @@ export async function embedMessage(
 
     // create params
     const params: ChatParams = {
-        model: tokens.model,
+        model: model,
         ollama: ollama,
         msgHist: msgHist.getItems()
     }

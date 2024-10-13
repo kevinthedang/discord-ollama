@@ -9,14 +9,6 @@ export type LogMethod = (...args: unknown[]) => void
 export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents object
 
 /**
- * Tokens to run the bot as intended
- * @param model chosen model for the ollama to utilize
- */
-export type Tokens = {
-    model: string,
-}
-
-/**
  * Parameters to run the chat query
  * @param model the model to run
  * @param ollama ollama api client
@@ -44,7 +36,6 @@ export interface EventProps {
     client: Client
     log: LogMethod
     msgHist: Queue<UserMessage>
-    tokens: Tokens,
     ollama: Ollama
 }
 export type EventCallback<T extends EventKeys> = (
@@ -67,14 +58,12 @@ export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): 
  * @param client initialized bot client
  * @param events all the exported events from the index.ts in the events dir
  * @param msgHist The message history of the bot
- * @param tokens the passed in environment tokens for the service
  * @param ollama the initialized ollama instance
  */
 export function registerEvents(
     client: Client, 
     events: Event[], 
     msgHist: Queue<UserMessage>,
-    tokens: Tokens,
     ollama: Ollama
 ): void {
     for (const { key, callback } of events) {
@@ -84,7 +73,7 @@ export function registerEvents(
 
             // Handle Errors, call callback, log errors as needed
             try {
-                callback({ client, log, msgHist, tokens, ollama }, ...args)
+                callback({ client, log, msgHist, ollama }, ...args)
             } catch (error) {
                 log('[Uncaught Error]', error)
             }

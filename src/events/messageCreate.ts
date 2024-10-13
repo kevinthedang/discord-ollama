@@ -8,7 +8,7 @@ import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openCo
  * 
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama, client }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client }, message) => {
     const clientId = client.user!!.id
     const cleanedMessage = clean(message.content, clientId)
     log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
@@ -49,7 +49,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             getUserConfig(`${message.author.username}-config.json`, (config) => {
                 if (config === undefined) {
                     openConfig(`${message.author.username}-config.json`, 'message-style', false)
-                    reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular messages.\nPlease try chatting again.'))
+                    reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular message style.\nPlease try chatting again.'))
                     return
                 }
     
@@ -65,6 +65,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     
                 // set stream state
                 shouldStream = config.options['message-stream'] as boolean || false
+
+                if (typeof config.options['switch-model'] !== 'string')
+                    reject(new Error(`No Model was set. Please set a model by running \`/switch-model <model of choice>\`.\n\nIf you do not have any models. Run \`/pull-model <model name>\`.`))
     
                 resolve(config)
             })
@@ -105,6 +108,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
 
         // get message attachment if exists
         const messageAttachment: string[] = await getAttachmentData(message.attachments.first())
+        const model: string = userConfig.options['switch-model']
 
         // set up new queue
         msgHist.setQueue(chatMessages)
@@ -121,9 +125,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
         
         // undefined or false, use normal, otherwise use embed
         if (userConfig.options['message-style'])
-            response = await embedMessage(message, ollama, tokens, msgHist, shouldStream)
+            response = await embedMessage(message, ollama, model, msgHist, shouldStream)
         else
-            response = await normalMessage(message, ollama, tokens, msgHist, shouldStream)
+            response = await normalMessage(message, ollama, model, msgHist, shouldStream)
 
         // If something bad happened, remove user query and stop
         if (response == undefined) { msgHist.pop(); return }

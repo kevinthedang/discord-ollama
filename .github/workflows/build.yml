@@ -31,7 +31,6 @@ jobs:
         run: |
           touch .env
           echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
-          echo MODEL = ${{ secrets.MODEL }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
 
@@ -58,7 +57,6 @@ jobs:
         run: |
           touch .env
           echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
-          echo MODEL = ${{ secrets.MODEL }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
 

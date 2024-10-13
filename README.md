@@ -25,8 +25,8 @@ The project aims to:
   * [x] User vs. Server Preferences
   * [ ] Redis Caching
   * [x] Administrator Role Compatible
-  * [x] Multi-User Chat Generation (Multiple users chatting at the same time) - This was built into from Ollama `v0.2.1+`
-  * [ ] Automatic and Manual model pulling through the Discord client
+  * [x] Multi-User Chat Generation (Multiple users chatting at the same time) - This was built in from Ollama `v0.2.1+`
+  * [x] Automatic and Manual model pulling through the Discord client
 * [ ] Allow others to create their own models personalized for their own servers!
   * [ ] Documentation on creating your own LLM
   * [ ] Documentation on web scrapping and cleaning
