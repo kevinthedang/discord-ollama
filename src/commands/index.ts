@@ -8,6 +8,7 @@ import { Capacity } from './capacity.js'
 import { PrivateThreadCreate } from './threadPrivateCreate.js'
 import { ClearUserChannelHistory } from './cleanUserChannelHistory.js'
 import { PullModel } from './pullModel.js'
+import { SwitchModel } from './switchModel.js'
 
 export default [
     ThreadCreate,
@@ -18,5 +19,6 @@ export default [
     Shutoff,
     Capacity,
     ClearUserChannelHistory,
-    PullModel
+    PullModel,
+    SwitchModel
 ] as SlashCommand[]
