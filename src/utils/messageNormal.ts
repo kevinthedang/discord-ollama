@@ -7,7 +7,7 @@ import { AbortableAsyncIterator } from 'ollama/src/utils.js'
 /**
  * Method to send replies as normal text on discord like any other user
  * @param message message sent by the user
- * @param tokens tokens to run query
+ * @param model name of model to run query
  * @param msgHist message history between user and model
  */
 export async function normalMessage(

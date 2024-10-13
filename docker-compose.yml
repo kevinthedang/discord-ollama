@@ -10,7 +10,6 @@ services:
     image: kevinthedang/discord-ollama:0.6.2
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
-      MODEL: ${MODEL}
       OLLAMA_IP: ${OLLAMA_IP}
       OLLAMA_PORT: ${OLLAMA_PORT}
     networks:

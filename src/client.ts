@@ -25,7 +25,7 @@ export const ollama = new Ollama({
 const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
 
 // register all events
-registerEvents(client, Events, messageHistory, Keys, ollama)
+registerEvents(client, Events, messageHistory, ollama)
 
 // Try to log in the client
 await client.login(Keys.clientToken)
