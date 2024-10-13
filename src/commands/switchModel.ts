@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction }
 import { SlashCommand } from "../utils/commands.js";
 import { ollama } from "../client.js";
 import { ModelResponse } from "ollama";
+import { openConfig } from "../utils/index.js";
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
@@ -33,7 +34,8 @@ export const SwitchModel: SlashCommand = {
                 for (const model in response.models) {
                     const currentModel: ModelResponse = response.models[model]
                     if (currentModel.name.startsWith(modelInput)) {
-                        // todo: implement here!!
+                        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+
                         // successful switch
                         interaction.editReply({
                             content: `Successfully switched to **${modelInput}** as the preferred model for ${interaction.user.username}.`
