@@ -20,6 +20,7 @@ export const PullModel: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
+        const modelInput: string = interaction.options.get('model-to-pull')!!.value as string
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
@@ -28,19 +29,19 @@ export const PullModel: SlashCommand = {
         try {
             // call ollama to pull desired model
             await ollama.pull({
-                model: interaction.options.get('model-to-pull')!!.value as string
+                model: modelInput
             })
         } catch (error) {
             // could not resolve pull or model unfound
             interaction.editReply({
-                content: `Could not pull/locate the **${interaction.options.get('model-to-pull')!!.value}** model within the [Ollama Model Library](https://ollama.com/library).\n\nPlease check the model library and try again.`
+                content: `Could not pull/locate the **${modelInput}** model within the [Ollama Model Library](https://ollama.com/library).\n\nPlease check the model library and try again.`
             })
             return
         }
 
         // successful pull
         interaction.editReply({
-            content: `Successfully added **${interaction.options.get('model-to-pull')!!.value}** into your local model library.`
+            content: `Successfully added **${modelInput}** into your local model library.`
         })
     }
 }

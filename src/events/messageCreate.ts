@@ -49,7 +49,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
             getUserConfig(`${message.author.username}-config.json`, (config) => {
                 if (config === undefined) {
                     openConfig(`${message.author.username}-config.json`, 'message-style', false)
-                    reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular messages.\nPlease try chatting again.'))
+                    reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular message style.\nPlease try chatting again.'))
                     return
                 }
     
@@ -65,6 +65,9 @@ export default event(Events.MessageCreate, async ({ log, msgHist, tokens, ollama
     
                 // set stream state
                 shouldStream = config.options['message-stream'] as boolean || false
+
+                if (typeof config.options['switch-model'] !== 'string')
+                    reject(new Error(`No Model was set. Please set a model by running \`/switch-model <model of choice>\`.\n\nIf you do not have any models. Run \`/pull-model <model name>\`.`))
     
                 resolve(config)
             })

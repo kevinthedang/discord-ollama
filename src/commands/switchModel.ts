@@ -29,6 +29,8 @@ export const SwitchModel: SlashCommand = {
         if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return
 
         try {
+            // Phase 1: Set the model
+            let switchSuccess = false
             await ollama.list()
             .then(response => {
                 for (const model in response.models) {
@@ -40,10 +42,27 @@ export const SwitchModel: SlashCommand = {
                         interaction.editReply({
                             content: `Successfully switched to **${modelInput}** as the preferred model for ${interaction.user.username}.`
                         })
-                        return
+                        switchSuccess = true
                     }
                 }
-                throw new Error(`**${modelInput}** does not exist in your local library.`)
+            })
+            if (switchSuccess) return
+
+            // Phase 2: Try to get it regardless
+            interaction.editReply({
+                content: `Could not find **${modelInput}** in local model library, trying to pull it now...\n\nThis could take a few moments... Please be patient!`
+            })
+
+            await ollama.pull({
+                model: modelInput
+            })
+
+            // set model now that it exists
+            openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+
+            // We got the model!
+            interaction.editReply({
+                content: `Successfully added and set **${modelInput}** as your preferred model.`
             })
         } catch (error) {
             // could not resolve user model switch
