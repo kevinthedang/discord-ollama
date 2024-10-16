@@ -10,6 +10,9 @@
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/coverage.yml"><img alt="Code Coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/kevinthedang/bc7b5dcfa16561ab02bb3df67a99b22d/raw/coverage.json"></a>
 </div>
 
+## Guides
+* [User Slash Commands](./docs/commands-guide.md)
+
 ## About/Goals
 Ollama is an AI model management tool that allows users to install and use custom large language models locally.  
 The project aims to:
