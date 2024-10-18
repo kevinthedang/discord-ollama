@@ -11,6 +11,7 @@
     * features: `'feature/**'`
     * releases: `'releases/**'`
     * bugs: `'bug/**'`
+    * docs: `'docs/**'`
 
 ## Run the Bot
 * Refer to all sections below before running the bot.

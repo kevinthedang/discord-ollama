@@ -10,9 +10,6 @@
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/coverage.yml"><img alt="Code Coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/kevinthedang/bc7b5dcfa16561ab02bb3df67a99b22d/raw/coverage.json"></a>
 </div>
 
-## Guides
-* [User Slash Commands](./docs/commands-guide.md)
-
 ## About/Goals
 Ollama is an AI model management tool that allows users to install and use custom large language models locally.  
 The project aims to:
@@ -34,6 +31,11 @@ The project aims to:
   * [ ] Documentation on creating your own LLM
   * [ ] Documentation on web scrapping and cleaning
 
+## Documentation
+These are guides to the feature set included and the events triggered in this app.
+* [User Slash Commands](./docs/commands-guide.md)
+* [Client Events](./docs/events-guide.md)
+
 ## Environment Setup
 * Clone this repo using `git clone https://github.com/kevinthedang/discord-ollama.git` or just use [GitHub Desktop](https://desktop.github.com/) to clone the repo.
 * You will need a `.env` file in the root of the project directory with the bot's token. There is a `.env.sample` is provided for you as a reference for what environment variables.
@@ -44,7 +46,9 @@ The project aims to:
     * [Docker Setup for Servers and Local Machines](./docs/setup-docker.md)
         * Nvidia is recommended for now, but support for other GPUs should be development.
         * Local use is not recommended.
+
 ## Resources
+These are a few links to documentation and guides that have proven useful during development.
 * [NodeJS](https://nodejs.org/en)
     * This project runs on `lts\hydrogen`. 
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
