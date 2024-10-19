@@ -24,4 +24,4 @@ This is a guide to all of the client events for the app.
 
 4. ThreadDelete  
     This event signifies that a Discord Thread was deleted.  
-    Here any preferences set for a thread are cleared away.
+    Here any preferences set for interaction within the thread are cleared away.

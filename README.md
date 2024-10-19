@@ -48,7 +48,6 @@ These are guides to the feature set included and the events triggered in this ap
         * Local use is not recommended.
 
 ## Resources
-These are a few links to documentation and guides that have proven useful during development.
 * [NodeJS](https://nodejs.org/en)
     * This project runs on `lts\hydrogen`. 
     * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
