@@ -36,6 +36,17 @@ services:
       - ${OLLAMA_PORT}:${OLLAMA_PORT}
 
 # Put Redis Container here?
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    networks:
+      ollama-net:
+        ipv4_address: ${REDIS_IP}
+    volumes:
+      - redis:/root/.redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
 
 # create a network that supports giving addresses withing a specific subnet
 networks:
@@ -49,3 +60,4 @@ networks:
 volumes:
   ollama:
   discord:
+  redis:
