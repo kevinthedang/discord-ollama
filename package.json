@@ -27,17 +27,17 @@
   "author": "Kevin Dang",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.15.3",
+    "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
     "ollama": "^0.5.9"
   },
   "devDependencies": {
-    "@types/node": "^22.7.5",
-    "@vitest/coverage-v8": "^2.1.2",
+    "@types/node": "^22.9.0",
+    "@vitest/coverage-v8": "^2.1.4",
     "ts-node": "^10.9.2",
-    "tsx": "^4.19.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3",
-    "vitest": "^2.1.2"
+    "vitest": "^2.1.4"
   },
   "type": "module",
   "engines": {
