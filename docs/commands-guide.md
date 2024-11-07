@@ -78,8 +78,7 @@ This is a guide to all of the slash commands for the app.
     ```
     /message-stream stream true
     ```
-> [!NOTE]
-> This is a very slow progress on Discord because "spamming" changes within 5 seconds is not allowed.
+    **This is a very slow progress on Discord because "spamming" changes within 5 seconds is not allowed.**
 
 3. Message Style  
     This command allows a user to select whether to embed the app's response. 
