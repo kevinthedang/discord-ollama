@@ -9,7 +9,7 @@ export const ThreadCreate: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch the channel
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.GuildText) return
+        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
 
         const thread = await (channel as TextChannel).threads.create({
             name: `${client.user?.username}-support-${Date.now()}`,

@@ -19,7 +19,7 @@ export const Disable: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.GuildText) return
+        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
 
         // check if runner is an admin
         if (!interaction.memberPermissions?.has('Administrator')) {

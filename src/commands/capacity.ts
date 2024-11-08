@@ -19,7 +19,7 @@ export const Capacity: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return
+        if (!channel || ![ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildText].includes(channel.type)) return
 
         // set state of bot chat features
         openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('context-capacity')?.value)

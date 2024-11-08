@@ -19,7 +19,7 @@ export const Shutoff: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== ChannelType.GuildText) return
+        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
 
         // log this, this will probably be improtant for logging who did this
         console.log(`User -> ${interaction.user.tag} attempting to shutdown ${client.user!!.tag}`)

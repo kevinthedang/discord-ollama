@@ -24,7 +24,7 @@ export const PullModel: SlashCommand = {
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return
+        if (!channel || ![ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildText].includes(channel.type)) return
 
         try {
             // call ollama to pull desired model
