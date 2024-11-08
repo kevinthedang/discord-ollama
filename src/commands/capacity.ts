@@ -1,5 +1,5 @@
-import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
-import { openConfig, SlashCommand } from '../utils/index.js'
+import { Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
+import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
@@ -19,7 +19,7 @@ export const Capacity: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || ![ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildText].includes(channel.type)) return
+        if (!channel || !UserCommand.includes(channel.type)) return
 
         // set state of bot chat features
         openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('context-capacity')?.value)

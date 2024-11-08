@@ -1,7 +1,8 @@
-import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction } from "discord.js";
+import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js";
 import { SlashCommand } from "../utils/commands.js";
 import { ollama } from "../client.js";
 import { ModelResponse } from "ollama";
+import { UserCommand } from "../utils/index.js";
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
@@ -25,7 +26,7 @@ export const PullModel: SlashCommand = {
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || ![ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildText].includes(channel.type)) return
+        if (!channel || !UserCommand.includes(channel.type)) return
 
         // check if model was already pulled
         const modelExists: boolean = await ollama.list()

@@ -1,5 +1,6 @@
-import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
+import { Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { SlashCommand } from '../utils/commands.js'
+import { AdminCommand } from '../utils/index.js'
 
 export const Shutoff: SlashCommand = {
     name: 'shutoff',
@@ -19,7 +20,7 @@ export const Shutoff: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
+        if (!channel || !AdminCommand.includes(channel.type)) return
 
         // log this, this will probably be improtant for logging who did this
         console.log(`User -> ${interaction.user.tag} attempting to shutdown ${client.user!!.tag}`)

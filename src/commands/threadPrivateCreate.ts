@@ -1,5 +1,5 @@
 import { ChannelType, Client, CommandInteraction, TextChannel, ThreadChannel } from 'discord.js'
-import { openChannelInfo, SlashCommand } from '../utils/index.js'
+import { AdminCommand, openChannelInfo, SlashCommand } from '../utils/index.js'
 
 export const PrivateThreadCreate: SlashCommand = {
     name: 'private-thread',
@@ -9,7 +9,7 @@ export const PrivateThreadCreate: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch the channel
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
+        if (!channel || !AdminCommand.includes(channel.type)) return
 
         const thread = await (channel as TextChannel).threads.create({
             name: `${client.user?.username}-private-support-${Date.now()}`,

@@ -53,7 +53,6 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
             }
         })
     })
-    console.log(cleanedHistory)
     return cleanedHistory
 }
 

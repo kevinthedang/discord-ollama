@@ -1,5 +1,5 @@
-import { Channel, ChannelType, Client, CommandInteraction, TextChannel } from 'discord.js'
-import { clearChannelInfo, SlashCommand } from '../utils/index.js'
+import { Channel, Client, CommandInteraction, TextChannel } from 'discord.js'
+import { clearChannelInfo, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const ClearUserChannelHistory: SlashCommand = {
     name: 'clear-user-channel-history',
@@ -11,7 +11,7 @@ export const ClearUserChannelHistory: SlashCommand = {
         const channel: Channel | null = await client.channels.fetch(interaction.channelId)
 
         // if not an existing channel or a GuildText, fail command
-        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
+        if (!channel || !UserCommand.includes(channel.type)) return
 
         // clear channel info for user
         const successfulWipe = await clearChannelInfo(interaction.channelId, 

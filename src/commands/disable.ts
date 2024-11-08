@@ -1,5 +1,5 @@
 import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
-import { openConfig, SlashCommand } from '../utils/index.js'
+import { AdminCommand, openConfig, SlashCommand } from '../utils/index.js'
 
 export const Disable: SlashCommand = {
     name: 'toggle-chat',
@@ -19,7 +19,7 @@ export const Disable: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || ![ChannelType.GuildText].includes(channel.type)) return
+        if (!channel || !AdminCommand.includes(channel.type)) return
 
         // check if runner is an admin
         if (!interaction.memberPermissions?.has('Administrator')) {

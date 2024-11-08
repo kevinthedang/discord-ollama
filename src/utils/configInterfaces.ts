@@ -1,3 +1,4 @@
+import { ChannelType } from 'discord.js'
 import { UserMessage } from './index.js'
 
 export interface UserConfiguration {
@@ -41,6 +42,21 @@ export interface Channel {
     readonly user: string
     messages: UserMessage[]
 }
+
+/**
+ * The following 2 types is allow for better readability in commands
+ * Admin Command -> Don't run in Threads
+ * User Command -> Used anywhere
+ */
+export const AdminCommand = [
+    ChannelType.GuildText
+]
+
+export const UserCommand = [
+    ChannelType.GuildText,
+    ChannelType.PublicThread,
+    ChannelType.PrivateThread
+]
 
 /**
  * Check if the configuration we are editing/taking from is a Server Config
