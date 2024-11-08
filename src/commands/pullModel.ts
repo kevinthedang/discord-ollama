@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction } from "discord.js";
 import { SlashCommand } from "../utils/commands.js";
 import { ollama } from "../client.js";
+import { ModelResponse } from "ollama";
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
@@ -26,11 +27,14 @@ export const PullModel: SlashCommand = {
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || ![ChannelType.PrivateThread, ChannelType.PublicThread, ChannelType.GuildText].includes(channel.type)) return
 
+        // check if model was already pulled
+        const modelExists: boolean = await ollama.list()
+            .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
+
         try {
             // call ollama to pull desired model
-            await ollama.pull({
-                model: modelInput
-            })
+            if (!modelExists)
+                await ollama.pull({ model: modelInput })
         } catch (error) {
             // could not resolve pull or model unfound
             interaction.editReply({
@@ -39,9 +43,14 @@ export const PullModel: SlashCommand = {
             return
         }
 
-        // successful pull
-        interaction.editReply({
-            content: `Successfully added **${modelInput}** into your local model library.`
-        })
+        // successful interaction
+        if (modelExists)
+            interaction.editReply({
+                content: `**${modelInput}** is already in your local model library.`
+            })
+        else
+            interaction.editReply({
+                content: `Successfully added **${modelInput}** into your local model library.`
+            })
     }
 }
