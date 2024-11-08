@@ -98,7 +98,7 @@ export async function embedMessage(
                 const lastEmbed = new EmbedBuilder()
                 .setTitle(`Responding to ${message.author.tag}`)
                 .setDescription(result || 'No Content to Provide...')
-                .setColor('#00FF00');
+                .setColor('#00FF00')
 
                 // rest of the response
                 channel.send({ embeds: [lastEmbed] })
