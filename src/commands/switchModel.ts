@@ -46,6 +46,7 @@ export const SwitchModel: SlashCommand = {
                     }
                 }
             })
+            // todo: problem can be here if async messes up
             if (switchSuccess) return
 
             // Phase 2: Try to get it regardless
