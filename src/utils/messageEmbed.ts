@@ -28,7 +28,8 @@ export async function embedMessage(
     .setColor('#00FF00')
 
     // send the message
-    const sentMessage = await (message.channel as SendableChannels).send({ embeds: [botMessage] })
+    const channel = message.channel as SendableChannels
+    const sentMessage = await channel.send({ embeds: [botMessage] })
 
     // create params
     const params: ChatParams = {
@@ -50,10 +51,10 @@ export async function embedMessage(
                     const errorEmbed = new EmbedBuilder()
                         .setTitle(`Responding to ${message.author.tag}`)
                         .setDescription(`Response length ${result.length} has exceeded Discord maximum.\n\nLong Stream messages not supported.`)
-                        .setColor('#00FF00');
+                        .setColor('#00FF00')
 
                     // send error
-                    (message.channel as SendableChannels).send({ embeds: [errorEmbed] })
+                    channel.send({ embeds: [errorEmbed] })
                     break // cancel loop and stop
                 }
 
@@ -88,9 +89,9 @@ export async function embedMessage(
                     const whileEmbed = new EmbedBuilder()
                     .setTitle(`Responding to ${message.author.tag}`)
                     .setDescription(result.slice(0, 5000) || 'No Content to Provide...')
-                    .setColor('#00FF00');
+                    .setColor('#00FF00')
 
-                    (message.channel as SendableChannels).send({ embeds: [whileEmbed] })
+                    channel.send({ embeds: [whileEmbed] })
                     result = result.slice(5000)
                 }
 
@@ -100,7 +101,7 @@ export async function embedMessage(
                 .setColor('#00FF00');
 
                 // rest of the response
-                (message.channel as SendableChannels).send({ embeds: [lastEmbed] })
+                channel.send({ embeds: [lastEmbed] })
             } else {
                 // only need to create 1 embed, handles 6000 characters
                 const newEmbed = new EmbedBuilder()

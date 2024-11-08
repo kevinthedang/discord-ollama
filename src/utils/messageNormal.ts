@@ -20,8 +20,9 @@ export async function normalMessage(
     // bot's respnse
     let response: ChatResponse | AbortableAsyncIterator<ChatResponse>
     let result: string = ''
+    const channel = message.channel as SendableChannels
 
-    await (message.channel as SendableChannels).send('Generating Response . . .').then(async sentMessage => {
+    await channel.send('Generating Response . . .').then(async sentMessage => {
         try {
             const params: ChatParams = {
                 model: model,
@@ -39,7 +40,7 @@ export async function normalMessage(
                         result = portion.message.content
 
                         // new message block, wait for it to send and assign new block to respond.
-                        await (message.channel as SendableChannels).send("Creating new stream block...").then(sentMessage => { messageBlock = sentMessage })
+                        await channel.send("Creating new stream block...").then(sentMessage => { messageBlock = sentMessage })
                     } else {
                         result += portion.message.content
                         
@@ -61,12 +62,12 @@ export async function normalMessage(
 
                     // handle for rest of message that is >2000
                     while (result.length > 2000) {
-                        (message.channel as SendableChannels).send(result.slice(0, 2000))
+                        channel.send(result.slice(0, 2000))
                         result = result.slice(2000)
                     }
 
                     // last part of message
-                    (message.channel as SendableChannels).send(result)
+                    channel.send(result)
                 } else // edit the 'generic' response to new message since <2000
                     sentMessage.edit(result)
             }            
