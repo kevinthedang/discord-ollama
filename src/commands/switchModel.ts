@@ -1,8 +1,8 @@
-import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction } from "discord.js";
+import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js";
 import { SlashCommand } from "../utils/commands.js";
 import { ollama } from "../client.js";
 import { ModelResponse } from "ollama";
-import { openConfig } from "../utils/index.js";
+import { openConfig, UserCommand } from "../utils/index.js";
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
@@ -26,7 +26,7 @@ export const SwitchModel: SlashCommand = {
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return
+        if (!channel || !UserCommand.includes(channel.type)) return
 
         try {
             // Phase 1: Set the model
@@ -46,6 +46,7 @@ export const SwitchModel: SlashCommand = {
                     }
                 }
             })
+            // todo: problem can be here if async messes up
             if (switchSuccess) return
 
             // Phase 2: Try to get it regardless

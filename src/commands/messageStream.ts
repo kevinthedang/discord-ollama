@@ -1,5 +1,5 @@
-import { ApplicationCommandOptionType, ChannelType, Client, CommandInteraction } from 'discord.js'
-import { openConfig, SlashCommand } from '../utils/index.js'
+import { ApplicationCommandOptionType, Client, CommandInteraction } from 'discord.js'
+import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const MessageStream: SlashCommand = {
     name: 'message-stream',
@@ -19,7 +19,7 @@ export const MessageStream: SlashCommand = {
     run: async (client: Client, interaction: CommandInteraction) => {
         // verify channel
         const channel = await client.channels.fetch(interaction.channelId)
-        if (!channel || channel.type !== (ChannelType.PrivateThread && ChannelType.PublicThread && ChannelType.GuildText)) return
+        if (!channel || !UserCommand.includes(channel.type)) return
 
         // save value to json and write to it
         openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('stream')?.value)
