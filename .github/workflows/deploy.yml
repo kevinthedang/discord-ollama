@@ -1,12 +1,12 @@
 name: Deploy
-run-name: Release Docker Image
+run-name: Deploy Image and Restart Service
 on:
   push:
     tags:
       - 'v*'
 
 jobs:
-  Release-Docker-Image:
+  Deploy-Docker-Image:
     runs-on: ubuntu-latest
     environment: release
     timeout-minutes: 3
@@ -23,7 +23,7 @@ jobs:
       - name: Create Environment Variables
         run: |
           touch .env
-          echo CLIENT_TOKEN = NOT_REAL_TOKEN >> .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
 
@@ -34,15 +34,5 @@ jobs:
         run: |
           npm run docker:build
 
-      - name: Build Image as Latest
-        run: |
-          npm run docker:build-latest
-      
-      - name: Log into Docker
-        run: |
-          docker login --username ${{ vars.DOCKER_USER }} --password ${{ secrets.DOCKER_PASS }}
-
-      - name: Release Docker Image
-        run: |
-          docker push ${{ vars.DOCKER_USER }}/discord-ollama:${{ env.VERSION }}
-          docker push ${{ vars.DOCKER_USER }}/discord-ollama:latest
+        # Export Image to server somehow and restart it, otherwise deploy source code and build
+        
