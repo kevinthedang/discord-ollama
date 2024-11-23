@@ -1,0 +1,24 @@
+# The further along the ownership is, the more precedance it has.
+# This to make sure the right people look at certain changes.
+# Last Edited: 11/23/2024
+# Author: Kevin Dang
+
+# These owners will be the default owners 
+# for everything in the repo. However it's
+# only for the rest of the files not declared by the
+# following ownerships below.
+* @kevinthedang @JT2M0L3Y
+
+# Technical/Business Code Ownership
+/src/ @kevinthedang @JT2M0L3Y
+/tests/ @kevinthedang @JT2M0L3Y
+/.github/ @kevinthedang
+
+# Docker Ownership
+Dockerfile @kevinthedang
+docker-compose.yml @kevinthedang
+
+# Documentation Ownership
+/docs/ @kevinthedang
+/imgs/ @kevinthedang
+
