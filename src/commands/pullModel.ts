@@ -28,6 +28,15 @@ export const PullModel: SlashCommand = {
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return
 
+        // Admin Command
+        if (!interaction.memberPermissions?.has('Administrator')) {
+            interaction.reply({
+                content: `${interaction.commandName} is an Administrator Command.\n\nYou, ${interaction.member?.user.username}, are not an Administrator in this server.\nPlease contact an admin to use this command.`,
+                ephemeral: true
+            })
+            return
+        }
+
         // check if model was already pulled
         const modelExists: boolean = await ollama.list()
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
