@@ -27,12 +27,9 @@ The project aims to:
   * [x] Administrator Role Compatible
   * [x] Multi-User Chat Generation (Multiple users chatting at the same time) - This was built in from Ollama `v0.2.1+`
   * [x] Automatic and Manual model pulling through the Discord client
-* [ ] Allow others to create their own models personalized for their own servers!
-  * [ ] Documentation on creating your own LLM
-  * [ ] Documentation on web scrapping and cleaning
 
 ## Documentation
-These are guides to the feature set included and the events triggered in this app.
+These are guides to the features and capabilities of this app.
 * [User Slash Commands](./docs/commands-guide.md)
 * [Client Events](./docs/events-guide.md)
 

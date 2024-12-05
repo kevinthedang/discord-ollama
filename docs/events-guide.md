@@ -1,7 +1,9 @@
 ## Events Guide
 This is a guide to all of the client events for the app.
 
-> [!NOTE] Each of these is logged to the console for a developer to track.
+> [!NOTE]
+> * Each of these is logged to the console for a developer to track.
+> * Possible interactions include commands, buttons, menus, etc.
 
 1. ClientReady  
     This event signifies that the Discord app is online.  
@@ -10,8 +12,6 @@ This is a guide to all of the client events for the app.
 2. InteractionCreate  
     This event signifies that a user interacted from Discord in some way.  
     Here commands are selected from a knowledge bank and executed if found.
-
-    > [!NOTE] Possible interactions include commands, buttons, menus, etc.
 
 3. MessageCreate  
     This event signifies that a message was sent.  
