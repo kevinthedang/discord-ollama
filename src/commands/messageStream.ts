@@ -3,13 +3,13 @@ import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const MessageStream: SlashCommand = {
     name: 'message-stream',
-    description: 'change preference on message streaming from ollama. WARNING: can be very slow.',
+    description: 'change preference on message streaming from ollama. WARNING: can be very slow due to Discord limits.',
 
     // user option(s) for setting stream
     options: [
         {
             name: 'stream',
-            description: 'enable or disable stream preference',
+            description: 'enable or disable message streaming',
             type: ApplicationCommandOptionType.Boolean,
             required: true
         }
@@ -25,7 +25,7 @@ export const MessageStream: SlashCommand = {
         openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('stream')?.value)
 
         interaction.reply({
-            content: `Message streaming preferences set to: \`${interaction.options.get('stream')?.value}\``,
+            content: `Message streaming is now set to: \`${interaction.options.get('stream')?.value}\``,
             ephemeral: true
         })
     }

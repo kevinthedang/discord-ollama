@@ -6,7 +6,7 @@ import { openConfig, UserCommand } from "../utils/index.js";
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
-    description: 'switches current model to preferred model to use.',
+    description: 'switches current model to use.',
 
     // set available user options to pass to the command
     options: [
@@ -55,12 +55,12 @@ export const SwitchModel: SlashCommand = {
 
             // Phase 2: Notify user of failure to find model.
             interaction.editReply({
-                content: `Could not find **${modelInput}** in local model library.\n\nPlease contact an server administrator for access to this model.`
+                content: `Could not find **${modelInput}** in local model library.\n\nPlease contact an server admin for access to this model.`
             })  
         } catch (error) {
             // could not resolve user model switch
             interaction.editReply({
-                content: `Unable to switch user preferred model to **${modelInput}**.\n\n${error}\n\nPossible solution is to request an server administrator run \`/pull-model ${modelInput}\` and try again.`
+                content: `Unable to switch user preferred model to **${modelInput}**.\n\n${error}\n\nPossible solution is to request an server admin run \`/pull-model ${modelInput}\` and try again.`
             })
             return
         }
