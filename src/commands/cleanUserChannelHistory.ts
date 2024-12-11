@@ -3,7 +3,7 @@ import { clearChannelInfo, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const ClearUserChannelHistory: SlashCommand = {
     name: 'clear-user-channel-history',
-    description: 'clears history for user running this command in current channel',
+    description: 'clears history for user in the current channel',
 
     // Clear channel history for intended user
     run: async (client: Client, interaction: CommandInteraction) => {
@@ -21,12 +21,12 @@ export const ClearUserChannelHistory: SlashCommand = {
         // check result of clearing history
         if (successfulWipe)
             interaction.reply({ 
-                content: `Channel history in **this channel** successfully cleared for **${interaction.user.username}**.`, 
+                content: `History cleared in **this channel** cleared for **${interaction.user.username}**.`, 
                 ephemeral: true
             })
         else
             interaction.reply({ 
-                content: `Channel history could not be found for **${interaction.user.username}** in **this channel**.\n\nPlease chat with **${client.user?.username}** to start a chat history.`, 
+                content: `History was not be found for **${interaction.user.username}** in **this channel**.\n\nPlease chat with **${client.user?.username}** to start a chat history.`, 
                 ephemeral: true
             })
     }
