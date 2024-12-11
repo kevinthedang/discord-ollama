@@ -18,7 +18,7 @@ export const ThreadCreate: SlashCommand = {
         })
 
         // Send a message in the thread
-        thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your prompt.`)
+        thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your message.`)
 
         // handle storing this chat channel
         openChannelInfo(thread.id, 
@@ -27,7 +27,7 @@ export const ThreadCreate: SlashCommand = {
 
         // user only reply
         return interaction.reply({
-            content: `I can help you in thread **${thread.id}** below.`,
+            content: `I can help you in <#${thread.id}> below.`,
             ephemeral: true
         })
     }
