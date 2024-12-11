@@ -36,7 +36,8 @@ export interface EventProps {
     client: Client
     log: LogMethod
     msgHist: Queue<UserMessage>
-    ollama: Ollama
+    ollama: Ollama,
+    defaultModel: String
 }
 export type EventCallback<T extends EventKeys> = (
     props: EventProps,
@@ -64,7 +65,8 @@ export function registerEvents(
     client: Client, 
     events: Event[], 
     msgHist: Queue<UserMessage>,
-    ollama: Ollama
+    ollama: Ollama,
+    defaultModel: String
 ): void {
     for (const { key, callback } of events) {
         client.on(key, (...args) => {
@@ -73,7 +75,7 @@ export function registerEvents(
 
             // Handle Errors, call callback, log errors as needed
             try {
-                callback({ client, log, msgHist, ollama }, ...args)
+                callback({ client, log, msgHist, ollama, defaultModel }, ...args)
             } catch (error) {
                 log('[Uncaught Error]', error)
             }
