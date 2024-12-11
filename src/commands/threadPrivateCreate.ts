@@ -29,7 +29,7 @@ export const PrivateThreadCreate: SlashCommand = {
 
         // user only reply
         return interaction.reply({
-            content: `I can help you in <#${thread.id}>.`,
+            content: `I can help you in thread **${thread.id}**. Please refer to the private channel below this one.`,
             ephemeral: true
         })
     }

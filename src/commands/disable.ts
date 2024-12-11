@@ -1,9 +1,9 @@
-import { Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
+import { ChannelType, Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
 import { AdminCommand, openConfig, SlashCommand } from '../utils/index.js'
 
 export const Disable: SlashCommand = {
     name: 'toggle-chat',
-    description: 'toggle all chat features. Adminstrator Only.',
+    description: 'toggle all chat features, Adminstrator Only.',
 
     // set available user options to pass to the command
     options: [
@@ -24,7 +24,7 @@ export const Disable: SlashCommand = {
         // check if runner is an admin
         if (!interaction.memberPermissions?.has('Administrator')) {
             interaction.reply({
-                content: `${interaction.commandName} is an admin command.\n\nPlease contact an admin to use this command for you.`,
+                content: `${interaction.commandName} is an Administrator Command.\n\nYou, ${interaction.member?.user.username}, are not an Administrator in this server.\nPlease contact an admin to use this command.`,
                 ephemeral: true
             })
             return
@@ -34,7 +34,7 @@ export const Disable: SlashCommand = {
         openConfig(`${interaction.guildId}-config.json`, interaction.commandName, interaction.options.get('enabled')?.value)
 
         interaction.reply({
-            content: `${client.user?.username} is now **${interaction.options.get('enabled')?.value ?  "enabled" : "disabled" }**.`,
+            content: `Chat features has been \`${interaction.options.get('enabled')?.value ?  "enabled" : "disabled" }\``,
             ephemeral: true
         })
     }

@@ -3,13 +3,13 @@ import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
-    description: 'maximum amount messages bot will hold for context.',
+    description: 'number of messages bot will hold for context.',
 
     // set available user options to pass to the command
     options: [
         {
             name: 'context-capacity',
-            description: 'number of allowed messages to remember',
+            description: 'a number to set capacity',
             type: ApplicationCommandOptionType.Number,
             required: true
         }
@@ -25,7 +25,7 @@ export const Capacity: SlashCommand = {
         openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('context-capacity')?.value)
 
         interaction.reply({
-            content: `Max message history is now set to \`${interaction.options.get('context-capacity')?.value}\``,
+            content: `Message History Capacity has been set to \`${interaction.options.get('context-capacity')?.value}\``,
             ephemeral: true
         })
     }

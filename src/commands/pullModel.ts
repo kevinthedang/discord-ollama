@@ -6,7 +6,7 @@ import { UserCommand } from "../utils/index.js";
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
-    description: 'pulls a model from the ollama model library. Administrator Only',
+    description: 'pulls a model from the ollama model library',
 
     // set available user options to pass to the command
     options: [
@@ -28,31 +28,18 @@ export const PullModel: SlashCommand = {
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return
 
-        // Admin Command
-        if (!interaction.memberPermissions?.has('Administrator')) {
-            interaction.reply({
-                content: `${interaction.commandName} is an admin command.\n\nPlease contact a server admin to pull the model you want.`,
-                ephemeral: true
-            })
-            return
-        }
-
         // check if model was already pulled
         const modelExists: boolean = await ollama.list()
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
 
         try {
             // call ollama to pull desired model
-            if (!modelExists) {
-                interaction.editReply({
-                    content: `**${modelInput}** could not be found. Please wait patiently as I try to retrieve it...`
-                })
+            if (!modelExists)
                 await ollama.pull({ model: modelInput })
-            }
         } catch (error) {
             // could not resolve pull or model unfound
             interaction.editReply({
-                content: `Could not retrieve the **${modelInput}** model. You can find models at [Ollama Model Library](https://ollama.com/library).\n\nPlease check the model library and try again.`
+                content: `Could not pull/locate the **${modelInput}** model within the [Ollama Model Library](https://ollama.com/library).\n\nPlease check the model library and try again.`
             })
             return
         }
@@ -60,11 +47,11 @@ export const PullModel: SlashCommand = {
         // successful interaction
         if (modelExists)
             interaction.editReply({
-                content: `**${modelInput}** is already available.`
+                content: `**${modelInput}** is already in your local model library.`
             })
         else
             interaction.editReply({
-                content: `Successfully added **${modelInput}**.`
+                content: `Successfully added **${modelInput}** into your local model library.`
             })
     }
 }

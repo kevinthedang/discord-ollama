@@ -6,7 +6,7 @@ import { openConfig, UserCommand } from "../utils/index.js";
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
-    description: 'switches current model to use.',
+    description: 'switches current model to preferred model to use.',
 
     // set available user options to pass to the command
     options: [
@@ -29,7 +29,7 @@ export const SwitchModel: SlashCommand = {
         if (!channel || !UserCommand.includes(channel.type)) return
 
         try {
-            // Phase 1: Switch to the model
+            // Phase 1: Set the model
             let switchSuccess = false
             await ollama.list()
             .then(response => {
@@ -47,20 +47,28 @@ export const SwitchModel: SlashCommand = {
                 }
             })
             // todo: problem can be here if async messes up
-            if (switchSuccess) {
-                // set model now that it exists
-                openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
-                return
-            }
+            if (switchSuccess) return
 
-            // Phase 2: Notify user of failure to find model.
+            // Phase 2: Try to get it regardless
             interaction.editReply({
-                content: `Could not find **${modelInput}** in local model library.\n\nPlease contact an server admin for access to this model.`
-            })  
+                content: `Could not find **${modelInput}** in local model library, trying to pull it now...\n\nThis could take a few moments... Please be patient!`
+            })
+
+            await ollama.pull({
+                model: modelInput
+            })
+
+            // set model now that it exists
+            openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+
+            // We got the model!
+            interaction.editReply({
+                content: `Successfully added and set **${modelInput}** as your preferred model.`
+            })
         } catch (error) {
             // could not resolve user model switch
             interaction.editReply({
-                content: `Unable to switch user preferred model to **${modelInput}**.\n\n${error}\n\nPossible solution is to request an server admin run \`/pull-model ${modelInput}\` and try again.`
+                content: `Unable to switch user preferred model to **${modelInput}**.\n\n${error}\n\nPossible solution is to run \`/pull-model ${modelInput}\` and try again.`
             })
             return
         }
