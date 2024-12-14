@@ -1,5 +1,5 @@
 import { TextChannel } from 'discord.js'
-import { embedMessage, event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
+import { event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
 import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openConfig, UserConfig, getAttachmentData } from '../utils/index.js'
 
 /** 
@@ -134,9 +134,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client
             })
         }
 
-        // response string for ollama to put its response
-        let response: string
-
         if (!userConfig)
             throw new Error(`Failed to initialize User Preference for **${message.author.username}**.\n\nIt's likely you do not have a model set. Please use the \`switch-model\` command to do that.`)
 
@@ -157,11 +154,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client
             images: messageAttachment || []
         })
         
-        // undefined or false, use normal, otherwise use embed
-        if (userConfig.options['message-style'])
-            response = await embedMessage(message, ollama, model, msgHist, shouldStream)
-        else
-            response = await normalMessage(message, ollama, model, msgHist, shouldStream)
+        // response string for ollama to put its response
+        const response: string = await normalMessage(message, ollama, model, msgHist, shouldStream)
 
         // If something bad happened, remove user query and stop
         if (response == undefined) { msgHist.pop(); return }
