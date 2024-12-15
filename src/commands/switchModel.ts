@@ -1,8 +1,7 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js";
-import { SlashCommand } from "../utils/commands.js";
-import { ollama } from "../client.js";
-import { ModelResponse } from "ollama";
-import { openConfig, UserCommand } from "../utils/index.js";
+import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js"
+import { ollama } from "../client.js"
+import { ModelResponse } from "ollama"
+import { openConfig, UserCommand, SlashCommand } from "../utils/index.js"
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',

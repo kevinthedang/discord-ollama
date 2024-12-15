@@ -1,6 +1,5 @@
-import { Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
-import { SlashCommand } from '../utils/commands.js'
-import { AdminCommand } from '../utils/index.js'
+import { Client, CommandInteraction } from 'discord.js'
+import { AdminCommand, SlashCommand } from '../utils/index.js'
 
 export const Shutoff: SlashCommand = {
     name: 'shutoff',

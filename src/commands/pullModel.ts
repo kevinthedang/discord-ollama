@@ -1,12 +1,11 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js";
-import { SlashCommand } from "../utils/commands.js";
-import { ollama } from "../client.js";
-import { ModelResponse } from "ollama";
-import { UserCommand } from "../utils/index.js";
+import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js"
+import { ollama } from "../client.js"
+import { ModelResponse } from "ollama"
+import { UserCommand, SlashCommand } from "../utils/index.js"
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
-    description: 'pulls a model from the ollama model library. Administrator Only',
+    description: 'pulls a model from the ollama model library. Administrator Only.',
 
     // set available user options to pass to the command
     options: [
