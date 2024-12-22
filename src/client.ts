@@ -17,14 +17,9 @@ const client = new Client({
 })
 
 // initialize connection to redis
-const redis = createClient({ url: 'redis://172.18.0.4:6379' })
-
-await redis.connect()
-    .then(() => console.log('[Redis] Connected'))
-    .catch((error) => {
-        console.error('[Redis] Connection Error', error)
-        process.exit(1)
-    })
+const redis = createClient({
+    url: `redis://${Keys.redisHost}:${Keys.redisPort}`,
+})
 
 // initialize connection to ollama container
 export const ollama = new Ollama({
@@ -41,6 +36,14 @@ registerEvents(client, Events, messageHistory, ollama, Keys.defaultModel)
 await client.login(Keys.clientToken)
     .catch((error) => {
         console.error('[Login Error]', error)
+        process.exit(1)
+    })
+
+// Try to connect to redis
+await redis.connect()
+    .then(() => console.log('[Redis] Connected'))
+    .catch((error) => {
+        console.error('[Redis] Connection Error', error)
         process.exit(1)
     })
 
