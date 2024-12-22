@@ -7,7 +7,7 @@ services:
     build: ./                     # find docker file in designated path
     container_name: discord
     restart: always               # rebuild container always
-    image: kevinthedang/discord-ollama:0.8.0
+    image: kevinthedang/discord-ollama:0.8.1
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       OLLAMA_IP: ${OLLAMA_IP}
@@ -37,7 +37,7 @@ services:
     ports: 
       - ${OLLAMA_PORT}:${OLLAMA_PORT}
 
-# Put Redis Container here?
+# setup redis container
   redis:
     image: redis:latest
     container_name: redis

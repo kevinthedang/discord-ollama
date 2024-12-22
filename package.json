@@ -1,6 +1,6 @@
 {
   "name": "discord-ollama",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Ollama Integration into discord",
   "main": "build/index.js",
   "exports": "./build/index.js",
@@ -28,16 +28,16 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.16.3",
-    "dotenv": "^16.4.5",
-    "ollama": "^0.5.9",
+    "dotenv": "^16.4.7",
+    "ollama": "^0.5.11",
     "redis": "^4.7.0"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "@vitest/coverage-v8": "^2.1.4",
+    "@types/node": "^22.10.2",
+    "@vitest/coverage-v8": "^2.1.8",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.6.3",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.4"
   },
   "type": "module",
