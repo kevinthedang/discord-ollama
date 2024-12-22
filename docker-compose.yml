@@ -12,6 +12,8 @@ services:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       OLLAMA_IP: ${OLLAMA_IP}
       OLLAMA_PORT: ${OLLAMA_PORT}
+      REDIS_IP: ${REDIS_IP}
+      REDIS_PORT: ${REDIS_PORT}
     networks:
       ollama-net:
         ipv4_address: ${DISCORD_IP}

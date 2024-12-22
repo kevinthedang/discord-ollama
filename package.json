@@ -29,7 +29,8 @@
   "dependencies": {
     "discord.js": "^14.16.3",
     "dotenv": "^16.4.5",
-    "ollama": "^0.5.9"
+    "ollama": "^0.5.9",
+    "redis": "^4.7.0"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
