@@ -46,10 +46,12 @@ These are guides to the features and capabilities of this app.
 
 ## Resources
 * [NodeJS](https://nodejs.org/en)
-    * This project runs on `lts\hydrogen`. 
-    * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
+    * This project runs on `lts\jod` and above. 
+    * This project requires the use of npm version `10.9.0` or above.
 * [Ollama](https://ollama.com/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
+* [Redis](https://redis.io/)
+    * [Redis Docker Image](https://hub.docker.com/_/redis)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 * [Setting up Docker (Ubuntu 20.04)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * [Setting up Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
