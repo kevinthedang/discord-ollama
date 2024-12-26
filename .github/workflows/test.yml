@@ -25,10 +25,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment lts/hydrogen
+      - name: Set up Node Environment lts/jod
         uses: actions/setup-node@v4
         with:
-          node-version: lts/hydrogen
+          node-version: lts/jod
           cache: "npm"
 
       - name: Install Project Dependencies
@@ -41,6 +41,8 @@ jobs:
           echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+          echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
+          echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
 
       - name: Test Application
         run: |

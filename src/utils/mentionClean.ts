@@ -1,5 +1,3 @@
-import Keys from "../keys.js"
-
 /**
  * Clean up the bot user_id so it only has the prompt
  * 

@@ -7,11 +7,13 @@ services:
     build: ./                     # find docker file in designated path
     container_name: discord
     restart: always               # rebuild container always
-    image: kevinthedang/discord-ollama:0.8.0
+    image: kevinthedang/discord-ollama:0.8.1
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       OLLAMA_IP: ${OLLAMA_IP}
       OLLAMA_PORT: ${OLLAMA_PORT}
+      REDIS_IP: ${REDIS_IP}
+      REDIS_PORT: ${REDIS_PORT}
     networks:
       ollama-net:
         ipv4_address: ${DISCORD_IP}
@@ -35,7 +37,18 @@ services:
     ports: 
       - ${OLLAMA_PORT}:${OLLAMA_PORT}
 
-# Put Redis Container here?
+# setup redis container
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    networks:
+      ollama-net:
+        ipv4_address: ${REDIS_IP}
+    volumes:
+      - redis:/root/.redis
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
 
 # create a network that supports giving addresses withing a specific subnet
 networks:
@@ -49,3 +62,4 @@ networks:
 volumes:
   ollama:
   discord:
+  redis:
