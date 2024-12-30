@@ -32,18 +32,18 @@ const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
 // register all events
 registerEvents(client, Events, messageHistory, ollama, Keys.defaultModel)
 
-// Try to log in the client
-await client.login(Keys.clientToken)
-    .catch((error) => {
-        console.error('[Login Error]', error)
-        process.exit(1)
-    })
-
 // Try to connect to redis
 await redis.connect()
     .then(() => console.log('[Redis] Connected'))
     .catch((error) => {
         console.error('[Redis] Connection Error', error)
+        process.exit(1)
+    })
+
+// Try to log in the client
+await client.login(Keys.clientToken)
+    .catch((error) => {
+        console.error('[Login Error]', error)
         process.exit(1)
     })
 

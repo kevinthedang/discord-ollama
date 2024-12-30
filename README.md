@@ -28,6 +28,10 @@ The project aims to:
   * [x] Multi-User Chat Generation (Multiple users chatting at the same time) - This was built in from Ollama `v0.2.1+`
   * [x] Automatic and Manual model pulling through the Discord client
 
+Further, Ollama provides the functionality to utilize custom models or provide context for the top-layer of any model available through the Ollama model library.
+* [Customize a model](https://github.com/ollama/ollama#customize-a-model)
+* [Modelfile Docs](https://github.com/ollama/ollama/blob/main/docs/modelfile.md)
+
 ## Documentation
 These are guides to the features and capabilities of this app.
 * [User Slash Commands](./docs/commands-guide.md)
