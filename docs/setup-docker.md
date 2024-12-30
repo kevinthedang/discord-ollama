@@ -43,11 +43,13 @@ sudo systemctl restart docker
 * [GitHub repository](https://github.com/NVIDIA/nvidia-container-toolkit?tab=readme-ov-file) for Nvidia Container Toolkit
 
 ## To Run (with Docker and Docker Compose)
-* With the inclusion of subnets in the `docker-compose.yml`, you will need to set the `SUBNET_ADDRESS`, `OLLAMA_IP`, `OLLAMA_PORT`, and `DISCORD_IP`. Here are some default values if you don't care:
+* With the inclusion of subnets in the `docker-compose.yml`, you will need to set the `SUBNET_ADDRESS`, `OLLAMA_IP`, `OLLAMA_PORT`, `REDIS_IP`, `REDIS_PORT`, and `DISCORD_IP`. Here are some default values if you don't care:
+    * `SUBNET_ADDRESS = 172.18.0.0`
     * `OLLAMA_IP = 172.18.0.2`
     * `OLLAMA_PORT = 11434`
     * `DISCORD_IP = 172.18.0.3`
-    * `SUBNET_ADDRESS = 172.18.0.0`
+    * `REDIS_IP = 172.18.0.4`
+    * `REDIS_PORT = 6379`
     * Don't understand any of this? watch a Networking video to understand subnetting.
     * You also need all environment variables shown in [`.env.sample`](../.env.sample)
 * Otherwise, there is no need to install any npm packages for this, you just need to run `npm run start` to pull the containers and spin them up.

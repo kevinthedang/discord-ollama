@@ -27,12 +27,13 @@ The project aims to:
   * [x] Administrator Role Compatible
   * [x] Multi-User Chat Generation (Multiple users chatting at the same time) - This was built in from Ollama `v0.2.1+`
   * [x] Automatic and Manual model pulling through the Discord client
-* [ ] Allow others to create their own models personalized for their own servers!
-  * [ ] Documentation on creating your own LLM
-  * [ ] Documentation on web scrapping and cleaning
+
+Further, Ollama provides the functionality to utilize custom models or provide context for the top-layer of any model available through the Ollama model library.
+* [Customize a model](https://github.com/ollama/ollama#customize-a-model)
+* [Modelfile Docs](https://github.com/ollama/ollama/blob/main/docs/modelfile.md)
 
 ## Documentation
-These are guides to the feature set included and the events triggered in this app.
+These are guides to the features and capabilities of this app.
 * [User Slash Commands](./docs/commands-guide.md)
 * [Client Events](./docs/events-guide.md)
 
@@ -49,10 +50,12 @@ These are guides to the feature set included and the events triggered in this ap
 
 ## Resources
 * [NodeJS](https://nodejs.org/en)
-    * This project runs on `lts\hydrogen`. 
-    * This project supports any NodeJS version above `16.x.x` to only allow ESModules.
+    * This project runs on `lts\jod` and above. 
+    * This project requires the use of npm version `10.9.0` or above.
 * [Ollama](https://ollama.com/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
+* [Redis](https://redis.io/)
+    * [Redis Docker Image](https://hub.docker.com/_/redis)
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 * [Setting up Docker (Ubuntu 20.04)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * [Setting up Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)
