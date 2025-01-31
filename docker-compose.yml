@@ -29,9 +29,9 @@ services:
       ollama-net:
         ipv4_address: ${OLLAMA_IP}
 
-    # runtime: nvidia             # use Nvidia Container Toolkit for GPU support
-    # devices:
-    #   - /dev/nvidia0
+    runtime: nvidia             # use Nvidia Container Toolkit for GPU support
+    devices:
+      - /dev/nvidia0
     volumes:
       - ollama:/root/.ollama
     ports: 
