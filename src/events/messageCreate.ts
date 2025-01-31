@@ -1,5 +1,5 @@
 import { TextChannel } from 'discord.js'
-import { event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
+import { event, Events, normalMessage, UserMessage, clean, getTextFileAttachmentData } from '../utils/index.js'
 import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openConfig, UserConfig, getAttachmentData } from '../utils/index.js'
 
 /** 
@@ -10,7 +10,7 @@ import { getChannelInfo, getServerConfig, getUserConfig, openChannelInfo, openCo
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client, defaultModel }, message) => {
     const clientId = client.user!!.id
-    const cleanedMessage = clean(message.content, clientId)
+    let cleanedMessage = clean(message.content, clientId)
     log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Do not respond if bot talks in the chat
@@ -138,7 +138,14 @@ export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client
             throw new Error(`Failed to initialize User Preference for **${message.author.username}**.\n\nIt's likely you do not have a model set. Please use the \`switch-model\` command to do that.`)
 
         // get message attachment if exists
-        const messageAttachment: string[] = await getAttachmentData(message.attachments.first())
+        const attachment = message.attachments.first()
+        let messageAttachment: string[] = []
+
+        if (attachment && attachment.name?.endsWith(".txt"))
+            cleanedMessage += await getTextFileAttachmentData(attachment)
+        else if (attachment)
+            messageAttachment = await getAttachmentData(attachment)
+        
         const model: string = userConfig.options['switch-model']
 
         // set up new queue
