@@ -34,7 +34,7 @@ describe('Commands Existence', () => {
     // test specific commands in the object
     it('references specific commands', () => {
         const commandsString = commands.map(e => e.name).join(', ')
-        expect(commandsString).toBe('thread, private-thread, message-stream, toggle-chat, shutoff, modify-capacity, clear-user-channel-history, pull-model, switch-model, delete-model')
+        expect(commandsString).toBe('thread, private-thread, message-stream, toggle-chat,shutoff, modify-capacity, clear-user-channel-history,pull-model, switch-model, delete-model')
     })
 })
 
@@ -49,23 +49,23 @@ describe('User Command Tests', () => {
     })
 
     it('run clear-user-channel-history command', () => {
-        
+
     })
 
     it('run message-stream command', () => {
-        
+
     })
 
     it('run message-style command', () => {
-        
+
     })
-    
+
     it('run thread command', () => {
-        
+
     })
 
     it('run private-thread command', () => {
-        
+
     })
 })
 
@@ -75,10 +75,10 @@ describe('User Command Tests', () => {
  */
 describe('Admin Command Tests', () => {
     it('run shutoff command', () => {
-        
+
     })
 
     it('run toggle-chat command', () => {
-        
+
     })
 })

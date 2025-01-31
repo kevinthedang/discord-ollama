@@ -22,7 +22,11 @@ export const Capacity: SlashCommand = {
         if (!channel || !UserCommand.includes(channel.type)) return
 
         // set state of bot chat features
-        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('context-capacity')?.value)
+        openConfig(
+            `${interaction.user.username}-config.json`,
+            interaction.commandName,
+            interaction.options.get('context-capacity')?.value
+        )
 
         interaction.reply({
             content: `Max message history is now set to \`${interaction.options.get('context-capacity')?.value}\``,

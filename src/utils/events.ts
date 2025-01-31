@@ -15,8 +15,8 @@ export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents ob
  * @param msgHist message history
  */
 export type ChatParams = {
-    model: string, 
-    ollama: Ollama, 
+    model: string,
+    ollama: Ollama,
     msgHist: UserMessage[]
 }
 
@@ -24,6 +24,7 @@ export type ChatParams = {
  * Format for the messages to be stored when communicating when the bot
  * @param role either assistant, user, or system
  * @param content string of the message the user or assistant provided
+ * @param images array of images that the user or assistant provided
  */
 export type UserMessage = {
     role: string,
@@ -33,12 +34,18 @@ export type UserMessage = {
 
 // Event properties
 export interface EventProps {
-    client: Client
-    log: LogMethod
-    msgHist: Queue<UserMessage>
+    client: Client,
+    log: LogMethod,
+    msgHist: Queue<UserMessage>,
     ollama: Ollama,
     defaultModel: String
 }
+
+/**
+ * Format for the callback function tied to an event
+ * @param props the properties of the event
+ * @param args the arguments of the event
+ */
 export type EventCallback<T extends EventKeys> = (
     props: EventProps,
     ...args: ClientEvents[T]
@@ -50,6 +57,12 @@ export interface Event<T extends EventKeys = EventKeys> {
     callback: EventCallback<T>
 }
 
+/**
+ * Method to create an event object
+ * @param key type of event
+ * @param callback function to run when event is triggered
+ * @returns event object
+ */
 export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): Event<T> {
     return { key, callback }
 }
@@ -62,8 +75,8 @@ export function event<T extends EventKeys>(key: T, callback: EventCallback<T>): 
  * @param ollama the initialized ollama instance
  */
 export function registerEvents(
-    client: Client, 
-    events: Event[], 
+    client: Client,
+    events: Event[],
     msgHist: Queue<UserMessage>,
     ollama: Ollama,
     defaultModel: String

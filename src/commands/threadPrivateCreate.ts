@@ -22,7 +22,8 @@ export const PrivateThreadCreate: SlashCommand = {
 
         // handle storing this chat channel
         // store: thread.id, thread.name
-        openChannelInfo(thread.id, 
+        openChannelInfo(
+            thread.id,
             thread as ThreadChannel,
             interaction.user.tag
         )

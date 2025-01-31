@@ -12,7 +12,7 @@ import path from 'path'
 // add type of change (server, user)
 export function openConfig(filename: string, key: string, value: any) {
     const fullFileName = `data/${filename}`
-    
+
     // check if the file exists, if not then make the config file
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
@@ -58,7 +58,7 @@ export async function getServerConfig(filename: string, callback: (config: Serve
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error) {
-                callback(undefined) 
+                callback(undefined)
                 return // something went wrong... stop
             }
             callback(JSON.parse(data))
@@ -81,7 +81,7 @@ export async function getUserConfig(filename: string, callback: (config: UserCon
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error) {
-                callback(undefined) 
+                callback(undefined)
                 return // something went wrong... stop
             }
             callback(JSON.parse(data))
