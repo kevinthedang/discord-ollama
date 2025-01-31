@@ -55,3 +55,12 @@ export async function getAttachmentData(attachment: Attachment | undefined): Pro
     const base64String = arrayBufferToBase64(buffer)
     return [base64String]
 }
+
+/**
+ * Method to retrieve the string data from the text file
+ * 
+ * @param attachment the text file to convert to a string
+ */
+export async function getTextFileAttachmentData(attachment: Attachment): Promise<string> {
+    return await (await fetch(attachment.url)).text()
+}

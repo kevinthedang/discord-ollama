@@ -2,7 +2,7 @@ import { TextChannel } from 'discord.js'
 import { event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
 import {
     getChannelInfo, getServerConfig, getUserConfig, openChannelInfo,
-    openConfig, UserConfig, getAttachmentData
+    openConfig, UserConfig, getAttachmentData, getTextFileAttachmentData
 } from '../utils/index.js'
 
 /** 
@@ -12,9 +12,9 @@ import {
  * @param message the message received from the channel
  */
 export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client, defaultModel }, message) => {
-        const clientId = client.user!!.id
-        const cleanedMessage = clean(message.content, clientId)
-        log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
+    const clientId = client.user!!.id
+    let cleanedMessage = clean(message.content, clientId)
+    log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
         // Do not respond if bot talks in the chat
         if (message.author.username === message.client.user.username) return
@@ -140,9 +140,16 @@ export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client
             if (!userConfig)
                 throw new Error(`Failed to initialize User Preference for **${message.author.username}**.\n\nIt's likely you do not have a model set. Please use the \`switch-model\` command to do that.`)
 
-            // get message attachment if exists
-            const messageAttachment: string[] = await getAttachmentData(message.attachments.first())
-            const model: string = userConfig.options['switch-model']
+        // get message attachment if exists
+        const attachment = message.attachments.first()
+        let messageAttachment: string[] = []
+
+        if (attachment && attachment.name?.endsWith(".txt"))
+            cleanedMessage += await getTextFileAttachmentData(attachment)
+        else if (attachment)
+            messageAttachment = await getAttachmentData(attachment)
+        
+        const model: string = userConfig.options['switch-model']
 
             // set up new queue
             msgHist.setQueue(chatMessages)
