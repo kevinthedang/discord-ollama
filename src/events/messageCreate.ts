@@ -11,9 +11,7 @@ import {
  * 
  * @param message the message received from the channel
  */
-export default event(
-    Events.MessageCreate,
-    async ({ log, msgHist, ollama, client, defaultModel }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client, defaultModel }, message) => {
         const clientId = client.user!!.id
         const cleanedMessage = clean(message.content, clientId)
         log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)

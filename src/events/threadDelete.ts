@@ -5,9 +5,7 @@ import fs from 'fs'
 /**
  * Event to remove the associated .json file for a thread once deleted
  */
-export default event(
-    Events.ThreadDelete,
-    async ({ log }, thread: ThreadChannel) => {
+export default event(Events.ThreadDelete, async ({ log }, thread: ThreadChannel) => {
         // iterate through every guild member in the thread and delete their history, except the bot
         try {
             log(`Number of User Guild Members in Thread being deleted: ${thread.memberCount!! - 1}`)

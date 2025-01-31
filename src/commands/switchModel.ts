@@ -48,11 +48,7 @@ export const SwitchModel: SlashCommand = {
             // todo: problem can be here if async messes up
             if (switchSuccess) {
                 // set model now that it exists
-                openConfig(
-                    `${interaction.user.username}-config.json`,
-                    interaction.commandName,
-                    modelInput
-                )
+                openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
                 return
             }
 

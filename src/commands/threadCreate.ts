@@ -21,11 +21,7 @@ export const ThreadCreate: SlashCommand = {
         thread.send(`Hello ${interaction.user} and others! \n\nIt's nice to meet you. Please talk to me by typing **@${client.user?.username}** with your message.`)
 
         // handle storing this chat channel
-        openChannelInfo(
-            thread.id,
-            thread as ThreadChannel,
-            interaction.user.tag
-        )
+        openChannelInfo(thread.id, thread as ThreadChannel, interaction.user.tag)
 
         // user only reply
         return interaction.reply({

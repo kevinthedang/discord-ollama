@@ -22,9 +22,7 @@ export const Capacity: SlashCommand = {
         if (!channel || !UserCommand.includes(channel.type)) return
 
         // set state of bot chat features
-        openConfig(
-            `${interaction.user.username}-config.json`,
-            interaction.commandName,
+        openConfig(`${interaction.user.username}-config.json`, interaction.commandName,
             interaction.options.get('context-capacity')?.value
         )
 

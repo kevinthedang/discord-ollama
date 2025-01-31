@@ -3,9 +3,7 @@ import { event, Events, registerCommands } from '../utils/index.js'
 import commands from '../commands/index.js'
 
 // Log when the bot successfully logs in and export it
-export default event(
-    Events.ClientReady,
-    ({ log }, client) => {
+export default event(Events.ClientReady, ({ log }, client) => {
         // Register the commands associated with the bot upon loggin in
         registerCommands(client, commands)
 
