@@ -28,6 +28,7 @@ export const Shutoff: SlashCommand = {
             content: `${client.user?.tag} is shutting down.`,
             ephemeral: true
         })
+
         console.log(`[Command: shutoff] ${client.user?.tag} is shutting down.`)
 
         // clean up client instance and stop

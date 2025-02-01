@@ -28,7 +28,7 @@ export async function normalMessage(
                 model: model,
                 ollama: ollama,
                 msgHist: msgHist.getItems()
-            } 
+            }
 
             // run query based on stream preference, true = stream, false = block
             if (stream) {
@@ -40,14 +40,15 @@ export async function normalMessage(
                         result = portion.message.content
 
                         // new message block, wait for it to send and assign new block to respond.
-                        await channel.send("Creating new stream block...").then(sentMessage => { messageBlock = sentMessage })
+                        await channel.send("Creating new stream block...")
+                            .then(sentMessage => { messageBlock = sentMessage })
                     } else {
                         result += portion.message.content
-                        
+
                         // ensure block is not empty
                         if (result.length > 5)
-                            messageBlock.edit(result) 
-                    }         
+                            messageBlock.edit(result)
+                    }
                     console.log(result)
                 }
             }
@@ -70,8 +71,8 @@ export async function normalMessage(
                     channel.send(result)
                 } else // edit the 'generic' response to new message since <2000
                     sentMessage.edit(result)
-            }            
-        } catch(error: any) {
+            }
+        } catch (error: any) {
             console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
             if (error.message.includes('try pulling it first'))
                 sentMessage.edit(`**Response generation failed.**\n\nReason: You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`)

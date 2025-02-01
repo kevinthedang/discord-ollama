@@ -22,7 +22,9 @@ export const MessageStream: SlashCommand = {
         if (!channel || !UserCommand.includes(channel.type)) return
 
         // save value to json and write to it
-        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, interaction.options.get('stream')?.value)
+        openConfig(`${interaction.user.username}-config.json`, interaction.commandName,
+            interaction.options.get('stream')?.value
+        )
 
         interaction.reply({
             content: `Message streaming is now set to: \`${interaction.options.get('stream')?.value}\``,

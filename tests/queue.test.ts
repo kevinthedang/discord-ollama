@@ -8,7 +8,7 @@ import { Queue } from '../src/queues/queue.js'
  * @param fn function holding tests to run
  */
 describe('Queue Structure', () => {
-    let queue= new Queue<string>()
+    let queue = new Queue<string>()
 
     // test for queue creation
     it('creates a new queue', () => {

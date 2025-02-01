@@ -6,7 +6,7 @@ import { ModelResponse } from 'ollama'
 export const DeleteModel: SlashCommand = {
     name: 'delete-model',
     description: 'deletes a model from the local list of models. Administrator Only.',
-    
+
     // set available user options to pass to the command
     options: [
         {

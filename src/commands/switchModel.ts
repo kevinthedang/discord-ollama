@@ -31,20 +31,20 @@ export const SwitchModel: SlashCommand = {
             // Phase 1: Switch to the model
             let switchSuccess = false
             await ollama.list()
-            .then(response => {
-                for (const model in response.models) {
-                    const currentModel: ModelResponse = response.models[model]
-                    if (currentModel.name.startsWith(modelInput)) {
-                        openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+                .then(response => {
+                    for (const model in response.models) {
+                        const currentModel: ModelResponse = response.models[model]
+                        if (currentModel.name.startsWith(modelInput)) {
+                            openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
 
-                        // successful switch
-                        interaction.editReply({
-                            content: `Successfully switched to **${modelInput}** as the preferred model for ${interaction.user.username}.`
-                        })
-                        switchSuccess = true
+                            // successful switch
+                            interaction.editReply({
+                                content: `Successfully switched to **${modelInput}** as the preferred model for ${interaction.user.username}.`
+                            })
+                            switchSuccess = true
+                        }
                     }
-                }
-            })
+                })
             // todo: problem can be here if async messes up
             if (switchSuccess) {
                 // set model now that it exists
@@ -55,7 +55,7 @@ export const SwitchModel: SlashCommand = {
             // Phase 2: Notify user of failure to find model.
             interaction.editReply({
                 content: `Could not find **${modelInput}** in local model library.\n\nPlease contact an server admin for access to this model.`
-            })  
+            })
         } catch (error) {
             // could not resolve user model switch
             interaction.editReply({

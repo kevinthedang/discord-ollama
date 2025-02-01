@@ -80,7 +80,14 @@ export async function openChannelInfo(filename: string, channel: TextChannel | T
             }
         })
     } else { // file doesn't exist, create it
-        const object: Configuration = JSON.parse(`{ \"id\": \"${channel?.id}\", \"name\": \"${channel?.name}\", \"user\": \"${user}\", \"messages\": []}`)
+        const object: Configuration = JSON.parse(
+            `{ 
+                \"id\": \"${channel?.id}\", 
+                \"name\": \"${channel?.name}\", 
+                \"user\": \"${user}\", 
+                \"messages\": []
+            }`
+        )
 
         const directory = path.dirname(fullFileName)
         if (!fs.existsSync(directory))
@@ -103,7 +110,7 @@ export async function getChannelInfo(filename: string, callback: (config: Channe
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error) {
-                callback(undefined) 
+                callback(undefined)
                 return // something went wrong... stop
             }
             callback(JSON.parse(data))
