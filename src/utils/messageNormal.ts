@@ -11,6 +11,7 @@ import { AbortableAsyncIterator } from 'ollama/src/utils.js'
  * @param msgHist message history between user and model
  */
 export async function normalMessage(
+    this: any,
     message: Message,
     ollama: Ollama,
     model: string,
@@ -73,12 +74,11 @@ export async function normalMessage(
                     sentMessage.edit(result)
             }
         } catch (error: any) {
-            console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
-            if (error.message.includes('fetch failed'))
-                error.message = 'Missing ollama service on machine'
-            else if (error.message.includes('try pulling it first'))
-                error.message = `You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`
-            sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
+            console.log(`[Util: ${this.name}] Error creating message: ${error.message}`)
+            if (error.message.includes('try pulling it first'))
+                sentMessage.edit(`**Response generation failed.**\n\nReason: You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`)
+            else
+                sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
         }
     })
 
