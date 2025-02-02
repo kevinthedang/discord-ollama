@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js"
+import { ApplicationCommandOptionType, Client, CommandInteraction, Message } from "discord.js"
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { openConfig, UserCommand, SlashCommand } from "../utils/index.js"

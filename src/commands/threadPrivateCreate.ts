@@ -1,4 +1,4 @@
-import { ChannelType, Client, CommandInteraction, TextChannel, ThreadChannel } from 'discord.js'
+import { ChannelType, Client, CommandInteraction, MessageFlags, TextChannel, ThreadChannel } from 'discord.js'
 import { AdminCommand, openChannelInfo, SlashCommand } from '../utils/index.js'
 
 export const PrivateThreadCreate: SlashCommand = {
@@ -27,7 +27,7 @@ export const PrivateThreadCreate: SlashCommand = {
         // user only reply
         return interaction.reply({
             content: `I can help you in <#${thread.id}>.`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 }

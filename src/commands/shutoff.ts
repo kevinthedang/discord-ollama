@@ -1,4 +1,4 @@
-import { Client, CommandInteraction } from 'discord.js'
+import { Client, CommandInteraction, MessageFlags } from 'discord.js'
 import { AdminCommand, SlashCommand } from '../utils/index.js'
 
 export const Shutoff: SlashCommand = {
@@ -18,7 +18,7 @@ export const Shutoff: SlashCommand = {
         if (!interaction.memberPermissions?.has('Administrator')) {
             interaction.reply({
                 content: `**Shutdown Aborted:**\n\n${interaction.user.tag}, You do not have permission to shutoff **${client.user?.tag}**.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
             return // stop from shutting down
         }
@@ -26,7 +26,7 @@ export const Shutoff: SlashCommand = {
         // Shutoff cleared, do it
         interaction.reply({
             content: `${client.user?.tag} is shutting down.`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
 
         console.log(`[Command: shutoff] ${client.user?.tag} is shutting down.`)

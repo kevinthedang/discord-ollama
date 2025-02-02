@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from 'discord.js'
+import { ApplicationCommandOptionType, Client, CommandInteraction, MessageFlags } from 'discord.js'
 import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const MessageStream: SlashCommand = {
@@ -28,7 +28,7 @@ export const MessageStream: SlashCommand = {
 
         interaction.reply({
             content: `Message streaming is now set to: \`${interaction.options.get('stream')?.value}\``,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 }
