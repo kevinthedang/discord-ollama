@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
+import { Client, CommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 import { AdminCommand, openConfig, SlashCommand } from '../utils/index.js'
 
 export const Disable: SlashCommand = {
@@ -25,7 +25,7 @@ export const Disable: SlashCommand = {
         if (!interaction.memberPermissions?.has('Administrator')) {
             interaction.reply({
                 content: `${interaction.commandName} is an admin command.\n\nPlease contact an admin to use this command for you.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
             return
         }
@@ -37,7 +37,7 @@ export const Disable: SlashCommand = {
 
         interaction.reply({
             content: `${client.user?.username} is now **${interaction.options.get('enabled')?.value ? "enabled" : "disabled"}**.`,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 }

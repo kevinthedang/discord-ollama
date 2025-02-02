@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js"
+import { ApplicationCommandOptionType, Client, CommandInteraction, MessageFlags } from "discord.js"
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { UserCommand, SlashCommand } from "../utils/index.js"
@@ -31,7 +31,7 @@ export const PullModel: SlashCommand = {
         if (!interaction.memberPermissions?.has('Administrator')) {
             interaction.reply({
                 content: `${interaction.commandName} is an admin command.\n\nPlease contact a server admin to pull the model you want.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
             return
         }

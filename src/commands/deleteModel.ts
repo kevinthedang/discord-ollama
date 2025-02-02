@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from 'discord.js'
+import { ApplicationCommandOptionType, Client, CommandInteraction, MessageFlags } from 'discord.js'
 import { UserCommand, SlashCommand } from '../utils/index.js'
 import { ollama } from '../client.js'
 import { ModelResponse } from 'ollama'
@@ -31,7 +31,7 @@ export const DeleteModel: SlashCommand = {
         if (!interaction.memberPermissions?.has('Administrator')) {
             interaction.reply({
                 content: `${interaction.commandName} is an admin command.\n\nPlease contact a server admin to pull the model you want.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
             return
         }
@@ -53,7 +53,7 @@ export const DeleteModel: SlashCommand = {
             // could not delete the model
             interaction.reply({
                 content: `Could not delete the **${modelInput}** model. It probably doesn't exist or you spelled it incorrectly.\n\nPlease try again if this is a mistake.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         }
     }

@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, ApplicationCommandOptionType } from 'discord.js'
+import { Client, CommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const Capacity: SlashCommand = {
@@ -28,7 +28,7 @@ export const Capacity: SlashCommand = {
 
         interaction.reply({
             content: `Max message history is now set to \`${interaction.options.get('context-capacity')?.value}\``,
-            ephemeral: true
+            flags: MessageFlags.Ephemeral
         })
     }
 }

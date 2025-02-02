@@ -1,4 +1,4 @@
-import { Channel, Client, CommandInteraction, TextChannel } from 'discord.js'
+import { Channel, Client, CommandInteraction, MessageFlags, TextChannel } from 'discord.js'
 import { clearChannelInfo, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const ClearUserChannelHistory: SlashCommand = {
@@ -24,12 +24,12 @@ export const ClearUserChannelHistory: SlashCommand = {
         if (successfulWipe)
             interaction.reply({
                 content: `History cleared in **this channel** cleared for **${interaction.user.username}**.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
         else
             interaction.reply({
                 content: `History was not be found for **${interaction.user.username}** in **this channel**.\n\nPlease chat with **${client.user?.username}** to start a chat history.`,
-                ephemeral: true
+                flags: MessageFlags.Ephemeral
             })
     }
 }
