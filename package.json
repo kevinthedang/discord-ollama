@@ -29,16 +29,16 @@
   "dependencies": {
     "discord.js": "^14.17.3",
     "dotenv": "^16.4.7",
-    "ollama": "^0.5.11",
+    "ollama": "^0.5.12",
     "redis": "^4.7.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.2",
-    "@vitest/coverage-v8": "^2.1.8",
+    "@types/node": "^22.13.0",
+    "@vitest/coverage-v8": "^3.0.4",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.4"
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.4"
   },
   "type": "module",
   "engines": {
