@@ -10,7 +10,7 @@ import path from 'path'
  * @param value new value to assign
  */
 // add type of change (server, user)
-export function openConfig(filename: string, key: string, value: any) {
+export function openConfig(this: any, filename: string, key: string, value: any) {
     const fullFileName = `data/${filename}`
 
     // check if the file exists, if not then make the config file
@@ -41,7 +41,7 @@ export function openConfig(filename: string, key: string, value: any) {
             fs.mkdirSync(directory, { recursive: true })
 
         fs.writeFileSync(`data/${filename}`, JSON.stringify(object, null, 2))
-        console.log(`[Util: openConfig] Created '${filename}' in working directory`)
+        console.log(`[Util: ${this.name}] Created '${filename}' in working directory`)
     }
 }
 
