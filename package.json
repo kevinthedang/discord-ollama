@@ -27,7 +27,7 @@
   "author": "Kevin Dang",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.17.3",
+    "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
     "ollama": "^0.5.11",
     "redis": "^4.7.0"
