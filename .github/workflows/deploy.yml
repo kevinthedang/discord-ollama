@@ -16,12 +16,6 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment lts/jod
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/jod
-          cache: "npm"
-
       # Generate Secret File
       - name: Create Environment Variables
         run: |
@@ -45,6 +39,12 @@ jobs:
         run: |
           git clone https://github.com/kevinthedang/discord-ollama.git ${{ secrets.PATH }}
           cd ${{ secrets.PATH }}
+      
+      - name: Set up Node Environment lts/jod
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/jod
+          cache: "npm"
 
       # Move Files to Server
       - name: Build Application
