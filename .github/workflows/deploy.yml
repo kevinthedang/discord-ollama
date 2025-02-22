@@ -40,20 +40,14 @@ jobs:
           git clone https://github.com/kevinthedang/discord-ollama.git ${{ secrets.PATH }}
           cd ${{ secrets.PATH }}
       
-      - name: Install NVM and Node.js LTS/Jod
+      - name: Install nvm and Node.js lts/jod
         run: |
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
           source ~/.bashrc
           echo "NVM installed successfully."
-
-      - name: Install Node lts/jod
-        run: |
           source ~/.bashrc
           nvm install lts/jod
           nvm alias default lts/jod
-
-      - name: Check nvm and Node Versions
-        run: |
           node -v
           npm -v
 
