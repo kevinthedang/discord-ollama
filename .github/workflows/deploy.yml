@@ -68,7 +68,6 @@ jobs:
             if [ ! -z "$CONTAINER_IDS" ]; then
               # Stop and remove the running containers
               docker stop $CONTAINER_IDS
-              docker rm $CONTAINER_IDS
               echo "Stopped and removed the containers using the image $IMAGE"
             fi
             docker rmi $IMAGE_ID
@@ -76,7 +75,6 @@ jobs:
           fi
 
           docker network prune -f
-          docker image prune -af
           docker system prune -a
 
           npm run docker:build-latest
