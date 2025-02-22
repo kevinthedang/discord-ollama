@@ -16,28 +16,29 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # Build Anything Prior or After?
+      - name: Set up Node Environment lts/jod
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/jod
+          cache: "npm"
+
+      # Generate Secret File
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = NOT_REAL_TOKEN >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+          echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
+          echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
+
       - name: Clone Repo onto Server
         run: |
           git clone https://github.com/kevinthedang/discord-ollama.git /tmp/deployment
           cd /tmp/deployment
-          ls -alrt
 
       # Move Files to Server
-      # - name: Move Application to Server via scp
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USERNAME }}
-      #     key: ${{ secrets.KEY }}
-      #     source: "README.md"
-      #     target: /tmp/
-
-      # Run Commands on Server to Run Application, run multiple
-      # - name: executing remote ssh commands
-      #   uses: appleboy/ssh-action@v1.2.1
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USERNAME }}
-      #     key: ${{ secrets.KEY }}
-      #     script: sudo dpkg -i /tmp/counter-v2.0.0.deb
+      - name: Build Application
+        run: |
+          npm install
+          npm run docker:build-latest
