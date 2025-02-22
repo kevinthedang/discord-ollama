@@ -43,6 +43,7 @@ jobs:
       - name: Check if nvm is Installed
         id: check-nvm
         run: |
+          source ~/.bashrc
           if command -v nvm >/dev/null 2>&1; then
             echo "NVM is already installed."
             echo "NVM=true" >> $GITHUB_ENV
@@ -61,6 +62,7 @@ jobs:
       - name: Check Node lts/jod is Installed
         id: check-node
         run: |
+          source ~/.bashrc
           if nvm ls lts/jod >/dev/null 2>&1; then
             echo "LTS/jod version of Node.js is already installed."
             echo "NODE=true" >> $GITHUB_ENV
@@ -72,6 +74,7 @@ jobs:
       - name: Install Node lts/jod
         if: ${{ env.NODE }} == 'false'
         run: |
+          source ~/.bashrc
           nvm install lts/jod
           nvm alias default lts/jod
 
