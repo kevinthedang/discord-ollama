@@ -111,6 +111,7 @@ jobs:
         run: |
           docker network create --subnet=${{ secrets.SUBNET_ADDRESS }}/16 ollama-net || true
           docker run --rm -d \
+            --gpus=all
             -v ollama:/root/.ollama \
             -p ${{ secrets.OLLAMA_PORT }}:${{ secrets.OLLAMA_PORT }} \
             --name ollama \
