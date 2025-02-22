@@ -82,6 +82,7 @@ jobs:
 
       - name: Start Application
         run: |
+          docker images
           docker network create --subnet=${{ secrets.SUBNET_ADDRESS }}/16 ollama-net || true
           docker run --rm -d \
             -v ollama:/root/.ollama \
