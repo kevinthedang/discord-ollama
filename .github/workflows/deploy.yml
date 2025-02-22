@@ -1,0 +1,38 @@
+name: Deploy
+run-name: Deploy Application Latest
+on:
+  push:
+    branches:
+      - 'feature/*'
+    # tags:
+    #   - 'v*'
+
+jobs:
+  Deploy-Application:
+    runs-on: ubuntu-latest
+    environment: deploy
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@4
+
+      # Build Anything Prior or After?
+
+      # Move Files to Server
+      - name: Move Application to Server via scp
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: "README.md"
+          target: /tmp/
+
+      # Run Commands on Server to Run Application, run multiple
+      # - name: executing remote ssh commands
+      #   uses: appleboy/ssh-action@v1.2.1
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.KEY }}
+      #     script: sudo dpkg -i /tmp/counter-v2.0.0.deb
