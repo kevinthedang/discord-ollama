@@ -16,13 +16,15 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      # Generate Secret File
+      # Generate Secret File for Compose case
       - name: Create Environment Variables
         run: |
           touch .env
-          echo CLIENT_TOKEN = NOT_REAL_TOKEN >> .env
+          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+          echo DISCORD_IP = ${{ secrets.DISCORD_IP }} >> .env
+          echo SUBNET_ADDRESS = ${{ secrets.SUBNET_ADDRESS }} >> .env
           echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
           echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
       
@@ -51,7 +53,6 @@ jobs:
           node -v
           npm -v
 
-      # Move Files to Server
       - name: Build Application
         run: |
           export NVM_DIR="$HOME/.nvm"
@@ -73,5 +74,14 @@ jobs:
             docker rmi $IMAGE_ID
             echo "Old $IMAGE Image Removed"
           fi
+
+          docker network prune -f
           
           npm run docker:build-latest
+
+      - name: Start Application
+        run: |
+          docker network create --subnet=${{ secrets.SUBNET_ADDRESS }}/16 ollama-net
+          docker run -d --gpus=all -v ollama:/root/.ollama -p ${{ secrets.OLLAMA_PORT }}:${{ secrets.OLLAMA_PORT }} --name ollama --network ollama-net --ip ${{ secrets.OLLAMA_IP }} ollama/ollama:latest
+          docker run -d -v redis:/root/.redis -p ${{ secrets.REDIS_PORT }}:${{ secrets.REDIS_PORT }} --name redis --network ollama-net --ip ${{ secrets.REDIS_IP }} redis:latest
+          docker run -d -v discord:/src/app --name discord --network ollama-net --ip ${{ secrets.DISCORD_IP }} kevinthedang/discord-ollama
