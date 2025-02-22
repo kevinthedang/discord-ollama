@@ -57,4 +57,21 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           npm install
+
+          IMAGE="kevinthedang/discord-ollama"
+
+          if docker images | grep -q $IMAGE; then
+            IMAGE_ID=$(docker images -q $IMAGE)
+            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
+
+            if [ ! -z "$CONTAINER_IDS" ]; then
+              # Stop and remove the running containers
+              docker stop $CONTAINER_IDS
+              docker rm $CONTAINER_IDS
+              echo "Stopped and removed the containers using the image $IMAGE"
+            fi
+            docker rmi $IMAGE_ID
+            echo "Old $IMAGE Image Removed"
+          fi
+          
           npm run docker:build-latest
