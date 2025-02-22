@@ -18,7 +18,7 @@ jobs:
       - name: Create Environment Variables
         run: |
           touch .env
-          echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
+          echo CLIENT_TOKEN = ${{ secrets.CLIENT }} >> .env
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
           echo DISCORD_IP = ${{ secrets.DISCORD_IP }} >> .env
