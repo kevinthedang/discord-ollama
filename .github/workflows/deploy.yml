@@ -39,40 +39,14 @@ jobs:
         run: |
           git clone https://github.com/kevinthedang/discord-ollama.git ${{ secrets.PATH }}
           cd ${{ secrets.PATH }}
-
-      - name: Check if nvm is Installed
-        id: check-nvm
-        run: |
-          source ~/.bashrc
-          if command -v nvm >/dev/null 2>&1; then
-            echo "NVM is already installed."
-            echo "NVM=true" >> $GITHUB_ENV
-          else
-            echo "NVM is not installed."
-            echo "NVM=false" >> $GITHUB_ENV
-          fi
       
       - name: Install NVM and Node.js LTS/Jod
-        if: ${{ env.NVM }} == 'false'
         run: |
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
           source ~/.bashrc
           echo "NVM installed successfully."
 
-      - name: Check Node lts/jod is Installed
-        id: check-node
-        run: |
-          source ~/.bashrc
-          if nvm ls lts/jod >/dev/null 2>&1; then
-            echo "LTS/jod version of Node.js is already installed."
-            echo "NODE=true" >> $GITHUB_ENV
-          else
-            echo "LTS/jod version of Node.js is not installed."
-            echo "NODE=false" >> $GITHUB_ENV
-          fi
-
       - name: Install Node lts/jod
-        if: ${{ env.NODE }} == 'false'
         run: |
           source ~/.bashrc
           nvm install lts/jod
