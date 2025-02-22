@@ -1,0 +1,132 @@
+name: Deploy
+run-name: Deploy Application Latest
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  Deploy-Application:
+    runs-on: self-hosted
+    environment: deploy
+    timeout-minutes: 5
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      # Generate Secret File for Compose case
+      - name: Create Environment Variables
+        run: |
+          touch .env
+          echo CLIENT_TOKEN = ${{ secrets.CLIENT }} >> .env
+          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
+          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+          echo DISCORD_IP = ${{ secrets.DISCORD_IP }} >> .env
+          echo SUBNET_ADDRESS = ${{ secrets.SUBNET_ADDRESS }} >> .env
+          echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
+          echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
+      
+      - name: Check if directory exists and delete it
+        run: |
+          if [ -d "${{ secrets.PATH }}" ]; then
+            echo "Directory exists, deleting old version..."
+            rm -rf ${{ secrets.PATH }}
+          else
+            echo "Directory does not exist."
+          fi
+
+      - name: Clone Repo onto Server
+        run: |
+          git clone https://github.com/kevinthedang/discord-ollama.git ${{ secrets.PATH }}
+          cd ${{ secrets.PATH }}
+      
+      - name: Install nvm and Node.js lts/jod
+        run: |
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          echo "NVM installed successfully."
+          nvm install lts/jod
+          nvm alias default lts/jod
+          node -v
+          npm -v
+
+      - name: Build Application
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          npm install
+
+          IMAGE="kevinthedang/discord-ollama"
+          REDIS="redis"
+          OLLAMA="ollama/ollama"
+
+          if docker images | grep -q $IMAGE; then
+            IMAGE_ID=$(docker images -q $IMAGE)
+            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
+
+            if [ ! -z "$CONTAINER_IDS" ]; then
+              # Stop and remove the running containers
+              docker stop $CONTAINER_IDS
+              echo "Stopped and removed the containers using the image $IMAGE"
+            fi
+            docker rmi $IMAGE_ID
+            echo "Old $IMAGE Image Removed"
+          fi
+
+          if docker images | grep -q $REDIS; then
+            IMAGE_ID=$(docker images -q $REDIS)
+            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
+
+            if [ ! -z "$CONTAINER_IDS" ]; then
+              # Stop and remove the running containers
+              docker stop $CONTAINER_IDS
+              echo "Stopped and removed the containers using the image $REDIS"
+            fi
+            docker rmi $IMAGE_ID
+            echo "Old $REDIS Image Removed"
+          fi
+
+          if docker images | grep -q $OLLAMA; then
+            IMAGE_ID=$(docker images -q $OLLAMA)
+            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
+
+            if [ ! -z "$CONTAINER_IDS" ]; then
+              # Stop and remove the running containers
+              docker stop $CONTAINER_IDS
+              echo "Stopped and removed the containers using the image $OLLAMA"
+            fi
+            docker rmi $IMAGE_ID
+            echo "Old $OLLAMA Image Removed"
+          fi
+
+          docker network prune -f
+          docker system prune -a -f
+
+          npm run docker:build-latest
+
+      - name: Start Application
+        run: |
+          docker network create --subnet=${{ secrets.SUBNET_ADDRESS }}/16 ollama-net || true
+          docker run --rm -d \
+            -v ollama:/root/.ollama \
+            -p ${{ secrets.OLLAMA_PORT }}:${{ secrets.OLLAMA_PORT }} \
+            --name ollama \
+            --network ollama-net \
+            --ip ${{ secrets.OLLAMA_IP }} \
+            ollama/ollama:latest
+
+          docker run --rm -d \
+            -v redis:/root/.redis \
+            -p ${{ secrets.REDIS_PORT }}:${{ secrets.REDIS_PORT }} \
+            --name redis \
+            --network ollama-net \
+            --ip ${{ secrets.REDIS_IP }} \
+            redis:latest
+
+          docker run --rm -d \
+            -v discord:/src/app \
+            --name discord \
+            --network ollama-net \
+            --ip ${{ secrets.DISCORD_IP }} \
+            kevinthedang/discord-ollama
