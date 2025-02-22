@@ -76,12 +76,13 @@ jobs:
           fi
 
           docker network prune -f
+          docker image prune -af
 
           npm run docker:build-latest
 
       - name: Start Application
         run: |
           docker network create --subnet=${{ secrets.SUBNET_ADDRESS }}/16 ollama-net
-          docker run -d -v ollama:/root/.ollama -p ${{ secrets.OLLAMA_PORT }}:${{ secrets.OLLAMA_PORT }} --name ollama --network ollama-net --ip ${{ secrets.OLLAMA_IP }} ollama/ollama:latest
-          docker run -d -v redis:/root/.redis -p ${{ secrets.REDIS_PORT }}:${{ secrets.REDIS_PORT }} --name redis --network ollama-net --ip ${{ secrets.REDIS_IP }} redis:latest
-          docker run -d -v discord:/src/app --name discord --network ollama-net --ip ${{ secrets.DISCORD_IP }} kevinthedang/discord-ollama
+          docker run --rm -d -v ollama:/root/.ollama -p ${{ secrets.OLLAMA_PORT }}:${{ secrets.OLLAMA_PORT }} --name ollama --network ollama-net --ip ${{ secrets.OLLAMA_IP }} ollama/ollama:latest
+          docker run --rm -d -v redis:/root/.redis -p ${{ secrets.REDIS_PORT }}:${{ secrets.REDIS_PORT }} --name redis --network ollama-net --ip ${{ secrets.REDIS_IP }} redis:latest
+          docker run --rm -d -v discord:/src/app --name discord --network ollama-net --ip ${{ secrets.DISCORD_IP }} kevinthedang/discord-ollama
