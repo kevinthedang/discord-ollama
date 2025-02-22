@@ -77,12 +77,12 @@ jobs:
 
           docker network prune -f
           docker image prune -af
+          docker system prune -a
 
           npm run docker:build-latest
 
       - name: Start Application
         run: |
-          docker images
           docker network create --subnet=${{ secrets.SUBNET_ADDRESS }}/16 ollama-net || true
           docker run --rm -d \
             -v ollama:/root/.ollama \
