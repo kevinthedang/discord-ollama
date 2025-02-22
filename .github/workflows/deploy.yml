@@ -103,7 +103,7 @@ jobs:
           fi
 
           docker network prune -f
-          docker system prune -a
+          docker system prune -a -f
 
           npm run docker:build-latest
 
