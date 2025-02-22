@@ -31,11 +31,20 @@ jobs:
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
           echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
           echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
+      
+      - name: Check if directory exists and delete it
+        run: |
+          if [ -d "${{ secrets.PATH }}" ]; then
+            echo "Directory exists, deleting old version..."
+            rm -rf ${{ secrets.PATH }}
+          else
+            echo "Directory does not exist."
+          fi
 
       - name: Clone Repo onto Server
         run: |
-          git clone https://github.com/kevinthedang/discord-ollama.git /tmp/deployment
-          cd /tmp/deployment
+          git clone https://github.com/kevinthedang/discord-ollama.git ${{ secrets.PATH }}
+          cd ${{ secrets.PATH }}
 
       # Move Files to Server
       - name: Build Application
