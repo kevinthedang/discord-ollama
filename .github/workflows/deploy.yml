@@ -72,10 +72,13 @@ jobs:
       - name: Install Node lts/jod
         if: ${{ env.NODE }} == 'false'
         run: |
-          nvm install lts/jod  # Install the LTS version jod
-          nvm alias default lts/jod  # Set it as the default version
-          node -v  # Verify the Node.js version
-          npm -v   # Verify the npm version
+          nvm install lts/jod
+          nvm alias default lts/jod
+
+      - name: Check nvm and Node Versions
+        run: |
+          node -v
+          npm -v
 
       # Move Files to Server
       - name: Build Application
