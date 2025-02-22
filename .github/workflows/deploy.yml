@@ -60,6 +60,8 @@ jobs:
           npm install
 
           IMAGE="kevinthedang/discord-ollama"
+          REDIS="redis"
+          OLLAMA="ollama/ollama"
 
           if docker images | grep -q $IMAGE; then
             IMAGE_ID=$(docker images -q $IMAGE)
@@ -72,6 +74,32 @@ jobs:
             fi
             docker rmi $IMAGE_ID
             echo "Old $IMAGE Image Removed"
+          fi
+
+          if docker images | grep -q $REDIS; then
+            IMAGE_ID=$(docker images -q $REDIS)
+            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
+
+            if [ ! -z "$CONTAINER_IDS" ]; then
+              # Stop and remove the running containers
+              docker stop $CONTAINER_IDS
+              echo "Stopped and removed the containers using the image $REDIS"
+            fi
+            docker rmi $IMAGE_ID
+            echo "Old $REDIS Image Removed"
+          fi
+
+          if docker images | grep -q $OLLAMA; then
+            IMAGE_ID=$(docker images -q $OLLAMA)
+            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
+
+            if [ ! -z "$CONTAINER_IDS" ]; then
+              # Stop and remove the running containers
+              docker stop $CONTAINER_IDS
+              echo "Stopped and removed the containers using the image $OLLAMA"
+            fi
+            docker rmi $IMAGE_ID
+            echo "Old $OLLAMA Image Removed"
           fi
 
           docker network prune -f
