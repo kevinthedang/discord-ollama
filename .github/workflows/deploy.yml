@@ -9,24 +9,29 @@ on:
 
 jobs:
   Deploy-Application:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: deploy
-    timeout-minutes: 5
+    timeout-minutes: 3
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
       # Build Anything Prior or After?
+      - name: Clone Repo onto Server
+        run: |
+          git clone https://github.com/kevinthedang/discord-ollama.git /tmp/deployment
+          cd /tmp/deployment
+          ls -alrt
 
       # Move Files to Server
-      - name: Move Application to Server via scp
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          source: "README.md"
-          target: /tmp/
+      # - name: Move Application to Server via scp
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.HOST }}
+      #     username: ${{ secrets.USERNAME }}
+      #     key: ${{ secrets.KEY }}
+      #     source: "README.md"
+      #     target: /tmp/
 
       # Run Commands on Server to Run Application, run multiple
       # - name: executing remote ssh commands
