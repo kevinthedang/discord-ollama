@@ -1,6 +1,5 @@
-import { ChatResponse } from "ollama"
+import { ChatResponse, AbortableAsyncIterator } from "ollama"
 import { ChatParams } from "../index.js"
-import { AbortableAsyncIterator } from "ollama/src/utils.js"
 
 /**
  * Method to query the Ollama client for async generation

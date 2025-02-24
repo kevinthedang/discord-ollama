@@ -1,5 +1,5 @@
-import { Client, CommandInteraction, Message, MessageFlags, SendableChannels } from "discord.js";
-import { accessChannelContext, normalMessage, SlashCommand, summarizeContextHistory, UserCommand, UserMessage } from "../utils/index.js";
+import { Client, CommandInteraction, MessageFlags } from "discord.js";
+import { accessChannelContext, SlashCommand, summarizeContextHistory, UserCommand, UserMessage } from "../utils/index.js";
 import { ollama } from "../client.js"
 
 export const Summary: SlashCommand = {
