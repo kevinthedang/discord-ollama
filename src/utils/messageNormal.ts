@@ -1,8 +1,7 @@
 import { Message, SendableChannels } from 'discord.js'
-import { ChatResponse, Ollama } from 'ollama'
+import { ChatResponse, Ollama, AbortableAsyncIterator } from 'ollama'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
-import { Queue } from '../queues/queue.js'
-import { AbortableAsyncIterator } from 'ollama/src/utils.js'
+import { Queue } from '../components/index.js'
 
 /**
  * Method to send replies as normal text on discord like any other user

@@ -1,6 +1,6 @@
 import type { ClientEvents, Awaitable, Client } from 'discord.js'
 import { Ollama } from 'ollama'
-import { Queue } from '../queues/queue.js'
+import { Queue } from '../components/index.js'
 
 // Export events through here to reduce amount of imports
 export { Events } from 'discord.js'
