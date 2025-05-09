@@ -5,8 +5,8 @@
   "main": "build/index.js",
   "exports": "./build/index.js",
   "scripts": {
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "tests": "vitest run",
+    "coverage": "vitest run --coverage",
     "watch": "tsx watch src",
     "build": "tsc",
     "prod": "node .",

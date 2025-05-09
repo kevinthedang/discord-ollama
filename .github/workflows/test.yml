@@ -47,4 +47,4 @@ jobs:
 
       - name: Test Application
         run: |
-          npm run test:run
+          npm run tests
