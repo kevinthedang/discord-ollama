@@ -33,12 +33,15 @@ const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
 registerEvents(client, Events, messageHistory, ollama, Keys.defaultModel)
 
 // Try to connect to redis
-await redis.connect()
-    .then(() => console.log('[Redis] Connected'))
-    .catch((error) => {
-        console.error('[Redis] Connection Error', error)
-        process.exit(1)
-    })
+try {
+    await redis.connect()
+    console.log('[Redis] Successfully Connected')
+} catch(error) {
+    console.error('[Redis] Connection Error. See error below:\n', error)
+    console.warn('[Redis] Failed to connect to Redis Database, using local system')
+    // TODO: create boolean flag that will probably be used in messageCreate.ts if redis database is down
+    // When implementing this boolean flag, move connection to database BEFORE the registerEvents method
+}
 
 // Try to log in the client
 await client.login(Keys.clientToken)
