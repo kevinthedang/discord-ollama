@@ -30,7 +30,7 @@
     "discord.js": "^14.18.0",
     "dotenv": "^16.5.0",
     "ollama": "^0.5.15",
-    "redis": "^4.7.0"
+    "redis": "^4.7.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",
