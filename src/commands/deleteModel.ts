@@ -22,6 +22,7 @@ export const DeleteModel: SlashCommand = {
         // defer reply to avoid timeout
         await interaction.deferReply()
         const modelInput: string = interaction.options.get('model-name')!!.value as string
+        let modelExists: boolean
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
@@ -37,8 +38,16 @@ export const DeleteModel: SlashCommand = {
         }
 
         // check if model exists
-        const modelExists: boolean = await ollama.list()
-            .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
+        try {
+            modelExists = await ollama.list()
+                .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
+        } catch (error) {
+            interaction.editReply({
+                content: `The Ollama service is not running. Please turn on/download the [service](https://ollama.com/).`
+            })
+            return
+        }
+        
 
         try {
             // call ollama to delete model

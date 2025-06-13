@@ -56,10 +56,13 @@ export const SwitchModel: SlashCommand = {
             interaction.editReply({
                 content: `Could not find **${modelInput}** in local model library.\n\nPlease contact an server admin for access to this model.`
             })
-        } catch (error) {
+        } catch (error: any) {
             // could not resolve user model switch
+            if (error.message.includes("fetch failed") as string)
+                error.message = "The Ollama service is not running. Please turn on/download the [service](https://ollama.com/)."
+
             interaction.editReply({
-                content: `Unable to switch user preferred model to **${modelInput}**.\n\n${error}\n\nPossible solution is to request an server admin run \`/pull-model ${modelInput}\` and try again.`
+                content: `Unable to switch user preferred model to **${modelInput}**.\n\n${error.message}`
             })
             return
         }
