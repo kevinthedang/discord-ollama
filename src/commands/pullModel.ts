@@ -22,7 +22,6 @@ export const PullModel: SlashCommand = {
         // defer reply to avoid timeout
         await interaction.deferReply()
         const modelInput: string = interaction.options.get('model-to-pull')!!.value as string
-        let modelExists: boolean
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
@@ -38,10 +37,14 @@ export const PullModel: SlashCommand = {
         }
 
         // check if model was already pulled, if the ollama service isn't running throw error
-        try {
-            modelExists = await ollama.list()
-                .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
-        } catch (error) {
+        const modelExists = await ollama.list()
+            .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
+            .catch(error => {
+                console.error(`[Command: pull-model] Failed to connect with Ollama service. Error: ${error.message}`)
+            })
+       
+        // Validate for any issue or if service is running
+        if (!modelExists) {
             interaction.editReply({
                 content: `The Ollama service is not running. Please turn on/download the [service](https://ollama.com/).`
             })

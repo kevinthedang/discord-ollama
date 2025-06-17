@@ -45,6 +45,9 @@ export const SwitchModel: SlashCommand = {
                         }
                     }
                 })
+                .catch(error => {
+                    console.error(`[Command: switch-model] Failed to connect with Ollama service. Error: ${error.message}`)
+                })
             // todo: problem can be here if async messes up
             if (switchSuccess) {
                 // set model now that it exists
