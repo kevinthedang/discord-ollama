@@ -37,9 +37,21 @@ export const DeleteModel: SlashCommand = {
         }
 
         // check if model exists
-        const modelExists: boolean = await ollama.list()
+        const modelExists = await ollama.list()
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
+            .catch(error => {
+                console.error(`[Command: delete-model] Failed to connect with Ollama service. Error: ${error.message}`)
+            })
 
+        // Validate for any issue or if service is running
+        if (!modelExists) {
+            interaction.editReply({
+                content: `The Ollama service is not running. Please turn on/download the [service](https://ollama.com/).`
+            })
+            return
+        }
+
+            
         try {
             // call ollama to delete model
             if (modelExists) {

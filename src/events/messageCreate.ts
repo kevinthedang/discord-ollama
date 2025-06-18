@@ -71,9 +71,8 @@ export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client
                 userConfig = await new Promise((resolve, reject) => {
                     getUserConfig(`${message.author.username}-config.json`, (config) => {
                         if (config === undefined) {
-                            openConfig(`${message.author.username}-config.json`, 'message-style', false)
                             openConfig(`${message.author.username}-config.json`, 'switch-model', defaultModel)
-                            reject(new Error('No User Preferences is set up.\n\nCreating preferences file with \`message-style\` set as \`false\` for regular message style.\nPlease try chatting again.'))
+                            reject(new Error(`No User Preferences is set up.\n\nCreating new preferences file for ${message.author.username}\nPlease try chatting again.`))
                             return
                         }
 

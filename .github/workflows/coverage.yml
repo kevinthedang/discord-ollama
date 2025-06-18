@@ -36,7 +36,7 @@ jobs:
 
       - name: Collect Code Coverage
         run: |
-          LINE_PCT=$(npm run test:coverage | tail -2 | head -1 | awk '{print $3}')
+          LINE_PCT=$(npm run coverage | tail -2 | head -1 | awk '{print $3}')
           echo "COVERAGE=$LINE_PCT" >> $GITHUB_ENV
       
       - name: Upload Code Coverage

@@ -36,9 +36,21 @@ export const PullModel: SlashCommand = {
             return
         }
 
-        // check if model was already pulled
-        const modelExists: boolean = await ollama.list()
+        // check if model was already pulled, if the ollama service isn't running throw error
+        const modelExists = await ollama.list()
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
+            .catch(error => {
+                console.error(`[Command: pull-model] Failed to connect with Ollama service. Error: ${error.message}`)
+            })
+       
+        // Validate for any issue or if service is running
+        if (!modelExists) {
+            interaction.editReply({
+                content: `The Ollama service is not running. Please turn on/download the [service](https://ollama.com/).`
+            })
+            return
+        }
+
 
         try {
             // call ollama to pull desired model

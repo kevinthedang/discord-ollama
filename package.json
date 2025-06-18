@@ -1,12 +1,12 @@
 {
   "name": "discord-ollama",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "description": "Ollama Integration into discord",
   "main": "build/index.js",
   "exports": "./build/index.js",
   "scripts": {
-    "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage",
+    "tests": "vitest run",
+    "coverage": "vitest run --coverage",
     "watch": "tsx watch src",
     "build": "tsc",
     "prod": "node .",
