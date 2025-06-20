@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction, MessageFlags } from 'discord.js'
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, Client, CommandInteraction, MessageFlags } from 'discord.js'
 import { UserCommand, SlashCommand } from '../utils/index.js'
 import { ollama } from '../client.js'
 import { ModelResponse } from 'ollama'
@@ -18,11 +18,10 @@ export const DeleteModel: SlashCommand = {
     ],
 
     // Delete Model locally stored
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
-        const modelInput: string = interaction.options.get('model-name')!!.value as string
-
+        const modelInput: string = interaction.options.getString('model-name') as string
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return

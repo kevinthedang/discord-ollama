@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction } from "discord.js"
+import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction } from "discord.js"
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { openConfig, UserCommand, SlashCommand } from "../utils/index.js"
@@ -18,10 +18,10 @@ export const SwitchModel: SlashCommand = {
     ],
 
     // Switch user preferred model if available in local library
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
         await interaction.deferReply()
 
-        const modelInput: string = interaction.options.get('model-to-use')!!.value as string
+        const modelInput: string = interaction.options.getString('model-to-use') as string
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
