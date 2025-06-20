@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
+import { Client, ChatInputCommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 import { AdminCommand, openConfig, SlashCommand } from '../utils/index.js'
 
 export const Disable: SlashCommand = {
@@ -16,7 +16,7 @@ export const Disable: SlashCommand = {
     ],
 
     // Query for message information and set the style
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !AdminCommand.includes(channel.type)) return
@@ -32,11 +32,11 @@ export const Disable: SlashCommand = {
 
         // set state of bot chat features
         openConfig(`${interaction.guildId}-config.json`, interaction.commandName,
-            interaction.options.get('enabled')?.value
+            interaction.options.getBoolean('enabled')
         )
 
         interaction.reply({
-            content: `${client.user?.username} is now **${interaction.options.get('enabled')?.value ? "enabled" : "disabled"}**.`,
+            content: `${client.user?.username} is now **${interaction.options.getBoolean('enabled') ? "enabled" : "disabled"}**.`,
             flags: MessageFlags.Ephemeral
         })
     }

@@ -1,4 +1,4 @@
-import { Client, CommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
+import { Client, ChatInputCommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
 
 export const Capacity: SlashCommand = {
@@ -16,14 +16,14 @@ export const Capacity: SlashCommand = {
     ],
 
     // Query for message information and set the style
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return
 
         // set state of bot chat features
         openConfig(`${interaction.user.username}-config.json`, interaction.commandName,
-            interaction.options.get('context-capacity')?.value
+            interaction.options.getNumber('context-capacity')
         )
 
         interaction.reply({

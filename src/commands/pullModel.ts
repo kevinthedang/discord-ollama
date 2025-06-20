@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType, Client, CommandInteraction, MessageFlags } from "discord.js"
+import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction, MessageFlags } from "discord.js"
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { UserCommand, SlashCommand } from "../utils/index.js"
@@ -18,10 +18,11 @@ export const PullModel: SlashCommand = {
     ],
 
     // Pull for model from Ollama library
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
-        const modelInput: string = interaction.options.get('model-to-pull')!!.value as string
+        const modelInput: string = interaction.options.getString('model-to-pull') as string
+        let ollamaOffline: boolean = false
 
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
@@ -40,11 +41,12 @@ export const PullModel: SlashCommand = {
         const modelExists = await ollama.list()
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
             .catch(error => {
+                ollamaOffline = true
                 console.error(`[Command: pull-model] Failed to connect with Ollama service. Error: ${error.message}`)
             })
        
         // Validate for any issue or if service is running
-        if (!modelExists) {
+        if (ollamaOffline) {
             interaction.editReply({
                 content: `The Ollama service is not running. Please turn on/download the [service](https://ollama.com/).`
             })

@@ -1,4 +1,4 @@
-import { CommandInteraction, ChatInputApplicationCommandData, Client, ApplicationCommandOption } from 'discord.js'
+import { ChatInputCommandInteraction, ChatInputApplicationCommandData, Client, ApplicationCommandOption } from 'discord.js'
 
 /**
  * interface for how slash commands should be run
@@ -6,7 +6,7 @@ import { CommandInteraction, ChatInputApplicationCommandData, Client, Applicatio
 export interface SlashCommand extends ChatInputApplicationCommandData {
     run: (
         client: Client,
-        interaction: CommandInteraction,
+        interaction: ChatInputCommandInteraction,
         options?: ApplicationCommandOption[]
     ) => void
 }
