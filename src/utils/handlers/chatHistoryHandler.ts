@@ -64,7 +64,7 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
  * @param user the user's name
  * @param messages their messages
  */
-export async function openChannelInfo(filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
+export async function openChannelInfo(this: any, filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
@@ -95,7 +95,7 @@ export async function openChannelInfo(filename: string, channel: TextChannel | T
 
         // only creating it, no need to add anything
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: openChannelInfo] Created '${fullFileName}' in working directory`)
+        console.log(`[Util: ${this.name}] Created '${fullFileName}' in working directory`)
     }
 }
 

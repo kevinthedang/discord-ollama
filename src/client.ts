@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 import { Ollama } from 'ollama'
 import { createClient } from 'redis'
-import { Queue } from './queues/queue.js'
+import { Queue } from './components/index.js'
 import { UserMessage, registerEvents } from './utils/index.js'
 import Events from './events/index.js'
 import Keys from './keys.js'

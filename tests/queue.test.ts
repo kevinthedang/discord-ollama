@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Queue } from '../src/queues/queue.js'
+import { Queue } from '../src/components/index.js'
 
 /**
  * Queue test suite, tests the Queue class

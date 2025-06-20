@@ -1,6 +1,6 @@
 import { TextChannel } from 'discord.js'
-import { event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
 import {
+    event, Events, normalMessage, UserMessage, clean,
     getChannelInfo, getServerConfig, getUserConfig, openChannelInfo,
     openConfig, UserConfig, getAttachmentData, getTextFileAttachmentData
 } from '../utils/index.js'
