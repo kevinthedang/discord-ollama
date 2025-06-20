@@ -1,6 +1,6 @@
 {
   "name": "discord-ollama",
-  "version": "0.8.5",
+  "version": "0.8.6",
   "description": "Ollama Integration into discord",
   "main": "build/index.js",
   "exports": "./build/index.js",
@@ -13,24 +13,22 @@
     "client": "npm run build && npm run prod",
     "clean": "docker compose down && docker rmi $(docker images | grep kevinthedang | tr -s ' ' | cut -d ' ' -f 3) && docker rmi $(docker images --filter \"dangling=true\" -q --no-trunc)",
     "start": "docker compose build --no-cache && docker compose up -d",
-    "docker:clean": "docker rm -f discord && docker rm -f ollama && docker rm -f redis && docker network prune -f && docker rmi $(docker images | grep kevinthedang | tr -s ' ' | cut -d ' ' -f 3) && docker rmi $(docker images --filter \"dangling=true\" -q --no-trunc)",
+    "docker:clean": "docker rm -f discord && docker rm -f ollama && docker network prune -f && docker rmi $(docker images | grep kevinthedang | tr -s ' ' | cut -d ' ' -f 3) && docker rmi $(docker images --filter \"dangling=true\" -q --no-trunc)",
     "docker:network": "docker network create --subnet=172.18.0.0/16 ollama-net",
     "docker:build": "docker build --no-cache -t kevinthedang/discord-ollama:$(node -p \"require('./package.json').version\") .",
     "docker:build-latest": "docker build --no-cache -t kevinthedang/discord-ollama:latest .",
     "docker:client": "docker run -d -v discord:/src/app --name discord --network ollama-net --ip 172.18.0.3 kevinthedang/discord-ollama:$(node -p \"require('./package.json').version\")",
-    "docker:redis": "docker run -d -v redis:/root/.redis -p 6379:6379 --name redis --network ollama-net --ip 172.18.0.4 redis:latest",
     "docker:ollama": "docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama --network ollama-net --ip 172.18.0.2 ollama/ollama:latest",
     "docker:ollama-cpu": "docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama --network ollama-net --ip 172.18.0.2 ollama/ollama:latest",
-    "docker:start": "docker network prune -f && npm run docker:network && npm run docker:build && npm run docker:redis && npm run docker:client && npm run docker:ollama",
-    "docker:start-cpu": "docker network prune -f && npm run docker:network && npm run docker:build && npm run docker:redis && npm run docker:client && npm run docker:ollama-cpu"
+    "docker:start": "docker network prune -f && npm run docker:network && npm run docker:build && npm run docker:client && npm run docker:ollama",
+    "docker:start-cpu": "docker network prune -f && npm run docker:network && npm run docker:build && npm run docker:client && npm run docker:ollama-cpu"
   },
   "author": "Kevin Dang",
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.20.0",
     "dotenv": "^16.5.0",
-    "ollama": "^0.5.15",
-    "redis": "^4.7.0"
+    "ollama": "^0.5.15"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",

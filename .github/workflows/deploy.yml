@@ -24,8 +24,6 @@ jobs:
           echo MODEL = ${{ secrets.MODEL }} >> .env
           echo DISCORD_IP = ${{ secrets.DISCORD_IP }} >> .env
           echo SUBNET_ADDRESS = ${{ secrets.SUBNET_ADDRESS }} >> .env
-          echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
-          echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
       
       - name: Check if directory exists and delete it
         run: |
@@ -59,7 +57,6 @@ jobs:
           npm install
 
           IMAGE="kevinthedang/discord-ollama"
-          REDIS="redis"
           OLLAMA="ollama/ollama"
 
           if docker images | grep -q $IMAGE; then
@@ -73,19 +70,6 @@ jobs:
             fi
             docker rmi $IMAGE_ID
             echo "Old $IMAGE Image Removed"
-          fi
-
-          if docker images | grep -q $REDIS; then
-            IMAGE_ID=$(docker images -q $REDIS)
-            CONTAINER_IDS=$(docker ps -q --filter "ancestor=$IMAGE_ID")
-
-            if [ ! -z "$CONTAINER_IDS" ]; then
-              # Stop and remove the running containers
-              docker stop $CONTAINER_IDS
-              echo "Stopped and removed the containers using the image $REDIS"
-            fi
-            docker rmi $IMAGE_ID
-            echo "Old $REDIS Image Removed"
           fi
 
           if docker images | grep -q $OLLAMA; then
@@ -116,14 +100,6 @@ jobs:
             --network ollama-net \
             --ip ${{ secrets.OLLAMA_IP }} \
             ollama/ollama:latest
-
-          docker run --rm -d \
-            -v redis:/root/.redis \
-            -p ${{ secrets.REDIS_PORT }}:${{ secrets.REDIS_PORT }} \
-            --name redis \
-            --network ollama-net \
-            --ip ${{ secrets.REDIS_IP }} \
-            redis:latest
 
           docker run --rm -d \
             -v discord:/src/app \

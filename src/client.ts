@@ -1,6 +1,5 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 import { Ollama } from 'ollama'
-import { createClient } from 'redis'
 import { Queue } from './queues/queue.js'
 import { UserMessage, registerEvents } from './utils/index.js'
 import Events from './events/index.js'
@@ -16,11 +15,6 @@ const client = new Client({
     ]
 })
 
-// initialize connection to redis
-const redis = createClient({
-    url: `redis://${Keys.redisHost}:${Keys.redisPort}`,
-})
-
 // initialize connection to ollama container
 export const ollama = new Ollama({
     host: `http://${Keys.ipAddress}:${Keys.portAddress}`,
@@ -31,18 +25,6 @@ const messageHistory: Queue<UserMessage> = new Queue<UserMessage>
 
 // register all events
 registerEvents(client, Events, messageHistory, ollama, Keys.defaultModel)
-
-// Try to connect to redis
-await redis.connect()
-    .then(response => {
-        console.log('[Redis] Successfully Connected')
-    })
-    .catch(error => {
-        console.error('[Redis] Connection Error. See error below:\n', error)
-        console.warn('[Redis] Failed to connect to Redis Database, using local system')
-        // TODO: create boolean flag that will probably be used in messageCreate.ts if redis database is down
-        // When implementing this boolean flag, move connection to database BEFORE the registerEvents method
-    })
 
 // Try to log in the client
 await client.login(Keys.clientToken)
