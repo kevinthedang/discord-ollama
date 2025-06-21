@@ -5,16 +5,9 @@ import { describe, expect, it, vi } from 'vitest'
 import commands from '../src/commands/index.js'
 
 /**
- * Mocking redis found in client.ts because of the commands
+ * Mocking client.ts because of the commands
  */
-vi.mock('../src/client.js', () => ({
-    redis: {
-        createClient: vi.fn(),
-        connect: vi.fn(),
-        get: vi.fn(),
-        set: vi.fn()
-    }
-}))
+vi.mock('../src/client.js', () => ({}))
 
 /**
  * Commands test suite, tests the commands object

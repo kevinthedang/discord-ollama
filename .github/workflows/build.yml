@@ -34,8 +34,6 @@ jobs:
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
           echo MODEL = ${{ secrets.MODEL }} >> .env
-          echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
-          echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
 
         # set -e ensures if nohup fails, this section fails
       - name: Startup Discord Bot Client
@@ -63,8 +61,6 @@ jobs:
           echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
           echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
           echo MODEL = ${{ secrets.MODEL }} >> .env
-          echo REDIS_IP = ${{ secrets.REDIS_IP }} >> .env
-          echo REDIS_PORT = ${{ secrets.REDIS_PORT }} >> .env
 
       - name: Setup Docker Network and Images
         run: |
@@ -72,8 +68,8 @@ jobs:
 
       - name: Check Images Exist
         run: |
-          (docker images | grep -q 'kevinthedang/discord-ollama' && docker images | grep -qE 'ollama/ollama' | docker images | grep -qE 'redis') || exit 1
+          (docker images | grep -q 'kevinthedang/discord-ollama' && docker images | grep -qE 'ollama/ollama') || exit 1
 
       - name: Check Containers Exist
         run: |
-          (docker ps | grep -q 'ollama' && docker ps | grep -q 'discord' && docker ps | grep -q 'redis') || exit 1
+          (docker ps | grep -q 'ollama' && docker ps | grep -q 'discord') || exit 1
