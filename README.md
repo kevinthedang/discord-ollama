@@ -14,18 +14,28 @@
 Ollama is an AI model management tool that allows users to install and use custom large language models locally.  
 The project aims to:
 * [x] Create a Discord bot that will utilize Ollama and chat to chat with users! 
-  * [x] User Preferences on Chat
-  * [x] Message Persistance on Channels and Threads
-    * [x] Threads
-    * [x] Channels
+  * [x] User and Server Preferences
+  * [x] Message Persistance
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
+    * [ ] Summary Command
+    * [ ] Model Info Command
+    * [ ] List Models Command
+    * [x] Pull Model Command
+    * [x] Switch Model Command
+    * [x] Delete Model Command
+    * [x] Create Thread Command
+    * [x] Create Private Thread Command
+    * [x] Message Stream Command
+    * [x] Change Message History Size Command
+    * [x] Clear Channel History Command (User Only)
+    * [x] Administrator Role Compatible
   * [x] Generated Token Length Handling for >2000
     * [x] Token Length Handling of any message size
-  * [x] User vs. Server Preferences
-  * [x] Administrator Role Compatible
-  * [x] Multi-User Chat Generation (Multiple users chatting at the same time) - This was built in from Ollama `v0.2.1+`
-  * [x] Automatic and Manual model pulling through the Discord client
+  * [x] Multi-User Chat Generation - This was built in from Ollama `v0.2.1+`
+  * [ ] Ollama Tool Support Implementation
+  * [ ] Enhanced Channel Context Awareness
+  * [ ] Improved User Replied Triggers
 
 Further, Ollama provides the functionality to utilize custom models or provide context for the top-layer of any model available through the Ollama model library.
 * [Customize a model](https://github.com/ollama/ollama#customize-a-model)
