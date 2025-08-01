@@ -37,6 +37,7 @@ export interface EventProps {
     client: Client,
     log: LogMethod,
     msgHist: Queue<UserMessage>,
+    channelHistory: Queue<UserMessage>,
     ollama: Ollama,
     defaultModel: String
 }
@@ -78,6 +79,7 @@ export function registerEvents(
     client: Client,
     events: Event[],
     msgHist: Queue<UserMessage>,
+    channelHistory: Queue<UserMessage>,
     ollama: Ollama,
     defaultModel: String
 ): void {
@@ -88,7 +90,7 @@ export function registerEvents(
 
             // Handle Errors, call callback, log errors as needed
             try {
-                callback({ client, log, msgHist, ollama, defaultModel }, ...args)
+                callback({ client, log, msgHist, channelHistory, ollama, defaultModel }, ...args)
             } catch (error) {
                 log('[Uncaught Error]', error)
             }
