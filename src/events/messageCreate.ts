@@ -1,5 +1,5 @@
 import { TextChannel } from 'discord.js'
-import { event, Events, normalMessage, UserMessage, clean } from '../utils/index.js'
+import { event, Events, normalMessage, UserMessage, clean, addToChannelContext } from '../utils/index.js'
 import {
     getChannelInfo, getServerConfig, getUserConfig, openChannelInfo,
     openConfig, UserConfig, getAttachmentData, getTextFileAttachmentData
@@ -11,13 +11,68 @@ import {
  * 
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client, defaultModel }, message) => {
+export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory, ollama, client, defaultModel }, message) => {
     const clientId = client.user!!.id
     let cleanedMessage = clean(message.content, clientId)
     log(`Message \"${cleanedMessage}\" from ${message.author.tag} in channel/thread ${message.channelId}.`)
 
     // Do not respond if bot talks in the chat
     if (message.author.username === message.client.user.username) return
+
+    // Save User Chat even if not for the bot
+    let channelContextHistory: UserMessage[] = await new Promise((resolve) => {
+        getChannelInfo(`${message.channelId}-context.json`, (channelInfo) => {
+            if (channelInfo?.messages)
+                resolve(channelInfo.messages)
+            else {
+                log(`Channel/Thread ${message.channel}-context does not exist. File will be created shortly...`)
+                resolve([])
+            }
+        })
+    })
+
+    if (channelContextHistory.length === 0) {
+        channelContextHistory = await new Promise((resolve) => {
+            addToChannelContext(message.channelId,
+                message.channel as TextChannel
+            )
+            getChannelInfo(`${message.channelId}-context.json`, (channelInfo) => {
+                if (channelInfo?.messages)
+                    resolve(channelInfo.messages)
+                else {
+                    log(`Channel/Thread ${message.channel}-context does not exist. File will be created shortly...`)
+                }
+            })
+        })
+    }
+
+    // Set Channel History Queue
+    channelHistory.setQueue(channelContextHistory)
+
+    // get message attachment if exists
+    const attachment = message.attachments.first()
+    let messageAttachment: string[] = []
+
+    if (attachment && attachment.name?.endsWith(".txt"))
+        cleanedMessage += ' ' + await getTextFileAttachmentData(attachment)
+    else if (attachment)
+        messageAttachment = await getAttachmentData(attachment)
+
+    while (channelHistory.size() >= channelHistory.capacity) channelHistory.dequeue()
+
+    // push user response to channel history
+    console.log
+    channelHistory.enqueue({
+        role: 'user',
+        content: cleanedMessage,
+        images: messageAttachment || []
+    })
+
+    // Store in Channel Context
+    addToChannelContext(message.channelId,
+        message.channel as TextChannel,
+        channelHistory.getItems()
+    )
 
     // Only respond if message mentions the bot
     if (!message.mentions.has(clientId)) return
@@ -138,15 +193,6 @@ export default event(Events.MessageCreate, async ({ log, msgHist, ollama, client
 
         if (!userConfig)
             throw new Error(`Failed to initialize User Preference for **${message.author.username}**.\n\nIt's likely you do not have a model set. Please use the \`switch-model\` command to do that.`)
-
-        // get message attachment if exists
-        const attachment = message.attachments.first()
-        let messageAttachment: string[] = []
-
-        if (attachment && attachment.name?.endsWith(".txt"))
-            cleanedMessage += await getTextFileAttachmentData(attachment)
-        else if (attachment)
-            messageAttachment = await getAttachmentData(attachment)
 
         const model: string = userConfig.options['switch-model']
 

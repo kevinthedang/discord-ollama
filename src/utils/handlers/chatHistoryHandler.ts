@@ -56,6 +56,39 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     return cleanedHistory
 }
 
+export async function addToChannelContext(filename: string, channel : TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
+    const fullFileName = `data/${filename}-context.json`
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
+            if (error)
+                console.log(`[Error: addToChannelContext] Incorrect file format`)
+            else {
+                const object = JSON.parse(data)
+                if (object['messages'].length === 0)
+                    object['messages'] = messages as []
+                else if (object['messages'].length !== 0 && messages.length !== 0)
+                    object['messages'] = messages as []
+                fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
+            }
+        })
+    } else { // channel context does not exist, create it
+        const object: Configuration = JSON.parse(
+            `{ 
+                \"id\": \"${channel?.id}\", 
+                \"name\": \"${channel?.name}\", 
+                \"messages\": []
+            }`
+        )
+
+        const directory = path.dirname(fullFileName)
+        if (!fs.existsSync(directory))
+            fs.mkdirSync(directory, { recursive: true })
+
+        fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
+        console.log(`[Util: addToChannelContext] Created '${fullFileName}' in working directory`)
+    }
+}
+
 /**
  * Method to open the channel history
  * 
