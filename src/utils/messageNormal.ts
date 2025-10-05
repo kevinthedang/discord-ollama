@@ -56,6 +56,10 @@ export async function normalMessage(
                 response = await blockResponse(params)
                 result = response.message.content
 
+                // check if there is a <think>...</think> sequence from the bot.
+                if (hasThinking(result))
+                    result = result.replace(/<think>[\s\S]*?<\/think>/g, '').trim()
+
                 // check if message length > discord max for normal messages
                 if (result.length > 2000) {
                     sentMessage.edit(result.slice(0, 2000))
@@ -84,4 +88,8 @@ export async function normalMessage(
 
     // return the string representation of ollama query response
     return result
+}
+
+function hasThinking(message: string): boolean {
+    return /<think>[\s\S]*?<\/think>/i.test(message)
 }
