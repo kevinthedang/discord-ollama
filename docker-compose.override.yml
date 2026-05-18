@@ -1,0 +1,11 @@
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=3600  # optional: check every hour
+      - WATCHTOWER_CLEANUP=true       # optional: remove old images
+      - WATCHTOWER_INCLUDE_RESTARTING=true

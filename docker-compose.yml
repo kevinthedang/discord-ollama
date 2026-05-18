@@ -1,49 +1,462 @@
-# creates the docker compose
-
-# build individual services 
-services:
-  # setup discord bot container
-  discord:
-    build: ./                     # find docker file in designated path
-    container_name: discord
-    restart: always               # rebuild container always
-    image: kevinthedang/discord-ollama:0.8.7
-    environment:
-      CLIENT_TOKEN: ${CLIENT_TOKEN}
-      OLLAMA_IP: ${OLLAMA_IP}
-      OLLAMA_PORT: ${OLLAMA_PORT}
-      MODEL: ${MODEL}
-    networks:
-      ollama-net:
-        ipv4_address: ${DISCORD_IP}
-    volumes: 
-      - discord:/src/app          # docker will not make this for you, make it yourself
-
-  # setup ollama container
+# ─────────────── Shared Volumes ───────────────
+volumes:
   ollama:
-    image: ollama/ollama:latest   # build the image using ollama
-    container_name: ollama
-    restart: always
-    networks:
-      ollama-net:
-        ipv4_address: ${OLLAMA_IP}
-    runtime: nvidia             # use Nvidia Container Toolkit for GPU support
-    devices:
-      - /dev/nvidia0
-    volumes:
-      - ollama:/root/.ollama
-    ports: 
-      - ${OLLAMA_PORT}:${OLLAMA_PORT}
+  discord:
+  redis:
+  n8n_storage:
+  postgres_storage:
+  qdrant_storage:
 
-# create a network that supports giving addresses withing a specific subnet
+# ─────────────── Network ───────────────
 networks:
   ollama-net:
     driver: bridge
     ipam:
       driver: default
       config:
-        - subnet: ${SUBNET_ADDRESS}/16
+        - subnet: ${SUBNET_ADDRESS}/24
+          gateway: 172.20.0.1
+          ip_range: 172.20.0.128/25        # Docker’s dynamic pool
 
+# ─────────────── n8n template ───────────────
+x-n8n: &service-n8n
+  image: n8nio/n8n:latest
+  restart: unless-stopped
+  env_file: [.env]
+  environment:
+    - DB_TYPE=postgresdb
+    - DB_POSTGRESDB_HOST=postgres
+    - DB_POSTGRESDB_USER=${POSTGRES_USER}
+    - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+    - N8N_DIAGNOSTICS_ENABLED=false
+    - N8N_PERSONALIZATION_ENABLED=false
+    - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    - N8N_USER_MANAGEMENT_JWT_SECRET=${N8N_USER_MANAGEMENT_JWT_SECRET}
+    - N8N_RUNNERS_ENABLED=true
+    - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+    - OLLAMA_HOST=ollama:11434
+  networks: [ollama-net]
+
+# ─────────────── Services ───────────────
+services:
+  # ---- Browser-Use WebUI (uses Ollama in this stack) ----
+  browser-use-webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TARGETPLATFORM: ${TARGETPLATFORM:-linux/amd64}
+    container_name: browser-use-webui
+    restart: unless-stopped
+    ports:
+      - "7788:7788"
+      - "6080:6080"
+      - "5901:5901"
+      - "9222:9222"
+    environment:
+      # Point WebUI at the *container* Ollama service (NOT localhost).
+      - OLLAMA_ENDPOINT=http://ollama:11434
+      - DEFAULT_LLM=ollama
+
+      # App / logging
+      - ANONYMIZED_TELEMETRY=false
+      - BROWSER_USE_LOGGING_LEVEL=info
+
+      # Browser / CDP
+      - BROWSER_DEBUGGING_PORT=9222
+      - BROWSER_DEBUGGING_HOST=localhost
+      - USE_OWN_BROWSER=false
+      - KEEP_BROWSER_OPEN=true
+
+      # Display / Playwright
+      - DISPLAY=:99
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-browsers
+      - RESOLUTION=${RESOLUTION:-1920x1080x24}
+      - RESOLUTION_WIDTH=${RESOLUTION_WIDTH:-1920}
+      - RESOLUTION_HEIGHT=${RESOLUTION_HEIGHT:-1080}
+
+      # SECURITY: force you to set this in your .env or shell (no unsafe default)
+      - VNC_PASSWORD=secret
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # - ./my_chrome_data:/app/data/chrome_data  # Optional: persist browser data
+    shm_size: "2gb"
+    cap_add:
+      - SYS_ADMIN
+    tmpfs:
+      - /tmp
+    networks: [ollama-net]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5901"]   # VNC port
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ---- Discord Bot ----
+  discord:
+    build: ./
+    image: kevinthedang/discord-ollama:latest
+    container_name: discord
+    restart: unless-stopped
+    environment:
+      CLIENT_TOKEN: ${CLIENT_TOKEN}
+      OLLAMA_IP: ${OLLAMA_IP}
+      OLLAMA_PORT: ${OLLAMA_PORT}
+      MODEL: ${MODEL}
+      REDIS_IP: ${REDIS_IP}
+      REDIS_PORT: ${REDIS_PORT}
+    networks:
+      ollama-net:
+        ipv4_address: ${DISCORD_IP}
+    volumes:
+      - discord:/src/app
+
+  # ---- Ollama (CPU) ----
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    networks:
+      ollama-net:
+        ipv4_address: ${OLLAMA_IP}
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "${OLLAMA_PORT}:${OLLAMA_PORT}"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+  # ---- Redis ----
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      ollama-net:
+        ipv4_address: ${REDIS_IP}
+    volumes:
+      - redis:/root/.redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+
+  # ---- Postgres ----
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    hostname: postgres
+    restart: unless-stopped
+    networks: [ollama-net]
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_storage:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---- n8n import helper (one-shot) ----
+  n8n-import:
+    <<: *service-n8n
+    container_name: n8n-import
+    restart: "no"
+    entrypoint: /bin/sh
+    command:
+      - "-c"
+      - |
+        export N8N_RUNNERS_ENABLED=true
+        export N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+        if [ -d /demo-data ] && [ "$(ls -A /demo-data 2>/dev/null)" ]; then
+          echo "Demo data found – importing."
+          n8n import:credentials --separate --input=/demo-data/credentials || true
+          n8n import:workflow    --separate --input=/demo-data/workflows   || true
+        else
+          echo "No demo data detected – skipping import."
+        fi
+    volumes:
+      - ./n8n/demo-data:/demo-data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ---- n8n main ----
+  n8n:
+    <<: *service-n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_storage:/home/node/.n8n
+      - ./n8n/demo-data:/demo-data
+      - ./shared:/data/shared
+    depends_on:
+      postgres:
+        condition: service_healthy
+      n8n-import:
+        condition: service_completed_successfully
+
+  # ---- Qdrant ----
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    restart: unless-stopped
+    networks: [ollama-net]
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+      
+# ─────────────── Shared Volumes ───────────────
 volumes:
   ollama:
   discord:
+  redis:
+  n8n_storage:
+  postgres_storage:
+  qdrant_storage:
+
+# ─────────────── Network ───────────────
+networks:
+  ollama-net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET_ADDRESS}/24
+          gateway: 172.20.0.1
+          ip_range: 172.20.0.128/25        # Docker’s dynamic pool
+
+# ─────────────── n8n template ───────────────
+x-n8n: &service-n8n
+  image: n8nio/n8n:latest
+  restart: unless-stopped
+  env_file: [.env]
+  environment:
+    - DB_TYPE=postgresdb
+    - DB_POSTGRESDB_HOST=postgres
+    - DB_POSTGRESDB_USER=${POSTGRES_USER}
+    - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
+    - N8N_DIAGNOSTICS_ENABLED=false
+    - N8N_PERSONALIZATION_ENABLED=false
+    - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+    - N8N_USER_MANAGEMENT_JWT_SECRET=${N8N_USER_MANAGEMENT_JWT_SECRET}
+    - N8N_RUNNERS_ENABLED=true
+    - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+    - OLLAMA_HOST=ollama:11434
+  networks: [ollama-net]
+
+# ─────────────── Services ───────────────
+services:
+  # ---- Browser-Use WebUI (uses Ollama in this stack) ----
+  browser-use-webui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TARGETPLATFORM: ${TARGETPLATFORM:-linux/amd64}
+    container_name: browser-use-webui
+    restart: unless-stopped
+    ports:
+      - "7788:7788"
+      - "6080:6080"
+      - "5901:5901"
+      - "9222:9222"
+    environment:
+      # Point WebUI at the *container* Ollama service (NOT localhost).
+      - OLLAMA_ENDPOINT=http://ollama:11434
+      - DEFAULT_LLM=ollama
+
+      # App / logging
+      - ANONYMIZED_TELEMETRY=false
+      - BROWSER_USE_LOGGING_LEVEL=info
+
+      # Browser / CDP
+      - BROWSER_DEBUGGING_PORT=9222
+      - BROWSER_DEBUGGING_HOST=localhost
+      - USE_OWN_BROWSER=false
+      - KEEP_BROWSER_OPEN=true
+
+      # Display / Playwright
+      - DISPLAY=:99
+      - PLAYWRIGHT_BROWSERS_PATH=/ms-browsers
+      - RESOLUTION=${RESOLUTION:-1920x1080x24}
+      - RESOLUTION_WIDTH=${RESOLUTION_WIDTH:-1920}
+      - RESOLUTION_HEIGHT=${RESOLUTION_HEIGHT:-1080}
+
+      # SECURITY: force you to set this in your .env or shell (no unsafe default)
+      - VNC_PASSWORD=piranesi
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      # - ./my_chrome_data:/app/data/chrome_data  # Optional: persist browser data
+    shm_size: "2gb"
+    cap_add:
+      - SYS_ADMIN
+    tmpfs:
+      - /tmp
+    networks: [ollama-net]
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "5901"]   # VNC port
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ---- Discord Bot ----
+  discord:
+    build: ./
+    image: kevinthedang/discord-ollama:latest
+    container_name: discord
+    restart: unless-stopped
+    environment:
+      CLIENT_TOKEN: ${CLIENT_TOKEN}
+      OLLAMA_IP: ${OLLAMA_IP}
+      OLLAMA_PORT: ${OLLAMA_PORT}
+      MODEL: ${MODEL}
+      REDIS_IP: ${REDIS_IP}
+      REDIS_PORT: ${REDIS_PORT}
+    networks:
+      ollama-net:
+        ipv4_address: ${DISCORD_IP}
+    volumes:
+      - discord:/src/app
+
+  # ---- Ollama (CPU) ----
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    networks:
+      ollama-net:
+        ipv4_address: ${OLLAMA_IP}
+    volumes:
+      - ollama:/root/.ollama
+    ports:
+      - "${OLLAMA_PORT}:${OLLAMA_PORT}"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 10s
+
+  # ---- Redis ----
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      ollama-net:
+        ipv4_address: ${REDIS_IP}
+    volumes:
+      - redis:/root/.redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+
+  # ---- Postgres ----
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres
+    hostname: postgres
+    restart: unless-stopped
+    networks: [ollama-net]
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres_storage:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---- n8n import helper (one-shot) ----
+  n8n-import:
+    <<: *service-n8n
+    container_name: n8n-import
+    restart: "no"
+    entrypoint: /bin/sh
+    command:
+      - "-c"
+      - |
+        export N8N_RUNNERS_ENABLED=true
+        export N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+        if [ -d /demo-data ] && [ "$(ls -A /demo-data 2>/dev/null)" ]; then
+          echo "Demo data found – importing."
+          n8n import:credentials --separate --input=/demo-data/credentials || true
+          n8n import:workflow    --separate --input=/demo-data/workflows   || true
+        else
+          echo "No demo data detected – skipping import."
+        fi
+    volumes:
+      - ./n8n/demo-data:/demo-data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ---- n8n main ----
+  n8n:
+    <<: *service-n8n
+    container_name: n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_storage:/home/node/.n8n
+      - ./n8n/demo-data:/demo-data
+      - ./shared:/data/shared
+    depends_on:
+      postgres:
+        condition: service_healthy
+      n8n-import:
+        condition: service_completed_successfully
+
+  # ---- Qdrant ----
+  qdrant:
+    image: qdrant/qdrant
+    container_name: qdrant
+    restart: unless-stopped
+    networks: [ollama-net]
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+
+  # ---- Helper: pull devstral (idempotent) ----
+  ollama-pull-devstral:
+    image: ollama/ollama:latest
+    container_name: ollama-pull-devstral
+    restart: on-failure:3
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - OLLAMA_HOST=ollama:11434         # point CLI at the main service
+    entrypoint: /bin/sh
+    command:
+      - "-c"
+      - |
+        echo "Waiting for Ollama to accept CLI commands..."
+        for i in $(seq 1 18); do     # 18 × 5 s = 90 s max
+          ollama list >/dev/null 2>&1 && break
+          echo "…still waiting"; sleep 5
+        done
+        ollama list >/dev/null 2>&1 || { echo "Timed-out"; exit 1; }
+        ollama show devstral >/dev/null 2>&1 && \
+          echo "Model devstral already present." || \
+          ollama pull devstral
+    networks: [ollama-net]
+    volumes:
+      - ollama:/root/.ollama
