@@ -27,7 +27,7 @@ describe('Commands Existence', () => {
     // test specific commands in the object
     it('references specific commands', () => {
         const commandsString = commands.map(e => e.name).join(', ')
-        const expectedCommands = ['thread', 'private-thread', 'message-stream', 'toggle-chat', 'shutoff', 'modify-capacity', 'clear-user-channel-history', 'pull-model', 'switch-model', 'delete-model']
+        const expectedCommands = ['thread', 'private-thread', 'message-stream', 'toggle-chat', 'shutoff', 'modify-capacity', 'clear-user-channel-history', 'pull-model', 'switch-model', 'delete-model', 'summary']
         expect(commandsString).toBe(expectedCommands.join(', '))
     })
 })
