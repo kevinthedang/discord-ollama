@@ -18,7 +18,7 @@ The project aims to:
   * [x] Message Persistance
   * [x] Containerization with Docker
   * [x] Slash Commands Compatible
-    * [ ] Summary Command
+    * [x] Summary Command
     * [ ] Model Info Command
     * [ ] List Models Command
     * [x] Pull Model Command
