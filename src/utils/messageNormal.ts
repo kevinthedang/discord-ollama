@@ -90,6 +90,38 @@ export async function normalMessage(
     return result
 }
 
+export async function summarizeContextHistory(
+    ollama: Ollama, 
+    model: string, 
+    msgHist: UserMessage[], 
+): Promise<string> {
+    // todo: this stuff to create a response in a simpler way!
+    try {
+            const params: ChatParams = {
+            model: model,
+            ollama: ollama,
+            msgHist: msgHist
+        }
+        const response: ChatResponse = await blockResponse(params)
+        let result = response.message.content
+
+        if (hasThinking(result))
+            result = result.replace(/<think>[\s\S]*?<\/think>/g, '').trim()
+
+        return result
+    } catch (error: any) {
+        console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
+        if (error.message.includes('fetch failed'))
+            error.message = 'Missing ollama service on machine'
+        else if (error.message.includes('try pulling it first'))
+            error.message = `You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`
+        return `**Response generation failed.**\n\nReason: ${error.message}`
+    }
+}
+    
+
+// Region: Helpers
 function hasThinking(message: string): boolean {
     return /<think>[\s\S]*?<\/think>/i.test(message)
 }
+// End Region: Helpers

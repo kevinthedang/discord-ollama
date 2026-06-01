@@ -89,6 +89,21 @@ export async function addToChannelContext(filename: string, channel : TextChanne
     }
 }
 
+export async function accessChannelContext(filename: string, callback: (config: Channel | undefined) => void): Promise<void> {
+    const fullFileName = `data/${filename}-context.json`
+    if (fs.existsSync(fullFileName)) {
+        fs.readFile(fullFileName, 'utf8', (error, data) => {
+            if (error) {
+                callback(undefined)
+                return // something went wrong... stop
+            }
+            callback(JSON.parse(data))
+        })
+    } else {
+        callback(undefined) // file not found
+    }
+}
+
 /**
  * Method to open the channel history
  * 

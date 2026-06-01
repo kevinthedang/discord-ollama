@@ -9,6 +9,7 @@ import { ClearUserChannelHistory } from './cleanUserChannelHistory.js'
 import { PullModel } from './pullModel.js'
 import { SwitchModel } from './switchModel.js'
 import { DeleteModel } from './deleteModel.js'
+import { Summary } from './summary.js'
 
 export default [
     ThreadCreate,
@@ -20,5 +21,6 @@ export default [
     ClearUserChannelHistory,
     PullModel,
     SwitchModel,
-    DeleteModel
+    DeleteModel,
+    Summary
 ] as SlashCommand[]
