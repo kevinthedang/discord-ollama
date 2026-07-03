@@ -12,7 +12,7 @@ on:
 jobs:
   Discord-Node-Coverage:
     runs-on: ubuntu-latest
-    environment: coverage
+    # environment: coverage
     timeout-minutes: 2
 
     steps:
@@ -40,7 +40,6 @@ jobs:
         run: npm run coverage
 
       - name: Upload Coverage to Codecov
-        id: codecov
         uses: codecov/codecov-action@v5
         with:
           files: coverage/lcov.info
