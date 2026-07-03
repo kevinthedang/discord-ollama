@@ -1,5 +1,6 @@
 name: Builds
 run-name: Validate Node and Docker Builds
+
 on:
   push:
     branches:
@@ -9,15 +10,16 @@ jobs:
   Discord-Node-Build: # test if the node install and run
     runs-on: ubuntu-latest
     timeout-minutes: 2
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment lts/jod
+      - name: Set up Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/jod
-          cache: "npm"
+          node-version: current
+          cache: npm
 
       - name: Install Project Dependencies
         run: |
@@ -48,11 +50,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment lts/jod
+      - name: Set up Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/jod
-          cache: "npm"
+          node-version: current
+          cache: npm
 
       - name: Create Environment Variables
         run: |

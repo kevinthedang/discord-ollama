@@ -7,7 +7,7 @@
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/build.yml"><img alt="Builds" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/build.yml/badge.svg" /></a>
     <!-- <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/deploy.yml"><img alt="Deploy Status" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/deploy.yml/badge.svg" /></a> -->
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/test.yml"><img alt="Tests" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/test.yml/badge.svg" /></a>
-    <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/coverage.yml"><img alt="Code Coverage" src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/kevinthedang/bc7b5dcfa16561ab02bb3df67a99b22d/raw/coverage.json"></a>
+    <a href="https://codecov.io/gh/kevinthedang/discord-ollama"><img src="https://img.shields.io/codecov/c/github/kevinthedang/discord-ollama?logo=codecov" alt="coverage" /></a>
 </div>
 
 ## About/Goals

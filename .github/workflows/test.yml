@@ -1,5 +1,6 @@
 name: Tests
 run-name: Unit Tests
+
 on:
   pull_request:
     branches:
@@ -21,15 +22,16 @@ jobs:
   Discord-Node-Test:
     runs-on: ubuntu-latest
     timeout-minutes: 2
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Node Environment lts/jod
+      - name: Set up Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/jod
-          cache: "npm"
+          node-version: current
+          cache: npm
 
       - name: Install Project Dependencies
         run: |
