@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: current
+          node-version: lts/jod
           cache: npm
 
       - name: Install Project Dependencies

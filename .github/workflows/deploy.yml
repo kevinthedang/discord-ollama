@@ -44,8 +44,8 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           echo "NVM installed successfully."
-          nvm install current
-          nvm alias default current
+          nvm install lts/jod
+          nvm alias default lts/jod
           node -v
           npm -v
 
