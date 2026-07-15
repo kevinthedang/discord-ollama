@@ -39,7 +39,7 @@ jobs:
       - name: Run tests with coverage
         run: npm run coverage
 
-      - name: Upload Coverage to Codecov
+      - name: Generate coverage badge
         uses: wjervis7/vitest-badge-action@v1.0.0
         if: success() || failure()
         with:
