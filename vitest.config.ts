@@ -1,4 +1,4 @@
-import { defineConfig, configDefaults } from 'vitest/config'
+import { defineConfig } from 'vitest/config'
 
 // config for vitest
 export default defineConfig({
@@ -7,8 +7,7 @@ export default defineConfig({
         reporters: ['verbose'], // <-- verbose output
         coverage: {
             include: ['src/**/*.ts'],
-            reporter: 'lcov',
-            reportsDirectory: './coverage'
+            reporter: 'json-summary'
         }
     }
 })

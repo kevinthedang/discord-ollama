@@ -5,14 +5,14 @@ on:
   pull_request:
     branches:
       - master
-  push:
-    branches:
-      - master
+    types: [opened, synchronize, reopened, closed]
+
+permissions:
+  contents: write
 
 jobs:
   Discord-Node-Coverage:
     runs-on: ubuntu-latest
-    # environment: coverage
     timeout-minutes: 2
 
     steps:
@@ -40,7 +40,17 @@ jobs:
         run: npm run coverage
 
       - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: wjervis7/vitest-badge-action@v1
+        if: success() || failure()
         with:
-          files: coverage/lcov.info
-          fail_ci_if_error: true
+          result-type: statements
+          badge-text: 'Coverage (Statements)'
+          badge-path: ./imgs/coverage.svg
+          upload-badge: false
+
+      - name: Commit badge with merge
+        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          file_pattern: ./imgs/coverage.svg
+          commit_message: 'update with coverage badge'

@@ -12,7 +12,7 @@
 # Technical/Business Code Ownership
 /src/ @kevinthedang @JT2M0L3Y
 /tests/ @JT2M0L3Y
-/.github/ @kevinthedang
+/.github/ @kevinthedang @JT2M0L3Y
 
 # Docker Ownership
 Dockerfile @kevinthedang
