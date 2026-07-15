@@ -5,10 +5,14 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, reopened]
 
 permissions:
   contents: write
+
+concurrency:
+  group: coverage-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   Discord-Node-Coverage:
@@ -18,6 +22,9 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
       - name: Set up Node Environment
         uses: actions/setup-node@v4
@@ -48,9 +55,20 @@ jobs:
           badge-path: ./imgs/coverage.svg
           upload-badge: false
 
-      - name: Commit badge with merge
-        if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+      - name: Check whether badge commit is already latest
+        id: badge-check
+        if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'reopened')
+        run: |
+          if [ "$(git log -1 --pretty=%s)" = "update with coverage badge" ]; then
+            echo "already_latest=true" >> $GITHUB_OUTPUT
+          else
+            echo "already_latest=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit badge to PR branch
+        if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'synchronize' || github.event.action == 'reopened') && steps.badge-check.outputs.already_latest != 'true'
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           file_pattern: ./imgs/coverage.svg
           commit_message: 'update with coverage badge'
+          branch: ${{ github.head_ref }}
