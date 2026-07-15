@@ -40,7 +40,7 @@ jobs:
         run: npm run coverage
 
       - name: Upload Coverage to Codecov
-        uses: wjervis7/vitest-badge-action@v1
+        uses: wjervis7/vitest-badge-action@v1.0.0
         if: success() || failure()
         with:
           result-type: statements
