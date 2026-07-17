@@ -4,10 +4,6 @@ import { defineConfig } from 'vitest/config'
 export default defineConfig({
     test: {
         globals: true, // <-- reduces test file imports
-        reporters: ['verbose'], // <-- verbose output
-        coverage: {
-            include: ['src/**/*.ts'],
-            reporter: 'json-summary'
-        }
+        reporters: ['verbose'] // <-- verbose output
     }
 })

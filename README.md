@@ -6,7 +6,6 @@
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/kevinthedang/discord-ollama?logo=github" /></a>
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/build.yml"><img alt="Builds" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/build.yml/badge.svg" /></a>
     <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/test.yml"><img alt="Tests" src="https://github.com/kevinthedang/discord-ollama/actions/workflows/test.yml/badge.svg" /></a>
-    <a href="#"></a><a href="https://github.com/kevinthedang/discord-ollama/actions/workflows/coverage.yml"><img alt="Coverage" src="https://github.com/kevinthedang/discord-ollama/blob/main/imgs/coverage.svg?raw=true" /></a>
 </div>
 
 ## About/Goals

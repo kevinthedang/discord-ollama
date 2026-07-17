@@ -18,9 +18,8 @@
     // Decompile .ts to .js into a folder named build
     "outDir": "build",
     "rootDir": "src",
-    "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/"]
+      "*": ["./node_modules/"]
     }
   },
   // environment for env vars
