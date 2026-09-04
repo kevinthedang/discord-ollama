@@ -47,4 +47,28 @@ describe('Environment Setup', () => {
     it('throws an error if key is not found', () => {
         expect(() => getEnvVar('NON_EXISTENT_KEY')).toThrowError()
     })
+
+    // test that *_ENDPOINT keys are validated as IPv4 addresses like *_IP keys
+    it('validates *_ENDPOINT keys as IPv4', () => {
+        expect(getEnvVar('UNSET_TEST_ENDPOINT', '127.0.0.1')).toBe('127.0.0.1')
+        expect(() => getEnvVar('UNSET_TEST_ENDPOINT', 'not-an-ip')).toThrowError()
+    })
+
+    // test the deprecated alias lookup used in src/keys.ts
+    it('falls back to the deprecated OLLAMA_IP / OLLAMA_PORT aliases', () => {
+        const saved = { LLM_ENDPOINT: process.env.LLM_ENDPOINT, LLM_PORT: process.env.LLM_PORT }
+        delete process.env.LLM_ENDPOINT
+        delete process.env.LLM_PORT
+        process.env.OLLAMA_IP = '10.0.0.5'
+        process.env.OLLAMA_PORT = '17434'
+        try {
+            expect(getEnvVar('LLM_ENDPOINT', process.env.OLLAMA_IP ?? '127.0.0.1')).toBe('10.0.0.5')
+            expect(getEnvVar('LLM_PORT', process.env.OLLAMA_PORT ?? '11434')).toBe('17434')
+        } finally {
+            delete process.env.OLLAMA_IP
+            delete process.env.OLLAMA_PORT
+            if (saved.LLM_ENDPOINT !== undefined) process.env.LLM_ENDPOINT = saved.LLM_ENDPOINT
+            if (saved.LLM_PORT !== undefined) process.env.LLM_PORT = saved.LLM_PORT
+        }
+    })
 })

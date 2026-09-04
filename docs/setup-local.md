@@ -14,11 +14,18 @@
 > [!NOTE]  
 > You can now pull models directly from the Discord client using `/pull-model <model-name>` or `/switch-model <model-name>`. They must exist from your local model library or from the [Ollama Model Library](https://ollama.com/library)
 
+## Using with llmman (alternative to Ollama)
+* [llmman](https://github.com/llmmanorg/llmman) is a local model runner that serves the Ollama API on port `17434`. The bot talks to it exactly as it would to Ollama, only the port differs.
+* Install it with `curl -fsSL https://raw.githubusercontent.com/llmmanorg/llmman/main/install.sh | sh` (Linux/macOS) or `irm https://raw.githubusercontent.com/llmmanorg/llmman/main/install.ps1 | iex` (Windows).
+* Start the server with `llmman serve` and pull a model with `llmman pull [model name]`, for example `llmman pull gemma4` or `llmman pull hf.co/unsloth/Qwen3.5-0.8B-GGUF`.
+* Point the bot at it by setting `LLM_ENDPOINT = 127.0.0.1` and `LLM_PORT = 17434` in your `.env`, then set `MODEL` to a model you pulled. `/pull-model`, `/switch-model` and `/delete-model` work the same way.
+
 ## To Run Locally (without Docker)
 * Run `npm install` to install the npm packages.
-* Ensure that your [.env](../.env.sample) file's `OLLAMA_IP` is `127.0.0.1` to work properly.
-    * You only need your `CLIENT_TOKEN`, `OLLAMA_IP`, `OLLAMA_PORT`.
-    * The ollama ip and port should just use it's defaults by nature. If not, utilize `OLLAMA_IP = 127.0.0.1` and `OLLAMA_PORT = 11434`.
+* Ensure that your [.env](../.env.sample) file's `LLM_ENDPOINT` is `127.0.0.1` to work properly.
+    * You only need your `CLIENT_TOKEN`, `LLM_ENDPOINT`, `LLM_PORT`.
+    * The LLM server ip and port should just use it's defaults by nature. If not, utilize `LLM_ENDPOINT = 127.0.0.1` and `LLM_PORT = 11434`.
+    * The older `OLLAMA_IP` / `OLLAMA_PORT` names are still accepted as deprecated aliases.
 * Now, you can run the bot by running `npm run client` which will build and run the decompiled typescript and run the setup for ollama.
     * **IMPORTANT**: This must be ran in the wsl/Linux instance to work properly! Using Command Prompt/Powershell/Git Bash/etc. will not work on Windows (at least in my experience).
     * Refer to the [resources](../README.md#resources) on what node version to use.
