@@ -20,6 +20,7 @@ on:
 
 jobs:
   Discord-Node-Test:
+    if: ${{ github.event.pull_request.head.repo.fork == false }}
     runs-on: ubuntu-latest
     timeout-minutes: 2
     

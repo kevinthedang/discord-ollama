@@ -1,0 +1,47 @@
+name: Tests (Fork PRs)
+run-name: Unit Tests
+
+on:
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '*'
+      - 'package*.json'
+      - 'src/**'
+      - 'tests/**'
+      - '!docs/**'
+      - '!imgs/**'
+      - '!.github/**'
+      - '.github/workflows/**'
+      - '!.gitignore'
+      - '!LICENSE'
+      - '!README'
+
+jobs:
+  Discord-Node-Test-Fork:
+    if: ${{ github.event.pull_request.head.repo.fork == true }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/jod'
+          cache: npm
+
+      - name: Install Project Dependencies
+        run: |
+          npm install
+
+      - name: Create Dummy Env
+        run: |
+          echo CLIENT_TOKEN=test-token >> .env
+          echo LLM_ENDPOINT=127.0.0.1 >> .env
+          echo LLM_PORT=11434 >> .env
+          echo MODEL=dummy-model >> .env
+
+      - name: Test Application
+        run: |
+          npm run tests
