@@ -42,8 +42,8 @@ jobs:
         run: |
           touch .env
           echo CLIENT_TOKEN = ${{ secrets.BOT_TOKEN }} >> .env
-          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
-          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+          echo LLM_ENDPOINT = ${{ secrets.OLLAMA_IP }} >> .env
+          echo LLM_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
           echo MODEL = ${{ secrets.MODEL }} >> .env
 
       - name: Test Application

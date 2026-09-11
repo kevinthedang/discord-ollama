@@ -48,6 +48,7 @@ These are guides to the features and capabilities of this app.
 * Clone this repo using `git clone https://github.com/kevinthedang/discord-ollama.git` or just use [GitHub Desktop](https://desktop.github.com/) to clone the repo.
 * You will need a `.env` file in the root of the project directory with the bot's token. There is a `.env.sample` is provided for you as a reference for what environment variables.
     * For example, `CLIENT_TOKEN = [Bot Token]`
+    * The LLM server is configured with `LLM_ENDPOINT` / `LLM_PORT` (`OLLAMA_IP` / `OLLAMA_PORT` still work as deprecated aliases).
 * Please refer to the docs for bot setup.
     * [Creating a Discord App](./docs/setup-discord-app.md)
     * [Local Machine Setup](./docs/setup-local.md)
@@ -61,6 +62,7 @@ These are guides to the features and capabilities of this app.
     * This project requires the use of npm version `10.9.0` or above.
 * [Ollama](https://ollama.com/)
     * [Ollama Docker Image](https://hub.docker.com/r/ollama/ollama)
+    * [llmman](https://github.com/llmmanorg/llmman) also serves the Ollama API (on port `17434`) and can be used in its place, see [Local Machine Setup](./docs/setup-local.md#using-with-llmman-alternative-to-ollama).
 * [Discord.js Docs](https://discord.js.org/docs/packages/discord.js/main)
 * [Setting up Docker (Ubuntu 20.04)](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04)
     * [Setting up Nvidia Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html)

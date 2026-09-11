@@ -18,8 +18,8 @@ jobs:
         run: |
           touch .env
           echo CLIENT_TOKEN = ${{ secrets.CLIENT }} >> .env
-          echo OLLAMA_IP = ${{ secrets.OLLAMA_IP }} >> .env
-          echo OLLAMA_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
+          echo LLM_ENDPOINT = ${{ secrets.OLLAMA_IP }} >> .env
+          echo LLM_PORT = ${{ secrets.OLLAMA_PORT }} >> .env
           echo MODEL = ${{ secrets.MODEL }} >> .env
           echo DISCORD_IP = ${{ secrets.DISCORD_IP }} >> .env
           echo SUBNET_ADDRESS = ${{ secrets.SUBNET_ADDRESS }} >> .env

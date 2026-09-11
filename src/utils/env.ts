@@ -26,7 +26,7 @@ export function getEnvVar(name: string, fallback?: string): string {
             This is probably an invalid token unless Discord updated their token policy. Please provide a valid token.`)
 
     // validate IPv4 address found in environment variables
-    if ((name.endsWith("_IP") || name.endsWith("_ADDRESS")) && !ipValidate.test(value))
+    if ((name.endsWith("_IP") || name.endsWith("_ADDRESS") || name.endsWith("_ENDPOINT")) && !ipValidate.test(value))
         throw new Error(`Environment variable ${name} does not follow IPv4 formatting.`)
 
     // return env variable
