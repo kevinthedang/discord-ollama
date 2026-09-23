@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/jod
+          node-version: lts/krypton
           cache: npm
 
       - name: Install Project Dependencies
@@ -45,7 +45,7 @@ jobs:
 
   Discord-Ollama-Container-Build: # test docker build and run
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 3
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -53,7 +53,7 @@ jobs:
       - name: Set up Node Environment
         uses: actions/setup-node@v4
         with:
-          node-version: lts/jod
+          node-version: lts/krypton
           cache: npm
 
       - name: Create Environment Variables
