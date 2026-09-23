@@ -9,11 +9,14 @@
 </div>
 
 ## About
-Ollama is an AI model management tool that allows users to install and use custom large language models locally.  
+Discord Ollama is a Discord bot that lets users interact with locally hosted
+Ollama language models directly from Discord.
 
-Ollama provides the functionality to utilize custom models or provide context for the top-layer of any model available through the Ollama model library.
-* [Customize a model](https://github.com/ollama/ollama#customize-a-model)
-* [Modelfile Docs](https://github.com/ollama/ollama/blob/main/docs/modelfile.md)
+The bot supports model management, streamed responses, conversation history,
+private threads, and configurable server controls. Because Ollama runs locally,
+you retain control over the models and data used by the bot.
+
+See the [setup guides](./docs/setup-local.md) to get started.
 
 ## Documentation
 These are guides to the features and capabilities of this app.
