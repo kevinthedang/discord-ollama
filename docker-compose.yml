@@ -7,7 +7,7 @@ services:
     build: ./                     # find docker file in designated path
     container_name: discord
     restart: always               # rebuild container always
-    image: kevinthedang/discord-ollama:0.9.1
+    image: kevinthedang/discord-ollama:0.9.2
     environment:
       CLIENT_TOKEN: ${CLIENT_TOKEN}
       LLM_ENDPOINT: ${LLM_ENDPOINT:-${OLLAMA_IP}}     # OLLAMA_IP is a deprecated alias

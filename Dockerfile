@@ -1,5 +1,5 @@
-# use node LTS image for version 22
-FROM node:jod-alpine
+# use node LTS image for version 24
+FROM node:krypton-alpine
 
 # set working directory inside container
 WORKDIR /app
