@@ -2,9 +2,7 @@ import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction, Mess
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { UserCommand, SlashCommand } from "../utils/index.js"
-import { createLogger } from "../components/index.js"
-
-const logger = createLogger({ component: 'command', command: 'pull-model' })
+import type { Logger as PinoLogger } from 'pino'
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
@@ -21,7 +19,7 @@ export const PullModel: SlashCommand = {
     ],
 
     // Pull for model from Ollama library
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
         const modelInput: string = interaction.options.getString('model-to-pull') as string

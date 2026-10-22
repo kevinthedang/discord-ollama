@@ -5,15 +5,15 @@ import commands from '../commands/index.js'
  * Interaction creation listener for the client
  * @param interaction the interaction received from the server
  */
-export default event(Events.InteractionCreate, async ({ log, client }, interaction) => {
+export default event(Events.InteractionCreate, async ({ logger, client }, interaction) => {
     if (!interaction.isCommand() || !interaction.isChatInputCommand()) return
 
-    log.info({ command: interaction.commandName, user: interaction.user.tag }, 'Interaction received')
+    logger.info({ command: interaction.commandName, user: interaction.user.tag }, 'Interaction received')
 
     // ensure command exists, otherwise kill event
     const command = commands.find(command => command.name === interaction.commandName)
     if (!command) return
 
     // the command exists, execute it
-    command.run(client, interaction)
+    command.run(client, interaction, logger)
 })

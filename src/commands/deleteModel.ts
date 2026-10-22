@@ -2,9 +2,7 @@ import { ApplicationCommandOptionType, ChatInputCommandInteraction, Client, Comm
 import { UserCommand, SlashCommand } from '../utils/index.js'
 import { ollama } from '../client.js'
 import { ModelResponse } from 'ollama'
-import { createLogger } from '../components/index.js'
-
-const logger = createLogger({ component: 'command', command: 'delete-model' })
+import type { Logger as PinoLogger } from 'pino'
 
 export const DeleteModel: SlashCommand = {
     name: 'delete-model',
@@ -21,7 +19,7 @@ export const DeleteModel: SlashCommand = {
     ],
 
     // Delete Model locally stored
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
         const modelInput: string = interaction.options.getString('model-name') as string

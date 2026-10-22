@@ -2,7 +2,7 @@ import 'dotenv/config'
 import pino, { type Logger as PinoLogger } from 'pino'
 import { pinoCaller } from 'pino-caller'
 
-const rootLogger = pino({
+export const rootLogger = pino({
     level: process.env.LOG_LEVEL ?? 'info'
 })
 

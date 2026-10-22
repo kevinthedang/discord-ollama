@@ -11,10 +11,10 @@ import {
  * 
  * @param message the message received from the channel
  */
-export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory, ollama, client, defaultModel }, message) => {
+export default event(Events.MessageCreate, async ({ logger, msgHist, channelHistory, ollama, client, defaultModel }, message) => {
     const clientId = client.user!!.id
     let cleanedMessage = clean(message.content, clientId)
-    log.info({ author: message.author.tag, channelId: message.channelId, message: cleanedMessage }, 'Received message')
+    logger.info({ author: message.author.tag, channelId: message.channelId, message: cleanedMessage }, 'Received message')
 
     // Do not respond if bot talks in the chat
     if (message.author.username === message.client.user.username) return
@@ -25,7 +25,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
             if (channelInfo?.messages)
                 resolve(channelInfo.messages)
             else {
-                log.info({ channelId: message.channelId }, 'Channel context does not exist; creating it')
+                logger.info({ channelId: message.channelId }, 'Channel context does not exist; creating it')
                 resolve([])
             }
         })
@@ -40,7 +40,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
                 if (channelInfo?.messages)
                     resolve(channelInfo.messages)
                 else {
-                    log.info({ channelId: message.channelId }, 'Channel context does not exist; creating it')
+                    logger.info({ channelId: message.channelId }, 'Channel context does not exist; creating it')
                 }
             })
         })
@@ -108,7 +108,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
             } catch (error) {
                 ++attempt
                 if (attempt < maxRetries) {
-                    log.warn({ attempt, delay }, 'Failed to retrieve server preferences; retrying')
+                    logger.warn({ attempt, delay }, 'Failed to retrieve server preferences; retrying')
                     await new Promise(ret => setTimeout(ret, delay))
                 } else
                     throw new Error(`Could not retrieve Server Preferences, please try chatting again...`)
@@ -132,11 +132,11 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
 
                         // check if there is a set capacity in config
                         else if (typeof config.options['modify-capacity'] !== 'number')
-                            log.info({ capacity: msgHist.capacity }, 'Capacity is undefined; using default')
+                            logger.info({ capacity: msgHist.capacity }, 'Capacity is undefined; using default')
                         else if (config.options['modify-capacity'] === msgHist.capacity)
-                            log.info({ capacity: msgHist.capacity }, 'Configured capacity matches current capacity')
+                            logger.info({ capacity: msgHist.capacity }, 'Configured capacity matches current capacity')
                         else {
-                            log.info({ capacity: config.options['modify-capacity'] }, 'Updating context capacity')
+                            logger.info({ capacity: config.options['modify-capacity'] }, 'Updating context capacity')
                             msgHist.capacity = config.options['modify-capacity']
                         }
 
@@ -153,7 +153,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
             } catch (error) {
                 ++attempt
                 if (attempt < maxRetries) {
-                    log.warn({ attempt, delay }, 'Failed to retrieve user preferences; retrying')
+                    logger.warn({ attempt, delay }, 'Failed to retrieve user preferences; retrying')
                     await new Promise(ret => setTimeout(ret, delay))
                 } else
                     throw new Error(`Could not retrieve User Preferences, please try chatting again...`)
@@ -167,7 +167,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
                 if (channelInfo?.messages)
                     resolve(channelInfo.messages)
                 else {
-                    log.info({ channelId: message.channelId, username: message.author.username }, 'User channel history does not exist; creating it')
+                    logger.info({ channelId: message.channelId, username: message.author.username }, 'User channel history does not exist; creating it')
                     resolve([])
                 }
             })
@@ -183,7 +183,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
                     if (channelInfo?.messages)
                         resolve(channelInfo.messages)
                     else {
-                        log.info({ channelId: message.channelId, username: message.author.username }, 'User channel history does not exist; creating it')
+                        logger.info({ channelId: message.channelId, username: message.author.username }, 'User channel history does not exist; creating it')
                         reject(new Error(`Failed to find ${message.author.username}'s history. Try chatting again.`))
                     }
                 })
@@ -209,7 +209,7 @@ export default event(Events.MessageCreate, async ({ log, msgHist, channelHistory
         })
 
         // response string for ollama to put its response
-        const response: string = await normalMessage(message, ollama, model, msgHist, shouldStream)
+        const response: string = await normalMessage(logger, message, ollama, model, msgHist, shouldStream)
 
         // If something bad happened, remove user query and stop
         if (response == undefined) { msgHist.pop(); return }

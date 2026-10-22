@@ -59,7 +59,7 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     return cleanedHistory
 }
 
-export async function addToChannelContext(filename: string, channel : TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
+export async function addToChannelContext(filename: string, channel: TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-context.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
@@ -115,7 +115,7 @@ export async function accessChannelContext(filename: string, callback: (config: 
  * @param user the user's name
  * @param messages their messages
  */
-export async function openChannelInfo(this: any, filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
+export async function openChannelInfo(filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {

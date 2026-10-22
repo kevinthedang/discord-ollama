@@ -1,9 +1,8 @@
 import { Message, SendableChannels } from 'discord.js'
 import { ChatResponse, Ollama, AbortableAsyncIterator } from 'ollama'
+import type { Logger as PinoLogger } from 'pino'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
-import { Queue, createLogger } from '../components/index.js'
-
-const logger = createLogger({ component: 'message' })
+import { Queue } from '../components/index.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -12,7 +11,7 @@ const logger = createLogger({ component: 'message' })
  * @param msgHist message history between user and model
  */
 export async function normalMessage(
-    this: any,
+    logger: PinoLogger,
     message: Message,
     ollama: Ollama,
     model: string,
@@ -92,6 +91,7 @@ export async function normalMessage(
 }
 
 export async function summarizeContextHistory(
+    logger: PinoLogger,
     ollama: Ollama, 
     model: string, 
     msgHist: UserMessage[], 

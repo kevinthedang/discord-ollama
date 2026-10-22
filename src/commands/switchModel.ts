@@ -2,9 +2,7 @@ import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction } fro
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { openConfig, UserCommand, SlashCommand } from "../utils/index.js"
-import { createLogger } from "../components/index.js"
-
-const logger = createLogger({ component: 'command', command: 'switch-model' })
+import type { Logger as PinoLogger } from 'pino'
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
@@ -21,7 +19,7 @@ export const SwitchModel: SlashCommand = {
     ],
 
     // Switch user preferred model if available in local library
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         await interaction.deferReply()
 
         const modelInput: string = interaction.options.getString('model-to-use') as string

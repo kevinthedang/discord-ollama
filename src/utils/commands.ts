@@ -1,5 +1,6 @@
-import { ChatInputCommandInteraction, ChatInputApplicationCommandData, Client, ApplicationCommandOption } from 'discord.js'
+import { ChatInputCommandInteraction, ChatInputApplicationCommandData, Client } from 'discord.js'
 import { createLogger } from '../components/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 const logger = createLogger({ component: 'commands' })
 
@@ -10,7 +11,7 @@ export interface SlashCommand extends ChatInputApplicationCommandData {
     run: (
         client: Client,
         interaction: ChatInputCommandInteraction,
-        options?: ApplicationCommandOption[]
+        logger: PinoLogger
     ) => void
 }
 

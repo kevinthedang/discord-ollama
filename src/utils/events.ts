@@ -36,7 +36,7 @@ export type UserMessage = {
 // Event properties
 export interface EventProps {
     client: Client,
-    log: LogMethod,
+    logger: LogMethod,
     msgHist: Queue<UserMessage>,
     channelHistory: Queue<UserMessage>,
     ollama: Ollama,
@@ -86,14 +86,14 @@ export function registerEvents(
 ): void {
     for (const { key, callback } of events) {
         client.on(key, (...args) => {
-            const log = createLogger({ component: 'event', event: key })
+            const logger = createLogger({ component: 'event', event: key })
 
             // Handle Errors, call callback, log errors as needed
             try {
-                void Promise.resolve(callback({ client, log, msgHist, channelHistory, ollama, defaultModel }, ...args))
-                    .catch(error => log.error({ err: error }, 'Uncaught event error'))
+                void Promise.resolve(callback({ client, logger, msgHist, channelHistory, ollama, defaultModel }, ...args))
+                    .catch(error => logger.error({ err: error }, 'Uncaught event error'))
             } catch (error) {
-                log.error({ err: error }, 'Uncaught event error')
+                logger.error({ err: error }, 'Uncaught event error')
             }
         })
     }

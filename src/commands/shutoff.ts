@@ -1,15 +1,13 @@
 import { Client, CommandInteraction, MessageFlags } from 'discord.js'
 import { AdminCommand, SlashCommand } from '../utils/index.js'
-import { createLogger } from '../components/index.js'
-
-const logger = createLogger({ component: 'command', command: 'shutoff' })
+import type { Logger as PinoLogger } from 'pino'
 
 export const Shutoff: SlashCommand = {
     name: 'shutoff',
     description: 'shutdown the bot. You will need to manually bring it online again. Administrator Only.',
 
     // Query for message information and set the style
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: CommandInteraction, logger: PinoLogger) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !AdminCommand.includes(channel.type)) return

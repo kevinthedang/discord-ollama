@@ -1,16 +1,14 @@
 import { Client, CommandInteraction, MessageFlags } from "discord.js";
 import { accessChannelContext, SlashCommand, summarizeContextHistory, UserCommand, UserMessage } from "../utils/index.js";
-import { createLogger } from "../components/index.js"
+import type { Logger as PinoLogger } from 'pino'
 import { ollama } from "../client.js"
-
-const logger = createLogger({ component: 'command', command: 'summary' })
 
 export const Summary: SlashCommand = {
     name: 'summary',
     description: 'provides a summary of the chat history.',
 
     // Generate Summary from additional context
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: CommandInteraction, logger: PinoLogger) => {
         // fetch channel
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return
@@ -44,7 +42,7 @@ export const Summary: SlashCommand = {
         })
 
         // todo: instead of a default of codellama, we can user default model somehow. Look into later.
-        const response: string = await summarizeContextHistory(ollama, "codellama", channelContext)
+        const response: string = await summarizeContextHistory(logger, ollama, "codellama", channelContext)
 
         logger.info({ response }, 'Generated channel summary')
 
