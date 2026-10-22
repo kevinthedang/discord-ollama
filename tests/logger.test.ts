@@ -42,4 +42,23 @@ describe('Pino logger', () => {
         expect(entry.answer).toBe(42)
         expect(entry.msg).toBe('warning')
     })
+
+    it('preserves parent context when adding command bindings', () => {
+        output = ''
+        const eventLogger = createLogger({
+            component: 'event',
+            event: 'InteractionCreate'
+        }, parentLogger)
+        const commandLogger = createLogger({
+            component: 'command',
+            command: 'summary'
+        }, eventLogger)
+
+        commandLogger.info('command started')
+
+        const entry = JSON.parse(output)
+        expect(entry.component).toBe('command')
+        expect(entry.event).toBe('InteractionCreate')
+        expect(entry.command).toBe('summary')
+    })
 })

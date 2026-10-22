@@ -36,7 +36,7 @@ export const SwitchModel: SlashCommand = {
                     for (const model in response.models) {
                         const currentModel: ModelResponse = response.models[model]
                         if (currentModel.name.startsWith(modelInput)) {
-                            openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+                            openConfig(logger, `${interaction.user.username}-config.json`, interaction.commandName, modelInput)
 
                             // successful switch
                             interaction.editReply({
@@ -52,7 +52,7 @@ export const SwitchModel: SlashCommand = {
             // todo: problem can be here if async messes up
             if (switchSuccess) {
                 // set model now that it exists
-                openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+                openConfig(logger, `${interaction.user.username}-config.json`, interaction.commandName, modelInput)
                 return
             }
 

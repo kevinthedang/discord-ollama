@@ -1,5 +1,6 @@
 import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction, MessageFlags } from 'discord.js'
 import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 export const MessageStream: SlashCommand = {
     name: 'message-stream',
@@ -16,13 +17,13 @@ export const MessageStream: SlashCommand = {
     ],
 
     // change preferences based on command
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // verify channel
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return
 
         // save value to json and write to it
-        openConfig(`${interaction.user.username}-config.json`, interaction.commandName,
+        openConfig(logger, `${interaction.user.username}-config.json`, interaction.commandName,
             interaction.options.getBoolean('stream')
         )
 

@@ -42,8 +42,5 @@
   "engines": {
     "npm": ">=10.9.0",
     "node": ">=24.0.0"
-  },
-  "allowScripts": {
-    "esbuild@0.25.12": true
   }
 }

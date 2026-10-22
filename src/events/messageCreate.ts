@@ -33,7 +33,7 @@ export default event(Events.MessageCreate, async ({ logger, msgHist, channelHist
 
     if (channelContextHistory.length === 0) {
         channelContextHistory = await new Promise((resolve) => {
-            addToChannelContext(message.channelId,
+            addToChannelContext(logger, message.channelId,
                 message.channel as TextChannel
             )
             getChannelInfo(`${message.channelId}-context.json`, (channelInfo) => {
@@ -68,7 +68,7 @@ export default event(Events.MessageCreate, async ({ logger, msgHist, channelHist
     })
 
     // Store in Channel Context
-    addToChannelContext(message.channelId,
+    addToChannelContext(logger, message.channelId,
         message.channel as TextChannel,
         channelHistory.getItems()
     )
@@ -93,7 +93,7 @@ export default event(Events.MessageCreate, async ({ logger, msgHist, channelHist
                         // check if config.json exists
                         if (config === undefined) {
                             // Allowing chat options to be available
-                            openConfig(`${message.guildId}-config.json`, 'toggle-chat', true)
+                            openConfig(logger, `${message.guildId}-config.json`, 'toggle-chat', true)
                             reject(new Error('Failed to locate or create Server Preferences\n\nPlease try chatting again...'))
                         }
 
@@ -125,7 +125,7 @@ export default event(Events.MessageCreate, async ({ logger, msgHist, channelHist
                 userConfig = await new Promise((resolve, reject) => {
                     getUserConfig(`${message.author.username}-config.json`, (config) => {
                         if (config === undefined) {
-                            openConfig(`${message.author.username}-config.json`, 'switch-model', defaultModel)
+                            openConfig(logger, `${message.author.username}-config.json`, 'switch-model', defaultModel)
                             reject(new Error(`No User Preferences is set up.\n\nCreating new preferences file for ${message.author.username}\nPlease try chatting again.`))
                             return
                         }
@@ -175,7 +175,7 @@ export default event(Events.MessageCreate, async ({ logger, msgHist, channelHist
 
         if (chatMessages.length === 0) {
             chatMessages = await new Promise((resolve, reject) => {
-                openChannelInfo(message.channelId,
+                openChannelInfo(logger, message.channelId,
                     message.channel as TextChannel,
                     message.author.tag
                 )
@@ -225,7 +225,7 @@ export default event(Events.MessageCreate, async ({ logger, msgHist, channelHist
         })
 
         // only update the json on success
-        openChannelInfo(message.channelId,
+        openChannelInfo(logger, message.channelId,
             message.channel as TextChannel,
             message.author.tag,
             msgHist.getItems()

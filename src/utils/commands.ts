@@ -1,8 +1,5 @@
-import { ChatInputCommandInteraction, ChatInputApplicationCommandData, Client } from 'discord.js'
-import { createLogger } from '../components/index.js'
+import { ChatInputCommandInteraction, ChatInputApplicationCommandData, Client, type Awaitable } from 'discord.js'
 import type { Logger as PinoLogger } from 'pino'
-
-const logger = createLogger({ component: 'commands' })
 
 /**
  * interface for how slash commands should be run
@@ -12,7 +9,7 @@ export interface SlashCommand extends ChatInputApplicationCommandData {
         client: Client,
         interaction: ChatInputCommandInteraction,
         logger: PinoLogger
-    ) => void
+    ) => Awaitable<unknown>
 }
 
 /**
@@ -20,7 +17,7 @@ export interface SlashCommand extends ChatInputApplicationCommandData {
  * @param client the bot reference
  * @param commands commands to register to the bot
  */
-export function registerCommands(client: Client, commands: SlashCommand[]): void {
+export function registerCommands(client: Client, commands: SlashCommand[], logger: PinoLogger): void {
     // ensure the bot is online before registering
     if (!client.application) return
 

@@ -1,12 +1,13 @@
 import { ChannelType, Client, CommandInteraction, MessageFlags, TextChannel, ThreadChannel } from 'discord.js'
 import { AdminCommand, openChannelInfo, SlashCommand } from '../utils/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 export const PrivateThreadCreate: SlashCommand = {
     name: 'private-thread',
     description: 'creates a private thread and mentions user',
 
     // Query for server information
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: CommandInteraction, logger: PinoLogger) => {
         // fetch the channel
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !AdminCommand.includes(channel.type)) return
@@ -22,7 +23,7 @@ export const PrivateThreadCreate: SlashCommand = {
 
         // handle storing this chat channel
         // store: thread.id, thread.name
-        openChannelInfo(thread.id, thread as ThreadChannel, interaction.user.tag)
+        openChannelInfo(logger, thread.id, thread as ThreadChannel, interaction.user.tag)
 
         // user only reply
         return interaction.reply({

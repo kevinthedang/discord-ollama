@@ -1,5 +1,6 @@
 import { event, Events } from '../utils/index.js'
 import commands from '../commands/index.js'
+import { createLogger } from '../components/index.js'
 
 /**
  * Interaction creation listener for the client
@@ -15,5 +16,11 @@ export default event(Events.InteractionCreate, async ({ logger, client }, intera
     if (!command) return
 
     // the command exists, execute it
-    command.run(client, interaction, logger)
+    const commandLogger = createLogger({
+        component: 'command',
+        command: command.name
+    }, logger)
+
+    void Promise.resolve(command.run(client, interaction, commandLogger))
+        .catch(error => commandLogger.error({ err: error }, 'Command execution failed'))
 })

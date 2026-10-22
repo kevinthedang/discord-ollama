@@ -2,9 +2,7 @@ import { TextChannel, ThreadChannel } from 'discord.js'
 import { Configuration, Channel, UserMessage } from '../index.js'
 import fs from 'fs'
 import path from 'path'
-import { createLogger } from '../../components/index.js'
-
-const logger = createLogger({ component: 'chat-history' })
+import type { Logger as PinoLogger } from 'pino'
 
 /**
  * Method to check if a thread history file exists
@@ -32,7 +30,7 @@ async function checkChannelInfoExists(channel: TextChannel, user: string) {
  * @param user username of user
  * @returns nothing
  */
-export async function clearChannelInfo(filename: string, channel: TextChannel, user: string): Promise<boolean> {
+export async function clearChannelInfo(logger: PinoLogger, filename: string, channel: TextChannel, user: string): Promise<boolean> {
     const channelInfoExists: boolean = await checkChannelInfoExists(channel, user)
 
     // If thread does not exist, file can't be found
@@ -59,7 +57,7 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     return cleanedHistory
 }
 
-export async function addToChannelContext(filename: string, channel: TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
+export async function addToChannelContext(logger: PinoLogger, filename: string, channel: TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-context.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
@@ -115,7 +113,7 @@ export async function accessChannelContext(filename: string, callback: (config: 
  * @param user the user's name
  * @param messages their messages
  */
-export async function openChannelInfo(filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
+export async function openChannelInfo(logger: PinoLogger, filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {

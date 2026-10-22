@@ -1,9 +1,7 @@
 import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey } from '../index.js'
 import fs from 'fs'
 import path from 'path'
-import { createLogger } from '../../components/index.js'
-
-const logger = createLogger({ component: 'config' })
+import type { Logger as PinoLogger } from 'pino'
 
 /**
  * Method to open a file in the working directory and modify/create it
@@ -13,7 +11,7 @@ const logger = createLogger({ component: 'config' })
  * @param value new value to assign
  */
 // add type of change (server, user)
-export function openConfig(filename: string, key: string, value: any) {
+export function openConfig(logger: PinoLogger, filename: string, key: string, value: any) {
     const fullFileName = `data/${filename}`
 
     // check if the file exists, if not then make the config file
