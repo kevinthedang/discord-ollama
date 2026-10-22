@@ -1,5 +1,6 @@
 import { Client, ChatInputCommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 import { openConfig, SlashCommand, UserCommand } from '../utils/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 export const Capacity: SlashCommand = {
     name: 'modify-capacity',
@@ -16,13 +17,13 @@ export const Capacity: SlashCommand = {
     ],
 
     // Query for message information and set the style
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !UserCommand.includes(channel.type)) return
 
         // set state of bot chat features
-        openConfig(`${interaction.user.username}-config.json`, interaction.commandName,
+        openConfig(logger, `${interaction.user.username}-config.json`, interaction.commandName,
             interaction.options.getNumber('context-capacity')
         )
 

@@ -23,6 +23,24 @@ These are guides to the features and capabilities of this app.
 * [User Slash Commands](./docs/commands-guide.md)
 * [Client Events](./docs/events-guide.md)
 
+## Logging
+The application uses Pino child loggers with structured component metadata.
+Outside production, `pino-caller` adds the source file and line to each log
+entry. Set `LOG_LEVEL` to configure the minimum level (defaults to `info`).
+
+```ts
+import { createLogger } from './components/index.js'
+
+const logger = createLogger({ component: 'request', requestId })
+logger.info('Request started')
+```
+
+Log entries are JSON and include the structured fields provided to the log
+method, along with `component` and (outside production) `caller`. The root Pino
+instance is shared; create one child when entering a context, then pass that
+same child logger through the context's work. Create another child only when
+you need to add more scoped bindings; child creation does not mutate its parent.
+
 ## Environment Setup
 * Clone this repo using `git clone https://github.com/kevinthedang/discord-ollama.git` or just use [GitHub Desktop](https://desktop.github.com/) to clone the repo.
 * You will need a `.env` file in the root of the project directory with the bot's token. There is a `.env.sample` is provided for you as a reference for what environment variables.

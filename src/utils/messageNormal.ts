@@ -1,8 +1,8 @@
 import { Message, SendableChannels } from 'discord.js'
-import { ChatResponse, Ollama } from 'ollama'
+import { ChatResponse, Ollama, AbortableAsyncIterator } from 'ollama'
+import type { Logger as PinoLogger } from 'pino'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
-import { Queue } from '../queues/queue.js'
-import { AbortableAsyncIterator } from 'ollama/src/utils.js'
+import { Queue } from '../components/index.js'
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -11,6 +11,7 @@ import { AbortableAsyncIterator } from 'ollama/src/utils.js'
  * @param msgHist message history between user and model
  */
 export async function normalMessage(
+    logger: PinoLogger,
     message: Message,
     ollama: Ollama,
     model: string,
@@ -49,7 +50,7 @@ export async function normalMessage(
                         if (result.length > 5)
                             messageBlock.edit(result)
                     }
-                    console.log(result)
+                    logger.debug({ response: result }, 'Received response chunk')
                 }
             }
             else {
@@ -77,12 +78,11 @@ export async function normalMessage(
                     sentMessage.edit(result)
             }
         } catch (error: any) {
-            console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
-            if (error.message.includes('fetch failed'))
-                error.message = 'Missing ollama service on machine'
-            else if (error.message.includes('try pulling it first'))
-                error.message = `You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`
-            sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
+            logger.error({ err: error, model }, 'Failed to create message response')
+            if (error.message.includes('try pulling it first'))
+                sentMessage.edit(`**Response generation failed.**\n\nReason: You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`)
+            else
+                sentMessage.edit(`**Response generation failed.**\n\nReason: ${error.message}`)
         }
     })
 
@@ -91,6 +91,7 @@ export async function normalMessage(
 }
 
 export async function summarizeContextHistory(
+    logger: PinoLogger,
     ollama: Ollama, 
     model: string, 
     msgHist: UserMessage[], 
@@ -110,7 +111,7 @@ export async function summarizeContextHistory(
 
         return result
     } catch (error: any) {
-        console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
+        logger.error({ err: error, model }, 'Failed to summarize channel history')
         if (error.message.includes('fetch failed'))
             error.message = 'Missing ollama service on machine'
         else if (error.message.includes('try pulling it first'))

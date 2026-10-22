@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction } fro
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { openConfig, UserCommand, SlashCommand } from "../utils/index.js"
+import type { Logger as PinoLogger } from 'pino'
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
@@ -18,7 +19,7 @@ export const SwitchModel: SlashCommand = {
     ],
 
     // Switch user preferred model if available in local library
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         await interaction.deferReply()
 
         const modelInput: string = interaction.options.getString('model-to-use') as string
@@ -35,7 +36,7 @@ export const SwitchModel: SlashCommand = {
                     for (const model in response.models) {
                         const currentModel: ModelResponse = response.models[model]
                         if (currentModel.name.startsWith(modelInput)) {
-                            openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+                            openConfig(logger, `${interaction.user.username}-config.json`, interaction.commandName, modelInput)
 
                             // successful switch
                             interaction.editReply({
@@ -46,12 +47,12 @@ export const SwitchModel: SlashCommand = {
                     }
                 })
                 .catch(error => {
-                    console.error(`[Command: switch-model] Failed to connect with Ollama service. Error: ${error.message}`)
+                    logger.error({ err: error }, 'Failed to connect to Ollama service')
                 })
             // todo: problem can be here if async messes up
             if (switchSuccess) {
                 // set model now that it exists
-                openConfig(`${interaction.user.username}-config.json`, interaction.commandName, modelInput)
+                openConfig(logger, `${interaction.user.username}-config.json`, interaction.commandName, modelInput)
                 return
             }
 

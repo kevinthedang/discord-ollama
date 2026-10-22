@@ -1,5 +1,6 @@
 import { Client, ChatInputCommandInteraction, ApplicationCommandOptionType, MessageFlags } from 'discord.js'
 import { AdminCommand, openConfig, SlashCommand } from '../utils/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 export const Disable: SlashCommand = {
     name: 'toggle-chat',
@@ -16,7 +17,7 @@ export const Disable: SlashCommand = {
     ],
 
     // Query for message information and set the style
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // fetch channel and message
         const channel = await client.channels.fetch(interaction.channelId)
         if (!channel || !AdminCommand.includes(channel.type)) return
@@ -31,7 +32,7 @@ export const Disable: SlashCommand = {
         }
 
         // set state of bot chat features
-        openConfig(`${interaction.guildId}-config.json`, interaction.commandName,
+        openConfig(logger, `${interaction.guildId}-config.json`, interaction.commandName,
             interaction.options.getBoolean('enabled')
         )
 

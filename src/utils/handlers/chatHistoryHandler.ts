@@ -2,6 +2,7 @@ import { TextChannel, ThreadChannel } from 'discord.js'
 import { Configuration, Channel, UserMessage } from '../index.js'
 import fs from 'fs'
 import path from 'path'
+import type { Logger as PinoLogger } from 'pino'
 
 /**
  * Method to check if a thread history file exists
@@ -29,7 +30,7 @@ async function checkChannelInfoExists(channel: TextChannel, user: string) {
  * @param user username of user
  * @returns nothing
  */
-export async function clearChannelInfo(filename: string, channel: TextChannel, user: string): Promise<boolean> {
+export async function clearChannelInfo(logger: PinoLogger, filename: string, channel: TextChannel, user: string): Promise<boolean> {
     const channelInfoExists: boolean = await checkChannelInfoExists(channel, user)
 
     // If thread does not exist, file can't be found
@@ -40,7 +41,7 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     const cleanedHistory: boolean = await new Promise((resolve) => {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: openChannelInfo] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read channel history')
             else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0) // already empty, let user know
@@ -56,12 +57,12 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     return cleanedHistory
 }
 
-export async function addToChannelContext(filename: string, channel : TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
+export async function addToChannelContext(logger: PinoLogger, filename: string, channel: TextChannel | ThreadChannel, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-context.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: addToChannelContext] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read channel context')
             else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0)
@@ -85,7 +86,7 @@ export async function addToChannelContext(filename: string, channel : TextChanne
             fs.mkdirSync(directory, { recursive: true })
 
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: addToChannelContext] Created '${fullFileName}' in working directory`)
+        logger.info({ file: fullFileName }, 'Created channel context')
     }
 }
 
@@ -112,12 +113,12 @@ export async function accessChannelContext(filename: string, callback: (config: 
  * @param user the user's name
  * @param messages their messages
  */
-export async function openChannelInfo(filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
+export async function openChannelInfo(logger: PinoLogger, filename: string, channel: TextChannel | ThreadChannel, user: string, messages: UserMessage[] = []): Promise<void> {
     const fullFileName = `data/${filename}-${user}.json`
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: openChannelInfo] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read channel history')
             else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0)
@@ -143,7 +144,7 @@ export async function openChannelInfo(filename: string, channel: TextChannel | T
 
         // only creating it, no need to add anything
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: openChannelInfo] Created '${fullFileName}' in working directory`)
+        logger.info({ file: fullFileName }, 'Created channel history')
     }
 }
 

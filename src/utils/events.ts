@@ -1,11 +1,12 @@
 import type { ClientEvents, Awaitable, Client } from 'discord.js'
 import { Ollama } from 'ollama'
-import { Queue } from '../queues/queue.js'
+import { Queue, createLogger } from '../components/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 // Export events through here to reduce amount of imports
 export { Events } from 'discord.js'
 
-export type LogMethod = (...args: unknown[]) => void
+export type LogMethod = PinoLogger
 export type EventKeys = keyof ClientEvents // only wants keys of ClientEvents object
 
 /**
@@ -35,7 +36,7 @@ export type UserMessage = {
 // Event properties
 export interface EventProps {
     client: Client,
-    log: LogMethod,
+    logger: LogMethod,
     msgHist: Queue<UserMessage>,
     channelHistory: Queue<UserMessage>,
     ollama: Ollama,
@@ -85,14 +86,14 @@ export function registerEvents(
 ): void {
     for (const { key, callback } of events) {
         client.on(key, (...args) => {
-            // Create a new log method for this event
-            const log = console.log.bind(console, `[Event: ${key}]`)
+            const logger = createLogger({ component: 'event', event: key })
 
             // Handle Errors, call callback, log errors as needed
             try {
-                callback({ client, log, msgHist, channelHistory, ollama, defaultModel }, ...args)
+                void Promise.resolve(callback({ client, logger, msgHist, channelHistory, ollama, defaultModel }, ...args))
+                    .catch(error => logger.error({ err: error }, 'Uncaught event error'))
             } catch (error) {
-                log('[Uncaught Error]', error)
+                logger.error({ err: error }, 'Uncaught event error')
             }
         })
     }

@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction, Mess
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { UserCommand, SlashCommand } from "../utils/index.js"
+import type { Logger as PinoLogger } from 'pino'
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
@@ -18,7 +19,7 @@ export const PullModel: SlashCommand = {
     ],
 
     // Pull for model from Ollama library
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
         const modelInput: string = interaction.options.getString('model-to-pull') as string
@@ -42,7 +43,7 @@ export const PullModel: SlashCommand = {
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
             .catch(error => {
                 ollamaOffline = true
-                console.error(`[Command: pull-model] Failed to connect with Ollama service. Error: ${error.message}`)
+                logger.error({ err: error }, 'Failed to connect to Ollama service')
             })
        
         // Validate for any issue or if service is running

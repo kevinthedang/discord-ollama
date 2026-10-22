@@ -1,12 +1,13 @@
 import { Channel, Client, CommandInteraction, MessageFlags, TextChannel } from 'discord.js'
 import { clearChannelInfo, SlashCommand, UserCommand } from '../utils/index.js'
+import type { Logger as PinoLogger } from 'pino'
 
 export const ClearUserChannelHistory: SlashCommand = {
     name: 'clear-user-channel-history',
     description: 'clears history for user in the current channel',
 
     // Clear channel history for intended user
-    run: async (client: Client, interaction: CommandInteraction) => {
+    run: async (client: Client, interaction: CommandInteraction, logger: PinoLogger) => {
         // fetch current channel
         const channel: Channel | null = await client.channels.fetch(interaction.channelId)
 
@@ -15,6 +16,7 @@ export const ClearUserChannelHistory: SlashCommand = {
 
         // clear channel info for user
         const successfulWipe = await clearChannelInfo(
+            logger,
             interaction.channelId,
             interaction.channel as TextChannel,
             interaction.user.username

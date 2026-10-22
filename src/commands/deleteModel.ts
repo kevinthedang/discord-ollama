@@ -2,6 +2,7 @@ import { ApplicationCommandOptionType, ChatInputCommandInteraction, Client, Comm
 import { UserCommand, SlashCommand } from '../utils/index.js'
 import { ollama } from '../client.js'
 import { ModelResponse } from 'ollama'
+import type { Logger as PinoLogger } from 'pino'
 
 export const DeleteModel: SlashCommand = {
     name: 'delete-model',
@@ -18,7 +19,7 @@ export const DeleteModel: SlashCommand = {
     ],
 
     // Delete Model locally stored
-    run: async (client: Client, interaction: ChatInputCommandInteraction) => {
+    run: async (client: Client, interaction: ChatInputCommandInteraction, logger: PinoLogger) => {
         // defer reply to avoid timeout
         await interaction.deferReply()
         const modelInput: string = interaction.options.getString('model-name') as string
@@ -42,7 +43,7 @@ export const DeleteModel: SlashCommand = {
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
             .catch(error => {
                 ollamaOffline = true
-                console.error(`[Command: delete-model] Failed to connect with Ollama service. Error: ${error.message}`)
+                logger.error({ err: error }, 'Failed to connect to Ollama service')
             })
 
         // Validate for any issue or if service is running
@@ -53,7 +54,6 @@ export const DeleteModel: SlashCommand = {
             return
         }
 
-            
         try {
             // call ollama to delete model
             if (modelExists) {
