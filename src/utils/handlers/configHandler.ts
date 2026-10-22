@@ -1,6 +1,9 @@
 import { Configuration, ServerConfig, UserConfig, isServerConfigurationKey } from '../index.js'
 import fs from 'fs'
 import path from 'path'
+import { createLogger } from '../../components/index.js'
+
+const logger = createLogger({ component: 'config' })
 
 /**
  * Method to open a file in the working directory and modify/create it
@@ -17,7 +20,7 @@ export function openConfig(this: any, filename: string, key: string, value: any)
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: openConfig] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read configuration file')
             else {
                 const object = JSON.parse(data)
                 object['options'][key] = value
@@ -41,7 +44,7 @@ export function openConfig(this: any, filename: string, key: string, value: any)
             fs.mkdirSync(directory, { recursive: true })
 
         fs.writeFileSync(`data/${filename}`, JSON.stringify(object, null, 2))
-        console.log(`[Util: ${this.name}] Created '${filename}' in working directory`)
+        logger.info({ file: fullFileName }, 'Created configuration file')
     }
 }
 

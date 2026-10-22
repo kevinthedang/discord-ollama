@@ -13,5 +13,5 @@ export default event(Events.ClientReady, ({ log }, client) => {
         type: ActivityType.Custom
     })
 
-    log(`Logged in as ${client.user.username}.`)
+    log.info({ username: client.user.username }, 'Client ready')
 })

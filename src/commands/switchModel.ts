@@ -2,6 +2,9 @@ import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction } fro
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { openConfig, UserCommand, SlashCommand } from "../utils/index.js"
+import { createLogger } from "../components/index.js"
+
+const logger = createLogger({ component: 'command', command: 'switch-model' })
 
 export const SwitchModel: SlashCommand = {
     name: 'switch-model',
@@ -46,7 +49,7 @@ export const SwitchModel: SlashCommand = {
                     }
                 })
                 .catch(error => {
-                    console.error(`[Command: switch-model] Failed to connect with Ollama service. Error: ${error.message}`)
+                    logger.error({ err: error }, 'Failed to connect to Ollama service')
                 })
             // todo: problem can be here if async messes up
             if (switchSuccess) {

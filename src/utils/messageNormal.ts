@@ -1,7 +1,9 @@
 import { Message, SendableChannels } from 'discord.js'
 import { ChatResponse, Ollama, AbortableAsyncIterator } from 'ollama'
 import { ChatParams, UserMessage, streamResponse, blockResponse } from './index.js'
-import { Queue } from '../components/index.js'
+import { Queue, createLogger } from '../components/index.js'
+
+const logger = createLogger({ component: 'message' })
 
 /**
  * Method to send replies as normal text on discord like any other user
@@ -49,7 +51,7 @@ export async function normalMessage(
                         if (result.length > 5)
                             messageBlock.edit(result)
                     }
-                    console.log(result)
+                    logger.debug({ response: result }, 'Received response chunk')
                 }
             }
             else {
@@ -77,7 +79,7 @@ export async function normalMessage(
                     sentMessage.edit(result)
             }
         } catch (error: any) {
-            console.log(`[Util: ${this.name}] Error creating message: ${error.message}`)
+            logger.error({ err: error, model }, 'Failed to create message response')
             if (error.message.includes('try pulling it first'))
                 sentMessage.edit(`**Response generation failed.**\n\nReason: You do not have the ${model} downloaded. Ask an admin to pull it using the \`pull-model\` command.`)
             else
@@ -109,7 +111,7 @@ export async function summarizeContextHistory(
 
         return result
     } catch (error: any) {
-        console.log(`[Util: messageNormal] Error creating message: ${error.message}`)
+        logger.error({ err: error, model }, 'Failed to summarize channel history')
         if (error.message.includes('fetch failed'))
             error.message = 'Missing ollama service on machine'
         else if (error.message.includes('try pulling it first'))

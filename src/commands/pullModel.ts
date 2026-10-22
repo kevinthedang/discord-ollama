@@ -2,6 +2,9 @@ import { ApplicationCommandOptionType, Client, ChatInputCommandInteraction, Mess
 import { ollama } from "../client.js"
 import { ModelResponse } from "ollama"
 import { UserCommand, SlashCommand } from "../utils/index.js"
+import { createLogger } from "../components/index.js"
+
+const logger = createLogger({ component: 'command', command: 'pull-model' })
 
 export const PullModel: SlashCommand = {
     name: 'pull-model',
@@ -42,7 +45,7 @@ export const PullModel: SlashCommand = {
             .then(response => response.models.some((model: ModelResponse) => model.name.startsWith(modelInput)))
             .catch(error => {
                 ollamaOffline = true
-                console.error(`[Command: pull-model] Failed to connect with Ollama service. Error: ${error.message}`)
+                logger.error({ err: error }, 'Failed to connect to Ollama service')
             })
        
         // Validate for any issue or if service is running

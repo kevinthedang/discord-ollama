@@ -8,13 +8,13 @@ import fs from 'fs'
 export default event(Events.ThreadDelete, async ({ log }, thread: ThreadChannel) => {
     // iterate through every guild member in the thread and delete their history, except the bot
     try {
-        log(`Number of User Guild Members in Thread being deleted: ${thread.memberCount!! - 1}`)
+        log.info({ memberCount: thread.memberCount!! - 1 }, 'Deleting thread history')
         const dirPath = 'data/'
 
         // read all files in data/
         fs.readdir(dirPath, (error, files) => {
             if (error) {
-                log(`Error reading directory ${dirPath}`, error)
+                log.error({ err: error, directory: dirPath }, 'Failed to read history directory')
                 return
             }
 
@@ -28,13 +28,13 @@ export default event(Events.ThreadDelete, async ({ log }, thread: ThreadChannel)
                 const filePath = dirPath + file
                 fs.unlink(filePath, error => {
                     if (error)
-                        log(`Error deleting file ${filePath}`, error)
+                        log.error({ err: error, file: filePath }, 'Failed to delete thread history file')
                     else
-                        log(`Successfully deleted ${filePath} thread information`)
+                        log.info({ file: filePath }, 'Deleted thread history file')
                 })
             })
         })
     } catch (error) {
-        log(`Issue deleting user history files from ${thread.id}`)
+        log.error({ err: error, threadId: thread.id }, 'Failed to delete user history files')
     }
 })

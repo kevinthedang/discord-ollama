@@ -2,6 +2,9 @@ import { TextChannel, ThreadChannel } from 'discord.js'
 import { Configuration, Channel, UserMessage } from '../index.js'
 import fs from 'fs'
 import path from 'path'
+import { createLogger } from '../../components/index.js'
+
+const logger = createLogger({ component: 'chat-history' })
 
 /**
  * Method to check if a thread history file exists
@@ -40,7 +43,7 @@ export async function clearChannelInfo(filename: string, channel: TextChannel, u
     const cleanedHistory: boolean = await new Promise((resolve) => {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: openChannelInfo] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read channel history')
             else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0) // already empty, let user know
@@ -61,7 +64,7 @@ export async function addToChannelContext(filename: string, channel : TextChanne
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: addToChannelContext] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read channel context')
             else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0)
@@ -85,7 +88,7 @@ export async function addToChannelContext(filename: string, channel : TextChanne
             fs.mkdirSync(directory, { recursive: true })
 
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: addToChannelContext] Created '${fullFileName}' in working directory`)
+        logger.info({ file: fullFileName }, 'Created channel context')
     }
 }
 
@@ -117,7 +120,7 @@ export async function openChannelInfo(this: any, filename: string, channel: Text
     if (fs.existsSync(fullFileName)) {
         fs.readFile(fullFileName, 'utf8', (error, data) => {
             if (error)
-                console.log(`[Error: openChannelInfo] Incorrect file format`)
+                logger.error({ err: error, file: fullFileName }, 'Failed to read channel history')
             else {
                 const object = JSON.parse(data)
                 if (object['messages'].length === 0)
@@ -143,7 +146,7 @@ export async function openChannelInfo(this: any, filename: string, channel: Text
 
         // only creating it, no need to add anything
         fs.writeFileSync(fullFileName, JSON.stringify(object, null, 2))
-        console.log(`[Util: ${this.name}] Created '${fullFileName}' in working directory`)
+        logger.info({ file: fullFileName }, 'Created channel history')
     }
 }
 

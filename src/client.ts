@@ -1,9 +1,11 @@
 import { Client, GatewayIntentBits } from 'discord.js'
 import { Ollama } from 'ollama'
-import { Queue } from './components/index.js'
+import { Queue, createLogger } from './components/index.js'
 import { UserMessage, registerEvents } from './utils/index.js'
 import Events from './events/index.js'
 import Keys from './keys.js'
+
+const logger = createLogger({ component: 'client' })
 
 // initialize the client with the following permissions when logging in
 const client = new Client({
@@ -32,7 +34,7 @@ registerEvents(client, Events, messageHistory, channelMessageHistory, ollama, Ke
 // Try to log in the client
 await client.login(Keys.clientToken)
     .catch((error) => {
-        console.error('[Login Error]', error)
+        logger.fatal({ err: error }, 'Client login failed')
         process.exit(1)
     })
 

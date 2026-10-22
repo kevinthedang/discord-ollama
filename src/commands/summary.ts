@@ -1,6 +1,9 @@
 import { Client, CommandInteraction, MessageFlags } from "discord.js";
 import { accessChannelContext, SlashCommand, summarizeContextHistory, UserCommand, UserMessage } from "../utils/index.js";
+import { createLogger } from "../components/index.js"
 import { ollama } from "../client.js"
+
+const logger = createLogger({ component: 'command', command: 'summary' })
 
 export const Summary: SlashCommand = {
     name: 'summary',
@@ -43,7 +46,7 @@ export const Summary: SlashCommand = {
         // todo: instead of a default of codellama, we can user default model somehow. Look into later.
         const response: string = await summarizeContextHistory(ollama, "codellama", channelContext)
 
-        console.log(response)
+        logger.info({ response }, 'Generated channel summary')
 
         interaction.editReply({ content: response })
     }
